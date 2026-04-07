@@ -30,15 +30,6 @@ export class ProductsController {
     return this.productsService.search(tenantId, q, query);
   }
 
-  /**
-   * GET /products/category/:slug
-   * Returns all products in a specific category (by slug).
-   */
-  @Get('category/:slug')
-  async findByCategory(@Param('slug') slug: string, @Query() query: GetProductsQueryDto) {
-    const tenantId = await this.productsService.getTenantIdBySlug(DEV_TENANT_SLUG);
-    return this.productsService.findByCategory(tenantId, slug, query);
-  }
 
   /**
    * GET /products/:id

@@ -65,6 +65,14 @@ export class ProductsService {
     };
   }
 
+  // ── CATEGORIES ──────────────────────────────────────────────────────────
+  async findAllCategories(tenantId: number) {
+    return this.prisma.client.category.findMany({
+      where: { tenantId, deletedAt: null },
+      orderBy: { sortOrder: 'asc' },
+    });
+  }
+
   // ── 2. GET BY CATEGORY ───────────────────────────────────────────────────
   async findByCategory(tenantId: number, categorySlug: string, query: GetProductsQueryDto) {
     const category = await this.prisma.client.category.findUnique({

@@ -1,0 +1,430 @@
+// This is your Prisma schema file.
+// Translates the DATA_MODEL.md documentation to Prisma ORM.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Tenant {
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                String   @db.VarChar
+  slug                String   @unique @db.VarChar
+  status              String   @db.VarChar
+  defaultCurrency     String   @map("default_currency") @db.Char(3)
+  settings            Json     @default("{}")
+  orderNumberPrefix   String?  @map("order_number_prefix") @db.VarChar
+  orderNumberPadding  Int      @default(6) @map("order_number_padding")
+  createdAt           DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt           DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  sequence            TenantOrderSequence?
+  domains             TenantDomain[]
+  memberships         TenantMembership[]
+  companies           Company[]
+  customers           Customer[]
+  categories          Category[]
+  products            Product[]
+  productCategories   ProductCategory[]
+  productVariants     ProductVariant[]
+  inventoryBalances   InventoryBalance[]
+  inventoryMovements  InventoryMovement[]
+  priceLists          PriceList[]
+  priceListItems      PriceListItem[]
+  carts               Cart[]
+  cartItems           CartItem[]
+  orders              Order[]
+  orderItems          OrderItem[]
+  payments            Payment[]
+  paymentEvents       PaymentEvent[]
+
+  @@map("tenants")
+}
+
+model TenantOrderSequence {
+  tenantId  String   @id @map("tenant_id") @db.Uuid
+  nextValue BigInt   @map("next_value")
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@map("tenant_order_sequences")
+}
+
+model TenantDomain {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId    String    @map("tenant_id") @db.Uuid
+  hostname    String    @unique @db.VarChar
+  isPrimary   Boolean   @map("is_primary")
+  verifiedAt  DateTime? @map("verified_at") @db.Timestamptz
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz
+
+  tenant      Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@map("tenant_domains")
+}
+
+model User {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email           String    @unique @db.VarChar 
+  passwordHash    String?   @map("password_hash") @db.VarChar
+  emailVerifiedAt DateTime? @map("email_verified_at") @db.Timestamptz
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  memberships     TenantMembership[]
+  customers       Customer[]
+
+  @@map("users")
+}
+
+model TenantMembership {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  role      String   @db.VarChar
+  status    String   @db.VarChar
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, userId])
+  @@index([userId])
+  @@map("tenant_memberships")
+}
+
+model Company {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId       String   @map("tenant_id") @db.Uuid
+  legalName      String   @map("legal_name") @db.VarChar
+  taxId          String?  @map("tax_id") @db.VarChar
+  billingAddress Json?    @map("billing_address")
+  status         String   @db.VarChar
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant         Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  customers      Customer[]
+  priceLists     CompanyPriceList[]
+
+  @@unique([tenantId, taxId])
+  @@map("companies")
+}
+
+model Customer {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId     String   @map("tenant_id") @db.Uuid
+  email        String   @db.VarChar
+  phone        String?  @db.VarChar
+  fullName     String?  @map("full_name") @db.VarChar
+  userId       String?  @map("user_id") @db.Uuid
+  companyId    String?  @map("company_id") @db.Uuid
+  customerType String   @map("customer_type") @db.VarChar
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant       Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user         User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  company      Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  carts        Cart[]
+  orders       Order[]
+
+  @@unique([tenantId, email])
+  @@index([userId])
+  @@map("customers")
+}
+
+model Category {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId  String    @map("tenant_id") @db.Uuid
+  parentId  String?   @map("parent_id") @db.Uuid
+  name      String    @db.VarChar
+  slug      String    @db.VarChar
+  sortOrder Int       @default(0) @map("sort_order")
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant    Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  parent    Category? @relation("CategoryToCategory", fields: [parentId], references: [id])
+  children  Category[] @relation("CategoryToCategory")
+  productCategories ProductCategory[]
+  productsAsPrimary Product[]
+
+  @@unique([tenantId, slug])
+  @@map("categories")
+}
+
+model Product {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId          String    @map("tenant_id") @db.Uuid
+  primaryCategoryId String?   @map("primary_category_id") @db.Uuid
+  name              String    @db.VarChar
+  slug              String    @db.VarChar
+  description       String?   @db.Text
+  status            String    @db.VarChar
+  isFeatured        Boolean   @default(false) @map("is_featured")
+  deletedAt         DateTime? @map("deleted_at") @db.Timestamptz
+  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt         DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant            Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  primaryCategory   Category? @relation(fields: [primaryCategoryId], references: [id])
+  productCategories ProductCategory[]
+  variants          ProductVariant[]
+
+  @@unique([tenantId, slug])
+  @@map("products")
+}
+
+model ProductCategory {
+  id         String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId   String @map("tenant_id") @db.Uuid
+  productId  String @map("product_id") @db.Uuid
+  categoryId String @map("category_id") @db.Uuid
+  sortOrder  Int    @default(0) @map("sort_order")
+
+  tenant     Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, productId, categoryId])
+  @@index([tenantId, categoryId])
+  @@index([tenantId, productId])
+  @@map("product_categories")
+}
+
+model ProductVariant {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId            String    @map("tenant_id") @db.Uuid
+  productId           String    @map("product_id") @db.Uuid
+  sku                 String    @db.VarChar
+  name                String?   @db.VarChar
+  attributes          Json      @default("{}")
+  basePriceMinor      BigInt    @map("base_price_minor")
+  currency            String    @db.Char(3)
+  compareAtPriceMinor BigInt?   @map("compare_at_price_minor")
+  deletedAt           DateTime? @map("deleted_at") @db.Timestamptz
+  createdAt           DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt           DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant              Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  product             Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  inventoryBalance    InventoryBalance?
+  inventoryMovements  InventoryMovement[]
+  cartItems           CartItem[]
+  orderItems          OrderItem[]
+  priceListItems      PriceListItem[]
+
+  @@unique([tenantId, sku])
+  @@index([tenantId, productId])
+  @@map("product_variants")
+}
+
+model InventoryBalance {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId         String   @map("tenant_id") @db.Uuid
+  variantId        String   @unique @map("variant_id") @db.Uuid
+  quantityOnHand   Int      @map("quantity_on_hand")
+  quantityReserved Int      @default(0) @map("quantity_reserved")
+  updatedAt        DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant           Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  variant          ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  @@map("inventory_balances")
+}
+
+model InventoryMovement {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId      String   @map("tenant_id") @db.Uuid
+  variantId     String   @map("variant_id") @db.Uuid
+  delta         Int
+  reason        String   @db.VarChar
+  referenceType String?  @map("reference_type") @db.VarChar
+  referenceId   String?  @map("reference_id") @db.Uuid
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  tenant        Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  variant       ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  @@map("inventory_movements")
+}
+
+model PriceList {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  name      String   @db.VarChar
+  isDefault Boolean  @map("is_default")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  items     PriceListItem[]
+  companies CompanyPriceList[]
+
+  @@map("price_lists")
+}
+
+model PriceListItem {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+  priceListId String   @map("price_list_id") @db.Uuid
+  variantId   String   @map("variant_id") @db.Uuid
+  priceMinor  BigInt   @map("price_minor")
+  currency    String   @db.Char(3)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant      Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  priceList   PriceList      @relation(fields: [priceListId], references: [id], onDelete: Cascade)
+  variant     ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  @@unique([priceListId, variantId])
+  @@map("price_list_items")
+}
+
+model CompanyPriceList {
+  companyId   String @map("company_id") @db.Uuid
+  priceListId String @map("price_list_id") @db.Uuid
+
+  company     Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  priceList   PriceList @relation(fields: [priceListId], references: [id], onDelete: Cascade)
+
+  @@id([companyId, priceListId])
+  @@map("company_price_lists")
+}
+
+model Cart {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId   String    @map("tenant_id") @db.Uuid
+  customerId String?   @map("customer_id") @db.Uuid
+  sessionKey String?   @map("session_key") @db.VarChar
+  currency   String    @db.Char(3)
+  expiresAt  DateTime? @map("expires_at") @db.Timestamptz
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt  DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant     Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  customer   Customer? @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  items      CartItem[]
+
+  @@map("carts")
+}
+
+model CartItem {
+  id                     String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId               String   @map("tenant_id") @db.Uuid
+  cartId                 String   @map("cart_id") @db.Uuid
+  variantId              String   @map("variant_id") @db.Uuid
+  quantity               Int
+  unitPriceSnapshotMinor BigInt   @map("unit_price_snapshot_minor")
+  createdAt              DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt              DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant     Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  cart       Cart           @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  variant    ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  @@unique([cartId, variantId])
+  @@map("cart_items")
+}
+
+model Order {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId       String   @map("tenant_id") @db.Uuid
+  orderNumber    String   @map("order_number") @db.VarChar
+  customerId     String   @map("customer_id") @db.Uuid
+  status         String   @db.VarChar
+  currency       String   @db.Char(3)
+  subtotalMinor  BigInt   @map("subtotal_minor")
+  taxMinor       BigInt   @default(0) @map("tax_minor")
+  shippingMinor  BigInt   @default(0) @map("shipping_minor")
+  discountMinor  BigInt   @default(0) @map("discount_minor")
+  totalMinor     BigInt   @map("total_minor")
+  shippingAddress Json    @map("shipping_address")
+  billingAddress Json?    @map("billing_address")
+  idempotencyKey String?  @map("idempotency_key") @db.VarChar
+  notes          String?  @db.Text
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant         Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  customer       Customer  @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  items          OrderItem[]
+  payments       Payment[]
+
+  @@unique([tenantId, orderNumber])
+  @@unique([tenantId, idempotencyKey])
+  @@index([tenantId, status, createdAt])
+  @@index([customerId])
+  @@map("orders")
+}
+
+model OrderItem {
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId            String   @map("tenant_id") @db.Uuid
+  orderId             String   @map("order_id") @db.Uuid
+  variantId           String?  @map("variant_id") @db.Uuid
+  productNameSnapshot String   @map("product_name_snapshot") @db.VarChar
+  variantSkuSnapshot  String   @map("variant_sku_snapshot") @db.VarChar
+  unitPriceMinor      BigInt   @map("unit_price_minor")
+  quantity            Int
+  lineTotalMinor      BigInt   @map("line_total_minor")
+  createdAt           DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  tenant              Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  order               Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  variant             ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+
+  @@map("order_items")
+}
+
+model Payment {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId          String   @map("tenant_id") @db.Uuid
+  orderId           String   @map("order_id") @db.Uuid
+  provider          String   @db.VarChar
+  providerPaymentId String?  @map("provider_payment_id") @db.VarChar
+  status            String   @db.VarChar
+  amountMinor       BigInt   @map("amount_minor")
+  currency          String   @db.Char(3)
+  paymentMethod     String?  @map("payment_method") @db.VarChar
+  idempotencyKey    String   @unique @map("idempotency_key") @db.VarChar
+  metadata          Json     @default("{}")
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt         DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant            Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  order             Order          @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  events            PaymentEvent[]
+
+  @@unique([tenantId, providerPaymentId])
+  @@index([orderId])
+  @@index([tenantId, status])
+  @@map("payments")
+}
+
+model PaymentEvent {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId        String   @map("tenant_id") @db.Uuid
+  paymentId       String   @map("payment_id") @db.Uuid
+  providerEventId String   @map("provider_event_id") @db.VarChar
+  eventType       String   @map("event_type") @db.VarChar
+  payloadDigest   String?  @map("payload_digest") @db.VarChar
+  processedAt     DateTime @map("processed_at") @db.Timestamptz
+  rawPayload      Json?    @map("raw_payload")
+
+  tenant          Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  payment         Payment  @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, providerEventId])
+  @@map("payment_events")
+}

@@ -1,16 +1,18 @@
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
-import { PrismaClient } from '../generated/prisma/client';
+import { PrismaClient } from '../../prisma/generated/prisma/client.js';
+import { PrismaPg } from '@prisma/adapter-pg';
 
-// In Prisma 7, PrismaClient is a factory-based class that cannot be directly
-// extended. We wrap it via composition and re-expose the client instance
-// so that any service can inject PrismaService and call prisma.user.findMany() etc.
-const prismaInstance = new PrismaClient();
+function createPrismaClient() {
+  const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
+  return new PrismaClient({ adapter });
+}
+
+const prismaInstance = createPrismaClient();
 
 @Injectable()
 export class PrismaService implements OnModuleInit, OnModuleDestroy {
   readonly client = prismaInstance;
 
-  // Shortcut delegates so callers can do prismaService.tenant.findMany() etc.
   get tenant() { return this.client.tenant; }
   get tenantOrderSequence() { return this.client.tenantOrderSequence; }
   get tenantDomain() { return this.client.tenantDomain; }

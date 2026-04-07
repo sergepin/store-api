@@ -1,6 +1,6 @@
 -- CreateTable
 CREATE TABLE "tenants" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "id" SERIAL NOT NULL,
     "name" VARCHAR NOT NULL,
     "slug" VARCHAR NOT NULL,
     "status" VARCHAR NOT NULL,
@@ -16,7 +16,7 @@ CREATE TABLE "tenants" (
 
 -- CreateTable
 CREATE TABLE "tenant_order_sequences" (
-    "tenant_id" UUID NOT NULL,
+    "tenant_id" INTEGER NOT NULL,
     "next_value" BIGINT NOT NULL,
     "updated_at" TIMESTAMPTZ NOT NULL,
 
@@ -25,8 +25,8 @@ CREATE TABLE "tenant_order_sequences" (
 
 -- CreateTable
 CREATE TABLE "tenant_domains" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "tenant_id" UUID NOT NULL,
+    "id" SERIAL NOT NULL,
+    "tenant_id" INTEGER NOT NULL,
     "hostname" VARCHAR NOT NULL,
     "is_primary" BOOLEAN NOT NULL,
     "verified_at" TIMESTAMPTZ,
@@ -37,7 +37,7 @@ CREATE TABLE "tenant_domains" (
 
 -- CreateTable
 CREATE TABLE "users" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "id" SERIAL NOT NULL,
     "email" VARCHAR NOT NULL,
     "password_hash" VARCHAR,
     "email_verified_at" TIMESTAMPTZ,
@@ -49,9 +49,9 @@ CREATE TABLE "users" (
 
 -- CreateTable
 CREATE TABLE "tenant_memberships" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "tenant_id" UUID NOT NULL,
-    "user_id" UUID NOT NULL,
+    "id" SERIAL NOT NULL,
+    "tenant_id" INTEGER NOT NULL,
+    "user_id" INTEGER NOT NULL,
     "role" VARCHAR NOT NULL,
     "status" VARCHAR NOT NULL,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -62,8 +62,8 @@ CREATE TABLE "tenant_memberships" (
 
 -- CreateTable
 CREATE TABLE "companies" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "tenant_id" UUID NOT NULL,
+    "id" SERIAL NOT NULL,
+    "tenant_id" INTEGER NOT NULL,
     "legal_name" VARCHAR NOT NULL,
     "tax_id" VARCHAR,
     "billing_address" JSONB,
@@ -76,13 +76,13 @@ CREATE TABLE "companies" (
 
 -- CreateTable
 CREATE TABLE "customers" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "tenant_id" UUID NOT NULL,
+    "id" SERIAL NOT NULL,
+    "tenant_id" INTEGER NOT NULL,
     "email" VARCHAR NOT NULL,
     "phone" VARCHAR,
     "full_name" VARCHAR,
-    "user_id" UUID,
-    "company_id" UUID,
+    "user_id" INTEGER,
+    "company_id" INTEGER,
     "customer_type" VARCHAR NOT NULL,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ NOT NULL,
@@ -92,9 +92,9 @@ CREATE TABLE "customers" (
 
 -- CreateTable
 CREATE TABLE "categories" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "tenant_id" UUID NOT NULL,
-    "parent_id" UUID,
+    "id" SERIAL NOT NULL,
+    "tenant_id" INTEGER NOT NULL,
+    "parent_id" INTEGER,
     "name" VARCHAR NOT NULL,
     "slug" VARCHAR NOT NULL,
     "sort_order" INTEGER NOT NULL DEFAULT 0,
@@ -107,9 +107,9 @@ CREATE TABLE "categories" (
 
 -- CreateTable
 CREATE TABLE "products" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "tenant_id" UUID NOT NULL,
-    "primary_category_id" UUID,
+    "id" SERIAL NOT NULL,
+    "tenant_id" INTEGER NOT NULL,
+    "primary_category_id" INTEGER,
     "name" VARCHAR NOT NULL,
     "slug" VARCHAR NOT NULL,
     "description" TEXT,
@@ -124,10 +124,10 @@ CREATE TABLE "products" (
 
 -- CreateTable
 CREATE TABLE "product_categories" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "tenant_id" UUID NOT NULL,
-    "product_id" UUID NOT NULL,
-    "category_id" UUID NOT NULL,
+    "id" SERIAL NOT NULL,
+    "tenant_id" INTEGER NOT NULL,
+    "product_id" INTEGER NOT NULL,
+    "category_id" INTEGER NOT NULL,
     "sort_order" INTEGER NOT NULL DEFAULT 0,
 
     CONSTRAINT "product_categories_pkey" PRIMARY KEY ("id")
@@ -135,9 +135,9 @@ CREATE TABLE "product_categories" (
 
 -- CreateTable
 CREATE TABLE "product_variants" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "tenant_id" UUID NOT NULL,
-    "product_id" UUID NOT NULL,
+    "id" SERIAL NOT NULL,
+    "tenant_id" INTEGER NOT NULL,
+    "product_id" INTEGER NOT NULL,
     "sku" VARCHAR NOT NULL,
     "name" VARCHAR,
     "attributes" JSONB NOT NULL DEFAULT '{}',
@@ -153,9 +153,9 @@ CREATE TABLE "product_variants" (
 
 -- CreateTable
 CREATE TABLE "inventory_balances" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "tenant_id" UUID NOT NULL,
-    "variant_id" UUID NOT NULL,
+    "id" SERIAL NOT NULL,
+    "tenant_id" INTEGER NOT NULL,
+    "variant_id" INTEGER NOT NULL,
     "quantity_on_hand" INTEGER NOT NULL,
     "quantity_reserved" INTEGER NOT NULL DEFAULT 0,
     "updated_at" TIMESTAMPTZ NOT NULL,
@@ -165,13 +165,13 @@ CREATE TABLE "inventory_balances" (
 
 -- CreateTable
 CREATE TABLE "inventory_movements" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "tenant_id" UUID NOT NULL,
-    "variant_id" UUID NOT NULL,
+    "id" SERIAL NOT NULL,
+    "tenant_id" INTEGER NOT NULL,
+    "variant_id" INTEGER NOT NULL,
     "delta" INTEGER NOT NULL,
     "reason" VARCHAR NOT NULL,
     "reference_type" VARCHAR,
-    "reference_id" UUID,
+    "reference_id" INTEGER,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "inventory_movements_pkey" PRIMARY KEY ("id")
@@ -179,8 +179,8 @@ CREATE TABLE "inventory_movements" (
 
 -- CreateTable
 CREATE TABLE "price_lists" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "tenant_id" UUID NOT NULL,
+    "id" SERIAL NOT NULL,
+    "tenant_id" INTEGER NOT NULL,
     "name" VARCHAR NOT NULL,
     "is_default" BOOLEAN NOT NULL,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -191,10 +191,10 @@ CREATE TABLE "price_lists" (
 
 -- CreateTable
 CREATE TABLE "price_list_items" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "tenant_id" UUID NOT NULL,
-    "price_list_id" UUID NOT NULL,
-    "variant_id" UUID NOT NULL,
+    "id" SERIAL NOT NULL,
+    "tenant_id" INTEGER NOT NULL,
+    "price_list_id" INTEGER NOT NULL,
+    "variant_id" INTEGER NOT NULL,
     "price_minor" BIGINT NOT NULL,
     "currency" CHAR(3) NOT NULL,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -205,17 +205,17 @@ CREATE TABLE "price_list_items" (
 
 -- CreateTable
 CREATE TABLE "company_price_lists" (
-    "company_id" UUID NOT NULL,
-    "price_list_id" UUID NOT NULL,
+    "company_id" INTEGER NOT NULL,
+    "price_list_id" INTEGER NOT NULL,
 
     CONSTRAINT "company_price_lists_pkey" PRIMARY KEY ("company_id","price_list_id")
 );
 
 -- CreateTable
 CREATE TABLE "carts" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "tenant_id" UUID NOT NULL,
-    "customer_id" UUID,
+    "id" SERIAL NOT NULL,
+    "tenant_id" INTEGER NOT NULL,
+    "customer_id" INTEGER,
     "session_key" VARCHAR,
     "currency" CHAR(3) NOT NULL,
     "expires_at" TIMESTAMPTZ,
@@ -227,10 +227,10 @@ CREATE TABLE "carts" (
 
 -- CreateTable
 CREATE TABLE "cart_items" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "tenant_id" UUID NOT NULL,
-    "cart_id" UUID NOT NULL,
-    "variant_id" UUID NOT NULL,
+    "id" SERIAL NOT NULL,
+    "tenant_id" INTEGER NOT NULL,
+    "cart_id" INTEGER NOT NULL,
+    "variant_id" INTEGER NOT NULL,
     "quantity" INTEGER NOT NULL,
     "unit_price_snapshot_minor" BIGINT NOT NULL,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -241,10 +241,10 @@ CREATE TABLE "cart_items" (
 
 -- CreateTable
 CREATE TABLE "orders" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "tenant_id" UUID NOT NULL,
+    "id" SERIAL NOT NULL,
+    "tenant_id" INTEGER NOT NULL,
     "order_number" VARCHAR NOT NULL,
-    "customer_id" UUID NOT NULL,
+    "customer_id" INTEGER NOT NULL,
     "status" VARCHAR NOT NULL,
     "currency" CHAR(3) NOT NULL,
     "subtotal_minor" BIGINT NOT NULL,
@@ -264,10 +264,10 @@ CREATE TABLE "orders" (
 
 -- CreateTable
 CREATE TABLE "order_items" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "tenant_id" UUID NOT NULL,
-    "order_id" UUID NOT NULL,
-    "variant_id" UUID,
+    "id" SERIAL NOT NULL,
+    "tenant_id" INTEGER NOT NULL,
+    "order_id" INTEGER NOT NULL,
+    "variant_id" INTEGER,
     "product_name_snapshot" VARCHAR NOT NULL,
     "variant_sku_snapshot" VARCHAR NOT NULL,
     "unit_price_minor" BIGINT NOT NULL,
@@ -280,9 +280,9 @@ CREATE TABLE "order_items" (
 
 -- CreateTable
 CREATE TABLE "payments" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "tenant_id" UUID NOT NULL,
-    "order_id" UUID NOT NULL,
+    "id" SERIAL NOT NULL,
+    "tenant_id" INTEGER NOT NULL,
+    "order_id" INTEGER NOT NULL,
     "provider" VARCHAR NOT NULL,
     "provider_payment_id" VARCHAR,
     "status" VARCHAR NOT NULL,
@@ -299,14 +299,14 @@ CREATE TABLE "payments" (
 
 -- CreateTable
 CREATE TABLE "payment_events" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "tenant_id" UUID NOT NULL,
-    "payment_id" UUID NOT NULL,
+    "id" SERIAL NOT NULL,
+    "tenant_id" INTEGER NOT NULL,
+    "payment_id" INTEGER NOT NULL,
     "provider_event_id" VARCHAR NOT NULL,
     "event_type" VARCHAR NOT NULL,
     "payload_digest" VARCHAR,
     "processed_at" TIMESTAMPTZ NOT NULL,
-    "raw_payload" JSONB,
+    "rawPayload" JSONB,
 
     CONSTRAINT "payment_events_pkey" PRIMARY KEY ("id")
 );

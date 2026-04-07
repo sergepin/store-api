@@ -27,26 +27,34 @@ export type AggregateProductCategory = {
 }
 
 export type ProductCategoryAvgAggregateOutputType = {
+  id: number | null
+  tenantId: number | null
+  productId: number | null
+  categoryId: number | null
   sortOrder: number | null
 }
 
 export type ProductCategorySumAggregateOutputType = {
+  id: number | null
+  tenantId: number | null
+  productId: number | null
+  categoryId: number | null
   sortOrder: number | null
 }
 
 export type ProductCategoryMinAggregateOutputType = {
-  id: string | null
-  tenantId: string | null
-  productId: string | null
-  categoryId: string | null
+  id: number | null
+  tenantId: number | null
+  productId: number | null
+  categoryId: number | null
   sortOrder: number | null
 }
 
 export type ProductCategoryMaxAggregateOutputType = {
-  id: string | null
-  tenantId: string | null
-  productId: string | null
-  categoryId: string | null
+  id: number | null
+  tenantId: number | null
+  productId: number | null
+  categoryId: number | null
   sortOrder: number | null
 }
 
@@ -61,10 +69,18 @@ export type ProductCategoryCountAggregateOutputType = {
 
 
 export type ProductCategoryAvgAggregateInputType = {
+  id?: true
+  tenantId?: true
+  productId?: true
+  categoryId?: true
   sortOrder?: true
 }
 
 export type ProductCategorySumAggregateInputType = {
+  id?: true
+  tenantId?: true
+  productId?: true
+  categoryId?: true
   sortOrder?: true
 }
 
@@ -180,10 +196,10 @@ export type ProductCategoryGroupByArgs<ExtArgs extends runtime.Types.Extensions.
 }
 
 export type ProductCategoryGroupByOutputType = {
-  id: string
-  tenantId: string
-  productId: string
-  categoryId: string
+  id: number
+  tenantId: number
+  productId: number
+  categoryId: number
   sortOrder: number
   _count: ProductCategoryCountAggregateOutputType | null
   _avg: ProductCategoryAvgAggregateOutputType | null
@@ -211,10 +227,10 @@ export type ProductCategoryWhereInput = {
   AND?: Prisma.ProductCategoryWhereInput | Prisma.ProductCategoryWhereInput[]
   OR?: Prisma.ProductCategoryWhereInput[]
   NOT?: Prisma.ProductCategoryWhereInput | Prisma.ProductCategoryWhereInput[]
-  id?: Prisma.UuidFilter<"ProductCategory"> | string
-  tenantId?: Prisma.UuidFilter<"ProductCategory"> | string
-  productId?: Prisma.UuidFilter<"ProductCategory"> | string
-  categoryId?: Prisma.UuidFilter<"ProductCategory"> | string
+  id?: Prisma.IntFilter<"ProductCategory"> | number
+  tenantId?: Prisma.IntFilter<"ProductCategory"> | number
+  productId?: Prisma.IntFilter<"ProductCategory"> | number
+  categoryId?: Prisma.IntFilter<"ProductCategory"> | number
   sortOrder?: Prisma.IntFilter<"ProductCategory"> | number
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
@@ -233,14 +249,14 @@ export type ProductCategoryOrderByWithRelationInput = {
 }
 
 export type ProductCategoryWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
+  id?: number
   tenantId_productId_categoryId?: Prisma.ProductCategoryTenantIdProductIdCategoryIdCompoundUniqueInput
   AND?: Prisma.ProductCategoryWhereInput | Prisma.ProductCategoryWhereInput[]
   OR?: Prisma.ProductCategoryWhereInput[]
   NOT?: Prisma.ProductCategoryWhereInput | Prisma.ProductCategoryWhereInput[]
-  tenantId?: Prisma.UuidFilter<"ProductCategory"> | string
-  productId?: Prisma.UuidFilter<"ProductCategory"> | string
-  categoryId?: Prisma.UuidFilter<"ProductCategory"> | string
+  tenantId?: Prisma.IntFilter<"ProductCategory"> | number
+  productId?: Prisma.IntFilter<"ProductCategory"> | number
+  categoryId?: Prisma.IntFilter<"ProductCategory"> | number
   sortOrder?: Prisma.IntFilter<"ProductCategory"> | number
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
@@ -264,15 +280,14 @@ export type ProductCategoryScalarWhereWithAggregatesInput = {
   AND?: Prisma.ProductCategoryScalarWhereWithAggregatesInput | Prisma.ProductCategoryScalarWhereWithAggregatesInput[]
   OR?: Prisma.ProductCategoryScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ProductCategoryScalarWhereWithAggregatesInput | Prisma.ProductCategoryScalarWhereWithAggregatesInput[]
-  id?: Prisma.UuidWithAggregatesFilter<"ProductCategory"> | string
-  tenantId?: Prisma.UuidWithAggregatesFilter<"ProductCategory"> | string
-  productId?: Prisma.UuidWithAggregatesFilter<"ProductCategory"> | string
-  categoryId?: Prisma.UuidWithAggregatesFilter<"ProductCategory"> | string
+  id?: Prisma.IntWithAggregatesFilter<"ProductCategory"> | number
+  tenantId?: Prisma.IntWithAggregatesFilter<"ProductCategory"> | number
+  productId?: Prisma.IntWithAggregatesFilter<"ProductCategory"> | number
+  categoryId?: Prisma.IntWithAggregatesFilter<"ProductCategory"> | number
   sortOrder?: Prisma.IntWithAggregatesFilter<"ProductCategory"> | number
 }
 
 export type ProductCategoryCreateInput = {
-  id?: string
   sortOrder?: number
   tenant: Prisma.TenantCreateNestedOneWithoutProductCategoriesInput
   product: Prisma.ProductCreateNestedOneWithoutProductCategoriesInput
@@ -280,15 +295,14 @@ export type ProductCategoryCreateInput = {
 }
 
 export type ProductCategoryUncheckedCreateInput = {
-  id?: string
-  tenantId: string
-  productId: string
-  categoryId: string
+  id?: number
+  tenantId: number
+  productId: number
+  categoryId: number
   sortOrder?: number
 }
 
 export type ProductCategoryUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   tenant?: Prisma.TenantUpdateOneRequiredWithoutProductCategoriesNestedInput
   product?: Prisma.ProductUpdateOneRequiredWithoutProductCategoriesNestedInput
@@ -296,31 +310,30 @@ export type ProductCategoryUpdateInput = {
 }
 
 export type ProductCategoryUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  productId?: Prisma.StringFieldUpdateOperationsInput | string
-  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
+  productId?: Prisma.IntFieldUpdateOperationsInput | number
+  categoryId?: Prisma.IntFieldUpdateOperationsInput | number
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ProductCategoryCreateManyInput = {
-  id?: string
-  tenantId: string
-  productId: string
-  categoryId: string
+  id?: number
+  tenantId: number
+  productId: number
+  categoryId: number
   sortOrder?: number
 }
 
 export type ProductCategoryUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ProductCategoryUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  productId?: Prisma.StringFieldUpdateOperationsInput | string
-  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
+  productId?: Prisma.IntFieldUpdateOperationsInput | number
+  categoryId?: Prisma.IntFieldUpdateOperationsInput | number
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -335,9 +348,9 @@ export type ProductCategoryOrderByRelationAggregateInput = {
 }
 
 export type ProductCategoryTenantIdProductIdCategoryIdCompoundUniqueInput = {
-  tenantId: string
-  productId: string
-  categoryId: string
+  tenantId: number
+  productId: number
+  categoryId: number
 }
 
 export type ProductCategoryCountOrderByAggregateInput = {
@@ -349,6 +362,10 @@ export type ProductCategoryCountOrderByAggregateInput = {
 }
 
 export type ProductCategoryAvgOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
+  productId?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
 }
 
@@ -369,6 +386,10 @@ export type ProductCategoryMinOrderByAggregateInput = {
 }
 
 export type ProductCategorySumOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
+  productId?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
 }
 
@@ -499,16 +520,15 @@ export type ProductCategoryUncheckedUpdateManyWithoutProductNestedInput = {
 }
 
 export type ProductCategoryCreateWithoutTenantInput = {
-  id?: string
   sortOrder?: number
   product: Prisma.ProductCreateNestedOneWithoutProductCategoriesInput
   category: Prisma.CategoryCreateNestedOneWithoutProductCategoriesInput
 }
 
 export type ProductCategoryUncheckedCreateWithoutTenantInput = {
-  id?: string
-  productId: string
-  categoryId: string
+  id?: number
+  productId: number
+  categoryId: number
   sortOrder?: number
 }
 
@@ -542,24 +562,23 @@ export type ProductCategoryScalarWhereInput = {
   AND?: Prisma.ProductCategoryScalarWhereInput | Prisma.ProductCategoryScalarWhereInput[]
   OR?: Prisma.ProductCategoryScalarWhereInput[]
   NOT?: Prisma.ProductCategoryScalarWhereInput | Prisma.ProductCategoryScalarWhereInput[]
-  id?: Prisma.UuidFilter<"ProductCategory"> | string
-  tenantId?: Prisma.UuidFilter<"ProductCategory"> | string
-  productId?: Prisma.UuidFilter<"ProductCategory"> | string
-  categoryId?: Prisma.UuidFilter<"ProductCategory"> | string
+  id?: Prisma.IntFilter<"ProductCategory"> | number
+  tenantId?: Prisma.IntFilter<"ProductCategory"> | number
+  productId?: Prisma.IntFilter<"ProductCategory"> | number
+  categoryId?: Prisma.IntFilter<"ProductCategory"> | number
   sortOrder?: Prisma.IntFilter<"ProductCategory"> | number
 }
 
 export type ProductCategoryCreateWithoutCategoryInput = {
-  id?: string
   sortOrder?: number
   tenant: Prisma.TenantCreateNestedOneWithoutProductCategoriesInput
   product: Prisma.ProductCreateNestedOneWithoutProductCategoriesInput
 }
 
 export type ProductCategoryUncheckedCreateWithoutCategoryInput = {
-  id?: string
-  tenantId: string
-  productId: string
+  id?: number
+  tenantId: number
+  productId: number
   sortOrder?: number
 }
 
@@ -590,16 +609,15 @@ export type ProductCategoryUpdateManyWithWhereWithoutCategoryInput = {
 }
 
 export type ProductCategoryCreateWithoutProductInput = {
-  id?: string
   sortOrder?: number
   tenant: Prisma.TenantCreateNestedOneWithoutProductCategoriesInput
   category: Prisma.CategoryCreateNestedOneWithoutProductCategoriesInput
 }
 
 export type ProductCategoryUncheckedCreateWithoutProductInput = {
-  id?: string
-  tenantId: string
-  categoryId: string
+  id?: number
+  tenantId: number
+  categoryId: number
   sortOrder?: number
 }
 
@@ -630,86 +648,83 @@ export type ProductCategoryUpdateManyWithWhereWithoutProductInput = {
 }
 
 export type ProductCategoryCreateManyTenantInput = {
-  id?: string
-  productId: string
-  categoryId: string
+  id?: number
+  productId: number
+  categoryId: number
   sortOrder?: number
 }
 
 export type ProductCategoryUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   product?: Prisma.ProductUpdateOneRequiredWithoutProductCategoriesNestedInput
   category?: Prisma.CategoryUpdateOneRequiredWithoutProductCategoriesNestedInput
 }
 
 export type ProductCategoryUncheckedUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  productId?: Prisma.StringFieldUpdateOperationsInput | string
-  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  productId?: Prisma.IntFieldUpdateOperationsInput | number
+  categoryId?: Prisma.IntFieldUpdateOperationsInput | number
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ProductCategoryUncheckedUpdateManyWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  productId?: Prisma.StringFieldUpdateOperationsInput | string
-  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  productId?: Prisma.IntFieldUpdateOperationsInput | number
+  categoryId?: Prisma.IntFieldUpdateOperationsInput | number
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ProductCategoryCreateManyCategoryInput = {
-  id?: string
-  tenantId: string
-  productId: string
+  id?: number
+  tenantId: number
+  productId: number
   sortOrder?: number
 }
 
 export type ProductCategoryUpdateWithoutCategoryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   tenant?: Prisma.TenantUpdateOneRequiredWithoutProductCategoriesNestedInput
   product?: Prisma.ProductUpdateOneRequiredWithoutProductCategoriesNestedInput
 }
 
 export type ProductCategoryUncheckedUpdateWithoutCategoryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  productId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
+  productId?: Prisma.IntFieldUpdateOperationsInput | number
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ProductCategoryUncheckedUpdateManyWithoutCategoryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  productId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
+  productId?: Prisma.IntFieldUpdateOperationsInput | number
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ProductCategoryCreateManyProductInput = {
-  id?: string
-  tenantId: string
-  categoryId: string
+  id?: number
+  tenantId: number
+  categoryId: number
   sortOrder?: number
 }
 
 export type ProductCategoryUpdateWithoutProductInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   tenant?: Prisma.TenantUpdateOneRequiredWithoutProductCategoriesNestedInput
   category?: Prisma.CategoryUpdateOneRequiredWithoutProductCategoriesNestedInput
 }
 
 export type ProductCategoryUncheckedUpdateWithoutProductInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
+  categoryId?: Prisma.IntFieldUpdateOperationsInput | number
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type ProductCategoryUncheckedUpdateManyWithoutProductInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
+  categoryId?: Prisma.IntFieldUpdateOperationsInput | number
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -781,10 +796,10 @@ export type $ProductCategoryPayload<ExtArgs extends runtime.Types.Extensions.Int
     category: Prisma.$CategoryPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
-    tenantId: string
-    productId: string
-    categoryId: string
+    id: number
+    tenantId: number
+    productId: number
+    categoryId: number
     sortOrder: number
   }, ExtArgs["result"]["productCategory"]>
   composites: {}
@@ -1212,10 +1227,10 @@ export interface Prisma__ProductCategoryClient<T, Null = never, ExtArgs extends 
  * Fields of the ProductCategory model
  */
 export interface ProductCategoryFieldRefs {
-  readonly id: Prisma.FieldRef<"ProductCategory", 'String'>
-  readonly tenantId: Prisma.FieldRef<"ProductCategory", 'String'>
-  readonly productId: Prisma.FieldRef<"ProductCategory", 'String'>
-  readonly categoryId: Prisma.FieldRef<"ProductCategory", 'String'>
+  readonly id: Prisma.FieldRef<"ProductCategory", 'Int'>
+  readonly tenantId: Prisma.FieldRef<"ProductCategory", 'Int'>
+  readonly productId: Prisma.FieldRef<"ProductCategory", 'Int'>
+  readonly categoryId: Prisma.FieldRef<"ProductCategory", 'Int'>
   readonly sortOrder: Prisma.FieldRef<"ProductCategory", 'Int'>
 }
     

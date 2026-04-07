@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, ParseIntPipe } from '@nestjs/common';
 import { ProductsService } from './products.service.js';
 import { GetProductsQueryDto } from './dto/get-products-query.dto.js';
 
@@ -15,8 +15,9 @@ export class ProductsController {
    * Optional filters: ?categoryId=<uuid>&search=<text>&page=1&limit=20
    */
   @Get()
-  findAll(@Query() query: GetProductsQueryDto) {
-    return this.productsService.findAll(DEV_TENANT_SLUG as unknown as string, query);
+  async findAll(@Query() query: GetProductsQueryDto) {
+    const tenantId = await this.productsService.getTenantIdBySlug(DEV_TENANT_SLUG);
+    return this.productsService.findAll(tenantId, query);
   }
 
   /**
@@ -24,8 +25,9 @@ export class ProductsController {
    * Full-text search with relevance scoring.
    */
   @Get('search')
-  search(@Query('q') q: string, @Query() query: GetProductsQueryDto) {
-    return this.productsService.search(DEV_TENANT_SLUG as unknown as string, q, query);
+  async search(@Query('q') q: string, @Query() query: GetProductsQueryDto) {
+    const tenantId = await this.productsService.getTenantIdBySlug(DEV_TENANT_SLUG);
+    return this.productsService.search(tenantId, q, query);
   }
 
   /**
@@ -33,8 +35,9 @@ export class ProductsController {
    * Returns all products in a specific category (by slug).
    */
   @Get('category/:slug')
-  findByCategory(@Param('slug') slug: string, @Query() query: GetProductsQueryDto) {
-    return this.productsService.findByCategory(DEV_TENANT_SLUG as unknown as string, slug, query);
+  async findByCategory(@Param('slug') slug: string, @Query() query: GetProductsQueryDto) {
+    const tenantId = await this.productsService.getTenantIdBySlug(DEV_TENANT_SLUG);
+    return this.productsService.findByCategory(tenantId, slug, query);
   }
 
   /**
@@ -42,7 +45,8 @@ export class ProductsController {
    * Returns a single product by UUID (for product detail page).
    */
   @Get(':id')
-  findById(@Param('id') id: string) {
-    return this.productsService.findById(DEV_TENANT_SLUG as unknown as string, id);
+  async findById(@Param('id', ParseIntPipe) id: number) {
+    const tenantId = await this.productsService.getTenantIdBySlug(DEV_TENANT_SLUG);
+    return this.productsService.findById(tenantId, id);
   }
 }

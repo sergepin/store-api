@@ -27,15 +27,17 @@ export type AggregateTenant = {
 }
 
 export type TenantAvgAggregateOutputType = {
+  id: number | null
   orderNumberPadding: number | null
 }
 
 export type TenantSumAggregateOutputType = {
+  id: number | null
   orderNumberPadding: number | null
 }
 
 export type TenantMinAggregateOutputType = {
-  id: string | null
+  id: number | null
   name: string | null
   slug: string | null
   status: string | null
@@ -47,7 +49,7 @@ export type TenantMinAggregateOutputType = {
 }
 
 export type TenantMaxAggregateOutputType = {
-  id: string | null
+  id: number | null
   name: string | null
   slug: string | null
   status: string | null
@@ -74,10 +76,12 @@ export type TenantCountAggregateOutputType = {
 
 
 export type TenantAvgAggregateInputType = {
+  id?: true
   orderNumberPadding?: true
 }
 
 export type TenantSumAggregateInputType = {
+  id?: true
   orderNumberPadding?: true
 }
 
@@ -206,7 +210,7 @@ export type TenantGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 }
 
 export type TenantGroupByOutputType = {
-  id: string
+  id: number
   name: string
   slug: string
   status: string
@@ -242,7 +246,7 @@ export type TenantWhereInput = {
   AND?: Prisma.TenantWhereInput | Prisma.TenantWhereInput[]
   OR?: Prisma.TenantWhereInput[]
   NOT?: Prisma.TenantWhereInput | Prisma.TenantWhereInput[]
-  id?: Prisma.UuidFilter<"Tenant"> | string
+  id?: Prisma.IntFilter<"Tenant"> | number
   name?: Prisma.StringFilter<"Tenant"> | string
   slug?: Prisma.StringFilter<"Tenant"> | string
   status?: Prisma.StringFilter<"Tenant"> | string
@@ -306,7 +310,7 @@ export type TenantOrderByWithRelationInput = {
 }
 
 export type TenantWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
+  id?: number
   slug?: string
   AND?: Prisma.TenantWhereInput | Prisma.TenantWhereInput[]
   OR?: Prisma.TenantWhereInput[]
@@ -362,7 +366,7 @@ export type TenantScalarWhereWithAggregatesInput = {
   AND?: Prisma.TenantScalarWhereWithAggregatesInput | Prisma.TenantScalarWhereWithAggregatesInput[]
   OR?: Prisma.TenantScalarWhereWithAggregatesInput[]
   NOT?: Prisma.TenantScalarWhereWithAggregatesInput | Prisma.TenantScalarWhereWithAggregatesInput[]
-  id?: Prisma.UuidWithAggregatesFilter<"Tenant"> | string
+  id?: Prisma.IntWithAggregatesFilter<"Tenant"> | number
   name?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
   slug?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
   status?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
@@ -375,7 +379,6 @@ export type TenantScalarWhereWithAggregatesInput = {
 }
 
 export type TenantCreateInput = {
-  id?: string
   name: string
   slug: string
   status: string
@@ -407,7 +410,7 @@ export type TenantCreateInput = {
 }
 
 export type TenantUncheckedCreateInput = {
-  id?: string
+  id?: number
   name: string
   slug: string
   status: string
@@ -439,7 +442,6 @@ export type TenantUncheckedCreateInput = {
 }
 
 export type TenantUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -471,7 +473,7 @@ export type TenantUpdateInput = {
 }
 
 export type TenantUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -503,7 +505,7 @@ export type TenantUncheckedUpdateInput = {
 }
 
 export type TenantCreateManyInput = {
-  id?: string
+  id?: number
   name: string
   slug: string
   status: string
@@ -516,7 +518,6 @@ export type TenantCreateManyInput = {
 }
 
 export type TenantUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -529,7 +530,7 @@ export type TenantUpdateManyMutationInput = {
 }
 
 export type TenantUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -555,6 +556,7 @@ export type TenantCountOrderByAggregateInput = {
 }
 
 export type TenantAvgOrderByAggregateInput = {
+  id?: Prisma.SortOrder
   orderNumberPadding?: Prisma.SortOrder
 }
 
@@ -583,6 +585,7 @@ export type TenantMinOrderByAggregateInput = {
 }
 
 export type TenantSumOrderByAggregateInput = {
+  id?: Prisma.SortOrder
   orderNumberPadding?: Prisma.SortOrder
 }
 
@@ -878,7 +881,6 @@ export type TenantUpdateOneRequiredWithoutPaymentEventsNestedInput = {
 }
 
 export type TenantCreateWithoutSequenceInput = {
-  id?: string
   name: string
   slug: string
   status: string
@@ -909,7 +911,7 @@ export type TenantCreateWithoutSequenceInput = {
 }
 
 export type TenantUncheckedCreateWithoutSequenceInput = {
-  id?: string
+  id?: number
   name: string
   slug: string
   status: string
@@ -956,7 +958,6 @@ export type TenantUpdateToOneWithWhereWithoutSequenceInput = {
 }
 
 export type TenantUpdateWithoutSequenceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -987,7 +988,7 @@ export type TenantUpdateWithoutSequenceInput = {
 }
 
 export type TenantUncheckedUpdateWithoutSequenceInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1018,7 +1019,6 @@ export type TenantUncheckedUpdateWithoutSequenceInput = {
 }
 
 export type TenantCreateWithoutDomainsInput = {
-  id?: string
   name: string
   slug: string
   status: string
@@ -1049,7 +1049,7 @@ export type TenantCreateWithoutDomainsInput = {
 }
 
 export type TenantUncheckedCreateWithoutDomainsInput = {
-  id?: string
+  id?: number
   name: string
   slug: string
   status: string
@@ -1096,7 +1096,6 @@ export type TenantUpdateToOneWithWhereWithoutDomainsInput = {
 }
 
 export type TenantUpdateWithoutDomainsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1127,7 +1126,7 @@ export type TenantUpdateWithoutDomainsInput = {
 }
 
 export type TenantUncheckedUpdateWithoutDomainsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1158,7 +1157,6 @@ export type TenantUncheckedUpdateWithoutDomainsInput = {
 }
 
 export type TenantCreateWithoutMembershipsInput = {
-  id?: string
   name: string
   slug: string
   status: string
@@ -1189,7 +1187,7 @@ export type TenantCreateWithoutMembershipsInput = {
 }
 
 export type TenantUncheckedCreateWithoutMembershipsInput = {
-  id?: string
+  id?: number
   name: string
   slug: string
   status: string
@@ -1236,7 +1234,6 @@ export type TenantUpdateToOneWithWhereWithoutMembershipsInput = {
 }
 
 export type TenantUpdateWithoutMembershipsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1267,7 +1264,7 @@ export type TenantUpdateWithoutMembershipsInput = {
 }
 
 export type TenantUncheckedUpdateWithoutMembershipsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1298,7 +1295,6 @@ export type TenantUncheckedUpdateWithoutMembershipsInput = {
 }
 
 export type TenantCreateWithoutCompaniesInput = {
-  id?: string
   name: string
   slug: string
   status: string
@@ -1329,7 +1325,7 @@ export type TenantCreateWithoutCompaniesInput = {
 }
 
 export type TenantUncheckedCreateWithoutCompaniesInput = {
-  id?: string
+  id?: number
   name: string
   slug: string
   status: string
@@ -1376,7 +1372,6 @@ export type TenantUpdateToOneWithWhereWithoutCompaniesInput = {
 }
 
 export type TenantUpdateWithoutCompaniesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1407,7 +1402,7 @@ export type TenantUpdateWithoutCompaniesInput = {
 }
 
 export type TenantUncheckedUpdateWithoutCompaniesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1438,7 +1433,6 @@ export type TenantUncheckedUpdateWithoutCompaniesInput = {
 }
 
 export type TenantCreateWithoutCustomersInput = {
-  id?: string
   name: string
   slug: string
   status: string
@@ -1469,7 +1463,7 @@ export type TenantCreateWithoutCustomersInput = {
 }
 
 export type TenantUncheckedCreateWithoutCustomersInput = {
-  id?: string
+  id?: number
   name: string
   slug: string
   status: string
@@ -1516,7 +1510,6 @@ export type TenantUpdateToOneWithWhereWithoutCustomersInput = {
 }
 
 export type TenantUpdateWithoutCustomersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1547,7 +1540,7 @@ export type TenantUpdateWithoutCustomersInput = {
 }
 
 export type TenantUncheckedUpdateWithoutCustomersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1578,7 +1571,6 @@ export type TenantUncheckedUpdateWithoutCustomersInput = {
 }
 
 export type TenantCreateWithoutCategoriesInput = {
-  id?: string
   name: string
   slug: string
   status: string
@@ -1609,7 +1601,7 @@ export type TenantCreateWithoutCategoriesInput = {
 }
 
 export type TenantUncheckedCreateWithoutCategoriesInput = {
-  id?: string
+  id?: number
   name: string
   slug: string
   status: string
@@ -1656,7 +1648,6 @@ export type TenantUpdateToOneWithWhereWithoutCategoriesInput = {
 }
 
 export type TenantUpdateWithoutCategoriesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1687,7 +1678,7 @@ export type TenantUpdateWithoutCategoriesInput = {
 }
 
 export type TenantUncheckedUpdateWithoutCategoriesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1718,7 +1709,6 @@ export type TenantUncheckedUpdateWithoutCategoriesInput = {
 }
 
 export type TenantCreateWithoutProductsInput = {
-  id?: string
   name: string
   slug: string
   status: string
@@ -1749,7 +1739,7 @@ export type TenantCreateWithoutProductsInput = {
 }
 
 export type TenantUncheckedCreateWithoutProductsInput = {
-  id?: string
+  id?: number
   name: string
   slug: string
   status: string
@@ -1796,7 +1786,6 @@ export type TenantUpdateToOneWithWhereWithoutProductsInput = {
 }
 
 export type TenantUpdateWithoutProductsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1827,7 +1816,7 @@ export type TenantUpdateWithoutProductsInput = {
 }
 
 export type TenantUncheckedUpdateWithoutProductsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1858,7 +1847,6 @@ export type TenantUncheckedUpdateWithoutProductsInput = {
 }
 
 export type TenantCreateWithoutProductCategoriesInput = {
-  id?: string
   name: string
   slug: string
   status: string
@@ -1889,7 +1877,7 @@ export type TenantCreateWithoutProductCategoriesInput = {
 }
 
 export type TenantUncheckedCreateWithoutProductCategoriesInput = {
-  id?: string
+  id?: number
   name: string
   slug: string
   status: string
@@ -1936,7 +1924,6 @@ export type TenantUpdateToOneWithWhereWithoutProductCategoriesInput = {
 }
 
 export type TenantUpdateWithoutProductCategoriesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1967,7 +1954,7 @@ export type TenantUpdateWithoutProductCategoriesInput = {
 }
 
 export type TenantUncheckedUpdateWithoutProductCategoriesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1998,7 +1985,6 @@ export type TenantUncheckedUpdateWithoutProductCategoriesInput = {
 }
 
 export type TenantCreateWithoutProductVariantsInput = {
-  id?: string
   name: string
   slug: string
   status: string
@@ -2029,7 +2015,7 @@ export type TenantCreateWithoutProductVariantsInput = {
 }
 
 export type TenantUncheckedCreateWithoutProductVariantsInput = {
-  id?: string
+  id?: number
   name: string
   slug: string
   status: string
@@ -2076,7 +2062,6 @@ export type TenantUpdateToOneWithWhereWithoutProductVariantsInput = {
 }
 
 export type TenantUpdateWithoutProductVariantsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2107,7 +2092,7 @@ export type TenantUpdateWithoutProductVariantsInput = {
 }
 
 export type TenantUncheckedUpdateWithoutProductVariantsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2138,7 +2123,6 @@ export type TenantUncheckedUpdateWithoutProductVariantsInput = {
 }
 
 export type TenantCreateWithoutInventoryBalancesInput = {
-  id?: string
   name: string
   slug: string
   status: string
@@ -2169,7 +2153,7 @@ export type TenantCreateWithoutInventoryBalancesInput = {
 }
 
 export type TenantUncheckedCreateWithoutInventoryBalancesInput = {
-  id?: string
+  id?: number
   name: string
   slug: string
   status: string
@@ -2216,7 +2200,6 @@ export type TenantUpdateToOneWithWhereWithoutInventoryBalancesInput = {
 }
 
 export type TenantUpdateWithoutInventoryBalancesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2247,7 +2230,7 @@ export type TenantUpdateWithoutInventoryBalancesInput = {
 }
 
 export type TenantUncheckedUpdateWithoutInventoryBalancesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2278,7 +2261,6 @@ export type TenantUncheckedUpdateWithoutInventoryBalancesInput = {
 }
 
 export type TenantCreateWithoutInventoryMovementsInput = {
-  id?: string
   name: string
   slug: string
   status: string
@@ -2309,7 +2291,7 @@ export type TenantCreateWithoutInventoryMovementsInput = {
 }
 
 export type TenantUncheckedCreateWithoutInventoryMovementsInput = {
-  id?: string
+  id?: number
   name: string
   slug: string
   status: string
@@ -2356,7 +2338,6 @@ export type TenantUpdateToOneWithWhereWithoutInventoryMovementsInput = {
 }
 
 export type TenantUpdateWithoutInventoryMovementsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2387,7 +2368,7 @@ export type TenantUpdateWithoutInventoryMovementsInput = {
 }
 
 export type TenantUncheckedUpdateWithoutInventoryMovementsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2418,7 +2399,6 @@ export type TenantUncheckedUpdateWithoutInventoryMovementsInput = {
 }
 
 export type TenantCreateWithoutPriceListsInput = {
-  id?: string
   name: string
   slug: string
   status: string
@@ -2449,7 +2429,7 @@ export type TenantCreateWithoutPriceListsInput = {
 }
 
 export type TenantUncheckedCreateWithoutPriceListsInput = {
-  id?: string
+  id?: number
   name: string
   slug: string
   status: string
@@ -2496,7 +2476,6 @@ export type TenantUpdateToOneWithWhereWithoutPriceListsInput = {
 }
 
 export type TenantUpdateWithoutPriceListsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2527,7 +2506,7 @@ export type TenantUpdateWithoutPriceListsInput = {
 }
 
 export type TenantUncheckedUpdateWithoutPriceListsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2558,7 +2537,6 @@ export type TenantUncheckedUpdateWithoutPriceListsInput = {
 }
 
 export type TenantCreateWithoutPriceListItemsInput = {
-  id?: string
   name: string
   slug: string
   status: string
@@ -2589,7 +2567,7 @@ export type TenantCreateWithoutPriceListItemsInput = {
 }
 
 export type TenantUncheckedCreateWithoutPriceListItemsInput = {
-  id?: string
+  id?: number
   name: string
   slug: string
   status: string
@@ -2636,7 +2614,6 @@ export type TenantUpdateToOneWithWhereWithoutPriceListItemsInput = {
 }
 
 export type TenantUpdateWithoutPriceListItemsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2667,7 +2644,7 @@ export type TenantUpdateWithoutPriceListItemsInput = {
 }
 
 export type TenantUncheckedUpdateWithoutPriceListItemsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2698,7 +2675,6 @@ export type TenantUncheckedUpdateWithoutPriceListItemsInput = {
 }
 
 export type TenantCreateWithoutCartsInput = {
-  id?: string
   name: string
   slug: string
   status: string
@@ -2729,7 +2705,7 @@ export type TenantCreateWithoutCartsInput = {
 }
 
 export type TenantUncheckedCreateWithoutCartsInput = {
-  id?: string
+  id?: number
   name: string
   slug: string
   status: string
@@ -2776,7 +2752,6 @@ export type TenantUpdateToOneWithWhereWithoutCartsInput = {
 }
 
 export type TenantUpdateWithoutCartsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2807,7 +2782,7 @@ export type TenantUpdateWithoutCartsInput = {
 }
 
 export type TenantUncheckedUpdateWithoutCartsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2838,7 +2813,6 @@ export type TenantUncheckedUpdateWithoutCartsInput = {
 }
 
 export type TenantCreateWithoutCartItemsInput = {
-  id?: string
   name: string
   slug: string
   status: string
@@ -2869,7 +2843,7 @@ export type TenantCreateWithoutCartItemsInput = {
 }
 
 export type TenantUncheckedCreateWithoutCartItemsInput = {
-  id?: string
+  id?: number
   name: string
   slug: string
   status: string
@@ -2916,7 +2890,6 @@ export type TenantUpdateToOneWithWhereWithoutCartItemsInput = {
 }
 
 export type TenantUpdateWithoutCartItemsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2947,7 +2920,7 @@ export type TenantUpdateWithoutCartItemsInput = {
 }
 
 export type TenantUncheckedUpdateWithoutCartItemsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2978,7 +2951,6 @@ export type TenantUncheckedUpdateWithoutCartItemsInput = {
 }
 
 export type TenantCreateWithoutOrdersInput = {
-  id?: string
   name: string
   slug: string
   status: string
@@ -3009,7 +2981,7 @@ export type TenantCreateWithoutOrdersInput = {
 }
 
 export type TenantUncheckedCreateWithoutOrdersInput = {
-  id?: string
+  id?: number
   name: string
   slug: string
   status: string
@@ -3056,7 +3028,6 @@ export type TenantUpdateToOneWithWhereWithoutOrdersInput = {
 }
 
 export type TenantUpdateWithoutOrdersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3087,7 +3058,7 @@ export type TenantUpdateWithoutOrdersInput = {
 }
 
 export type TenantUncheckedUpdateWithoutOrdersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3118,7 +3089,6 @@ export type TenantUncheckedUpdateWithoutOrdersInput = {
 }
 
 export type TenantCreateWithoutOrderItemsInput = {
-  id?: string
   name: string
   slug: string
   status: string
@@ -3149,7 +3119,7 @@ export type TenantCreateWithoutOrderItemsInput = {
 }
 
 export type TenantUncheckedCreateWithoutOrderItemsInput = {
-  id?: string
+  id?: number
   name: string
   slug: string
   status: string
@@ -3196,7 +3166,6 @@ export type TenantUpdateToOneWithWhereWithoutOrderItemsInput = {
 }
 
 export type TenantUpdateWithoutOrderItemsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3227,7 +3196,7 @@ export type TenantUpdateWithoutOrderItemsInput = {
 }
 
 export type TenantUncheckedUpdateWithoutOrderItemsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3258,7 +3227,6 @@ export type TenantUncheckedUpdateWithoutOrderItemsInput = {
 }
 
 export type TenantCreateWithoutPaymentsInput = {
-  id?: string
   name: string
   slug: string
   status: string
@@ -3289,7 +3257,7 @@ export type TenantCreateWithoutPaymentsInput = {
 }
 
 export type TenantUncheckedCreateWithoutPaymentsInput = {
-  id?: string
+  id?: number
   name: string
   slug: string
   status: string
@@ -3336,7 +3304,6 @@ export type TenantUpdateToOneWithWhereWithoutPaymentsInput = {
 }
 
 export type TenantUpdateWithoutPaymentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3367,7 +3334,7 @@ export type TenantUpdateWithoutPaymentsInput = {
 }
 
 export type TenantUncheckedUpdateWithoutPaymentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3398,7 +3365,6 @@ export type TenantUncheckedUpdateWithoutPaymentsInput = {
 }
 
 export type TenantCreateWithoutPaymentEventsInput = {
-  id?: string
   name: string
   slug: string
   status: string
@@ -3429,7 +3395,7 @@ export type TenantCreateWithoutPaymentEventsInput = {
 }
 
 export type TenantUncheckedCreateWithoutPaymentEventsInput = {
-  id?: string
+  id?: number
   name: string
   slug: string
   status: string
@@ -3476,7 +3442,6 @@ export type TenantUpdateToOneWithWhereWithoutPaymentEventsInput = {
 }
 
 export type TenantUpdateWithoutPaymentEventsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3507,7 +3472,7 @@ export type TenantUpdateWithoutPaymentEventsInput = {
 }
 
 export type TenantUncheckedUpdateWithoutPaymentEventsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3843,7 +3808,7 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     paymentEvents: Prisma.$PaymentEventPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
+    id: number
     name: string
     slug: string
     status: string
@@ -4295,7 +4260,7 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
  * Fields of the Tenant model
  */
 export interface TenantFieldRefs {
-  readonly id: Prisma.FieldRef<"Tenant", 'String'>
+  readonly id: Prisma.FieldRef<"Tenant", 'Int'>
   readonly name: Prisma.FieldRef<"Tenant", 'String'>
   readonly slug: Prisma.FieldRef<"Tenant", 'String'>
   readonly status: Prisma.FieldRef<"Tenant", 'String'>

@@ -11,7 +11,7 @@ datasource db {
 }
 
 model Tenant {
-  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                  Int      @id @default(autoincrement())
   name                String   @db.VarChar
   slug                String   @unique @db.VarChar
   status              String   @db.VarChar
@@ -46,7 +46,7 @@ model Tenant {
 }
 
 model TenantOrderSequence {
-  tenantId  String   @id @map("tenant_id") @db.Uuid
+  tenantId  Int      @id @map("tenant_id")
   nextValue BigInt   @map("next_value")
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
@@ -56,8 +56,8 @@ model TenantOrderSequence {
 }
 
 model TenantDomain {
-  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  tenantId    String    @map("tenant_id") @db.Uuid
+  id          Int       @id @default(autoincrement())
+  tenantId    Int       @map("tenant_id")
   hostname    String    @unique @db.VarChar
   isPrimary   Boolean   @map("is_primary")
   verifiedAt  DateTime? @map("verified_at") @db.Timestamptz
@@ -70,7 +70,7 @@ model TenantDomain {
 }
 
 model User {
-  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id              Int       @id @default(autoincrement())
   email           String    @unique @db.VarChar 
   passwordHash    String?   @map("password_hash") @db.VarChar
   emailVerifiedAt DateTime? @map("email_verified_at") @db.Timestamptz
@@ -84,9 +84,9 @@ model User {
 }
 
 model TenantMembership {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  tenantId  String   @map("tenant_id") @db.Uuid
-  userId    String   @map("user_id") @db.Uuid
+  id        Int      @id @default(autoincrement())
+  tenantId  Int      @map("tenant_id")
+  userId    Int      @map("user_id")
   role      String   @db.VarChar
   status    String   @db.VarChar
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
@@ -101,8 +101,8 @@ model TenantMembership {
 }
 
 model Company {
-  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  tenantId       String   @map("tenant_id") @db.Uuid
+  id             Int      @id @default(autoincrement())
+  tenantId       Int      @map("tenant_id")
   legalName      String   @map("legal_name") @db.VarChar
   taxId          String?  @map("tax_id") @db.VarChar
   billingAddress Json?    @map("billing_address")
@@ -119,13 +119,13 @@ model Company {
 }
 
 model Customer {
-  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  tenantId     String   @map("tenant_id") @db.Uuid
+  id           Int      @id @default(autoincrement())
+  tenantId     Int      @map("tenant_id")
   email        String   @db.VarChar
   phone        String?  @db.VarChar
   fullName     String?  @map("full_name") @db.VarChar
-  userId       String?  @map("user_id") @db.Uuid
-  companyId    String?  @map("company_id") @db.Uuid
+  userId       Int?     @map("user_id")
+  companyId    Int?     @map("company_id")
   customerType String   @map("customer_type") @db.VarChar
   createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
   updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz
@@ -142,9 +142,9 @@ model Customer {
 }
 
 model Category {
-  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  tenantId  String    @map("tenant_id") @db.Uuid
-  parentId  String?   @map("parent_id") @db.Uuid
+  id        Int       @id @default(autoincrement())
+  tenantId  Int       @map("tenant_id")
+  parentId  Int?      @map("parent_id")
   name      String    @db.VarChar
   slug      String    @db.VarChar
   sortOrder Int       @default(0) @map("sort_order")
@@ -163,9 +163,9 @@ model Category {
 }
 
 model Product {
-  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  tenantId          String    @map("tenant_id") @db.Uuid
-  primaryCategoryId String?   @map("primary_category_id") @db.Uuid
+  id                Int       @id @default(autoincrement())
+  tenantId          Int       @map("tenant_id")
+  primaryCategoryId Int?      @map("primary_category_id")
   name              String    @db.VarChar
   slug              String    @db.VarChar
   description       String?   @db.Text
@@ -185,10 +185,10 @@ model Product {
 }
 
 model ProductCategory {
-  id         String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  tenantId   String @map("tenant_id") @db.Uuid
-  productId  String @map("product_id") @db.Uuid
-  categoryId String @map("category_id") @db.Uuid
+  id         Int    @id @default(autoincrement())
+  tenantId   Int    @map("tenant_id")
+  productId  Int    @map("product_id")
+  categoryId Int    @map("category_id")
   sortOrder  Int    @default(0) @map("sort_order")
 
   tenant     Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
@@ -202,9 +202,9 @@ model ProductCategory {
 }
 
 model ProductVariant {
-  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  tenantId            String    @map("tenant_id") @db.Uuid
-  productId           String    @map("product_id") @db.Uuid
+  id                  Int       @id @default(autoincrement())
+  tenantId            Int       @map("tenant_id")
+  productId           Int       @map("product_id")
   sku                 String    @db.VarChar
   name                String?   @db.VarChar
   attributes          Json      @default("{}")
@@ -229,9 +229,9 @@ model ProductVariant {
 }
 
 model InventoryBalance {
-  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  tenantId         String   @map("tenant_id") @db.Uuid
-  variantId        String   @unique @map("variant_id") @db.Uuid
+  id               Int      @id @default(autoincrement())
+  tenantId         Int      @map("tenant_id")
+  variantId        Int      @unique @map("variant_id")
   quantityOnHand   Int      @map("quantity_on_hand")
   quantityReserved Int      @default(0) @map("quantity_reserved")
   updatedAt        DateTime @updatedAt @map("updated_at") @db.Timestamptz
@@ -243,13 +243,13 @@ model InventoryBalance {
 }
 
 model InventoryMovement {
-  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  tenantId      String   @map("tenant_id") @db.Uuid
-  variantId     String   @map("variant_id") @db.Uuid
+  id            Int      @id @default(autoincrement())
+  tenantId      Int      @map("tenant_id")
+  variantId     Int      @map("variant_id")
   delta         Int
   reason        String   @db.VarChar
   referenceType String?  @map("reference_type") @db.VarChar
-  referenceId   String?  @map("reference_id") @db.Uuid
+  referenceId   Int?     @map("reference_id")
   createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz
 
   tenant        Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
@@ -259,8 +259,8 @@ model InventoryMovement {
 }
 
 model PriceList {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  tenantId  String   @map("tenant_id") @db.Uuid
+  id        Int      @id @default(autoincrement())
+  tenantId  Int      @map("tenant_id")
   name      String   @db.VarChar
   isDefault Boolean  @map("is_default")
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
@@ -274,10 +274,10 @@ model PriceList {
 }
 
 model PriceListItem {
-  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  tenantId    String   @map("tenant_id") @db.Uuid
-  priceListId String   @map("price_list_id") @db.Uuid
-  variantId   String   @map("variant_id") @db.Uuid
+  id          Int      @id @default(autoincrement())
+  tenantId    Int      @map("tenant_id")
+  priceListId Int      @map("price_list_id")
+  variantId   Int      @map("variant_id")
   priceMinor  BigInt   @map("price_minor")
   currency    String   @db.Char(3)
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
@@ -292,8 +292,8 @@ model PriceListItem {
 }
 
 model CompanyPriceList {
-  companyId   String @map("company_id") @db.Uuid
-  priceListId String @map("price_list_id") @db.Uuid
+  companyId   Int @map("company_id")
+  priceListId Int @map("price_list_id")
 
   company     Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
   priceList   PriceList @relation(fields: [priceListId], references: [id], onDelete: Cascade)
@@ -303,9 +303,9 @@ model CompanyPriceList {
 }
 
 model Cart {
-  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  tenantId   String    @map("tenant_id") @db.Uuid
-  customerId String?   @map("customer_id") @db.Uuid
+  id         Int       @id @default(autoincrement())
+  tenantId   Int       @map("tenant_id")
+  customerId Int?      @map("customer_id")
   sessionKey String?   @map("session_key") @db.VarChar
   currency   String    @db.Char(3)
   expiresAt  DateTime? @map("expires_at") @db.Timestamptz
@@ -320,10 +320,10 @@ model Cart {
 }
 
 model CartItem {
-  id                     String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  tenantId               String   @map("tenant_id") @db.Uuid
-  cartId                 String   @map("cart_id") @db.Uuid
-  variantId              String   @map("variant_id") @db.Uuid
+  id                     Int      @id @default(autoincrement())
+  tenantId               Int      @map("tenant_id")
+  cartId                 Int      @map("cart_id")
+  variantId              Int      @map("variant_id")
   quantity               Int
   unitPriceSnapshotMinor BigInt   @map("unit_price_snapshot_minor")
   createdAt              DateTime @default(now()) @map("created_at") @db.Timestamptz
@@ -338,10 +338,10 @@ model CartItem {
 }
 
 model Order {
-  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  tenantId       String   @map("tenant_id") @db.Uuid
+  id             Int      @id @default(autoincrement())
+  tenantId       Int      @map("tenant_id")
   orderNumber    String   @map("order_number") @db.VarChar
-  customerId     String   @map("customer_id") @db.Uuid
+  customerId     Int      @map("customer_id")
   status         String   @db.VarChar
   currency       String   @db.Char(3)
   subtotalMinor  BigInt   @map("subtotal_minor")
@@ -369,10 +369,10 @@ model Order {
 }
 
 model OrderItem {
-  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  tenantId            String   @map("tenant_id") @db.Uuid
-  orderId             String   @map("order_id") @db.Uuid
-  variantId           String?  @map("variant_id") @db.Uuid
+  id                  Int      @id @default(autoincrement())
+  tenantId            Int      @map("tenant_id")
+  orderId             Int      @map("order_id")
+  variantId           Int?     @map("variant_id")
   productNameSnapshot String   @map("product_name_snapshot") @db.VarChar
   variantSkuSnapshot  String   @map("variant_sku_snapshot") @db.VarChar
   unitPriceMinor      BigInt   @map("unit_price_minor")
@@ -388,9 +388,9 @@ model OrderItem {
 }
 
 model Payment {
-  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  tenantId          String   @map("tenant_id") @db.Uuid
-  orderId           String   @map("order_id") @db.Uuid
+  id                Int      @id @default(autoincrement())
+  tenantId          Int      @map("tenant_id")
+  orderId           Int      @map("order_id")
   provider          String   @db.VarChar
   providerPaymentId String?  @map("provider_payment_id") @db.VarChar
   status            String   @db.VarChar
@@ -413,14 +413,14 @@ model Payment {
 }
 
 model PaymentEvent {
-  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  tenantId        String   @map("tenant_id") @db.Uuid
-  paymentId       String   @map("payment_id") @db.Uuid
+  id              Int      @id @default(autoincrement())
+  tenantId        Int      @map("tenant_id")
+  paymentId       Int      @map("payment_id")
   providerEventId String   @map("provider_event_id") @db.VarChar
   eventType       String   @map("event_type") @db.VarChar
   payloadDigest   String?  @map("payload_digest") @db.VarChar
   processedAt     DateTime @map("processed_at") @db.Timestamptz
-  rawPayload      Json?    @map("raw_payload")
+  rawPayload      Json?
 
   tenant          Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   payment         Payment  @relation(fields: [paymentId], references: [id], onDelete: Cascade)

@@ -19,7 +19,7 @@ export class ProductsService {
   constructor(private readonly prisma: PrismaService) {}
 
   // ── 1. GET ALL PRODUCTS ──────────────────────────────────────────────────
-  async findAll(tenantId: string, query: GetProductsQueryDto) {
+  async findAll(tenantId: number, query: GetProductsQueryDto) {
     const { categoryId, search, page = 1, limit = 20 } = query;
     const skip = (page - 1) * limit;
 
@@ -66,7 +66,7 @@ export class ProductsService {
   }
 
   // ── 2. GET BY CATEGORY ───────────────────────────────────────────────────
-  async findByCategory(tenantId: string, categorySlug: string, query: GetProductsQueryDto) {
+  async findByCategory(tenantId: number, categorySlug: string, query: GetProductsQueryDto) {
     const category = await this.prisma.client.category.findUnique({
       where: { tenantId_slug: { tenantId, slug: categorySlug } },
     });
@@ -80,13 +80,13 @@ export class ProductsService {
   // Algorithm combines:
   //   A) Postgres full-text OR like search (filters in DB for performance)
   //   B) In-memory relevance scoring (rank the results by match quality)
-  async search(tenantId: string, q: string, query: GetProductsQueryDto) {
+  async search(tenantId: number, q: string, query: GetProductsQueryDto) {
     if (!q?.trim()) return this.findAll(tenantId, query);
     return this.findAll(tenantId, { ...query, search: q.trim() });
   }
 
   // ── 4. GET BY ID ─────────────────────────────────────────────────────────
-  async findById(tenantId: string, productId: string) {
+  async findById(tenantId: number, productId: number) {
     const product = await this.prisma.client.product.findFirst({
       where: { id: productId, tenantId, deletedAt: null },
       include: {
@@ -101,7 +101,7 @@ export class ProductsService {
   }
 
   // ── GET BY SLUG (for storefront canonical URLs) ───────────────────────
-  async findBySlug(tenantId: string, slug: string) {
+  async findBySlug(tenantId: number, slug: string) {
     const product = await this.prisma.client.product.findUnique({
       where: { tenantId_slug: { tenantId, slug } },
       include: PRODUCT_INCLUDE,
@@ -176,6 +176,16 @@ export class ProductsService {
     };
 
     return [...items].sort((a, b) => score(b) - score(a));
+  }
+
+  // ── PRIVATE: Resolve Tenant ───────────────────────────────────────────
+  async getTenantIdBySlug(slug: string): Promise<number> {
+    const tenant = await this.prisma.client.tenant.findUnique({
+      where: { slug },
+      select: { id: true },
+    });
+    if (!tenant) throw new NotFoundException(`Tenant '${slug}' not found`);
+    return tenant.id;
   }
 
   // ── PRIVATE: Format response ──────────────────────────────────────────

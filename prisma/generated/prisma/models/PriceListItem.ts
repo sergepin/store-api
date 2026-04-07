@@ -27,18 +27,26 @@ export type AggregatePriceListItem = {
 }
 
 export type PriceListItemAvgAggregateOutputType = {
+  id: number | null
+  tenantId: number | null
+  priceListId: number | null
+  variantId: number | null
   priceMinor: number | null
 }
 
 export type PriceListItemSumAggregateOutputType = {
+  id: number | null
+  tenantId: number | null
+  priceListId: number | null
+  variantId: number | null
   priceMinor: bigint | null
 }
 
 export type PriceListItemMinAggregateOutputType = {
-  id: string | null
-  tenantId: string | null
-  priceListId: string | null
-  variantId: string | null
+  id: number | null
+  tenantId: number | null
+  priceListId: number | null
+  variantId: number | null
   priceMinor: bigint | null
   currency: string | null
   createdAt: Date | null
@@ -46,10 +54,10 @@ export type PriceListItemMinAggregateOutputType = {
 }
 
 export type PriceListItemMaxAggregateOutputType = {
-  id: string | null
-  tenantId: string | null
-  priceListId: string | null
-  variantId: string | null
+  id: number | null
+  tenantId: number | null
+  priceListId: number | null
+  variantId: number | null
   priceMinor: bigint | null
   currency: string | null
   createdAt: Date | null
@@ -70,10 +78,18 @@ export type PriceListItemCountAggregateOutputType = {
 
 
 export type PriceListItemAvgAggregateInputType = {
+  id?: true
+  tenantId?: true
+  priceListId?: true
+  variantId?: true
   priceMinor?: true
 }
 
 export type PriceListItemSumAggregateInputType = {
+  id?: true
+  tenantId?: true
+  priceListId?: true
+  variantId?: true
   priceMinor?: true
 }
 
@@ -198,10 +214,10 @@ export type PriceListItemGroupByArgs<ExtArgs extends runtime.Types.Extensions.In
 }
 
 export type PriceListItemGroupByOutputType = {
-  id: string
-  tenantId: string
-  priceListId: string
-  variantId: string
+  id: number
+  tenantId: number
+  priceListId: number
+  variantId: number
   priceMinor: bigint
   currency: string
   createdAt: Date
@@ -232,10 +248,10 @@ export type PriceListItemWhereInput = {
   AND?: Prisma.PriceListItemWhereInput | Prisma.PriceListItemWhereInput[]
   OR?: Prisma.PriceListItemWhereInput[]
   NOT?: Prisma.PriceListItemWhereInput | Prisma.PriceListItemWhereInput[]
-  id?: Prisma.UuidFilter<"PriceListItem"> | string
-  tenantId?: Prisma.UuidFilter<"PriceListItem"> | string
-  priceListId?: Prisma.UuidFilter<"PriceListItem"> | string
-  variantId?: Prisma.UuidFilter<"PriceListItem"> | string
+  id?: Prisma.IntFilter<"PriceListItem"> | number
+  tenantId?: Prisma.IntFilter<"PriceListItem"> | number
+  priceListId?: Prisma.IntFilter<"PriceListItem"> | number
+  variantId?: Prisma.IntFilter<"PriceListItem"> | number
   priceMinor?: Prisma.BigIntFilter<"PriceListItem"> | bigint | number
   currency?: Prisma.StringFilter<"PriceListItem"> | string
   createdAt?: Prisma.DateTimeFilter<"PriceListItem"> | Date | string
@@ -260,14 +276,14 @@ export type PriceListItemOrderByWithRelationInput = {
 }
 
 export type PriceListItemWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
+  id?: number
   priceListId_variantId?: Prisma.PriceListItemPriceListIdVariantIdCompoundUniqueInput
   AND?: Prisma.PriceListItemWhereInput | Prisma.PriceListItemWhereInput[]
   OR?: Prisma.PriceListItemWhereInput[]
   NOT?: Prisma.PriceListItemWhereInput | Prisma.PriceListItemWhereInput[]
-  tenantId?: Prisma.UuidFilter<"PriceListItem"> | string
-  priceListId?: Prisma.UuidFilter<"PriceListItem"> | string
-  variantId?: Prisma.UuidFilter<"PriceListItem"> | string
+  tenantId?: Prisma.IntFilter<"PriceListItem"> | number
+  priceListId?: Prisma.IntFilter<"PriceListItem"> | number
+  variantId?: Prisma.IntFilter<"PriceListItem"> | number
   priceMinor?: Prisma.BigIntFilter<"PriceListItem"> | bigint | number
   currency?: Prisma.StringFilter<"PriceListItem"> | string
   createdAt?: Prisma.DateTimeFilter<"PriceListItem"> | Date | string
@@ -297,10 +313,10 @@ export type PriceListItemScalarWhereWithAggregatesInput = {
   AND?: Prisma.PriceListItemScalarWhereWithAggregatesInput | Prisma.PriceListItemScalarWhereWithAggregatesInput[]
   OR?: Prisma.PriceListItemScalarWhereWithAggregatesInput[]
   NOT?: Prisma.PriceListItemScalarWhereWithAggregatesInput | Prisma.PriceListItemScalarWhereWithAggregatesInput[]
-  id?: Prisma.UuidWithAggregatesFilter<"PriceListItem"> | string
-  tenantId?: Prisma.UuidWithAggregatesFilter<"PriceListItem"> | string
-  priceListId?: Prisma.UuidWithAggregatesFilter<"PriceListItem"> | string
-  variantId?: Prisma.UuidWithAggregatesFilter<"PriceListItem"> | string
+  id?: Prisma.IntWithAggregatesFilter<"PriceListItem"> | number
+  tenantId?: Prisma.IntWithAggregatesFilter<"PriceListItem"> | number
+  priceListId?: Prisma.IntWithAggregatesFilter<"PriceListItem"> | number
+  variantId?: Prisma.IntWithAggregatesFilter<"PriceListItem"> | number
   priceMinor?: Prisma.BigIntWithAggregatesFilter<"PriceListItem"> | bigint | number
   currency?: Prisma.StringWithAggregatesFilter<"PriceListItem"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"PriceListItem"> | Date | string
@@ -308,7 +324,6 @@ export type PriceListItemScalarWhereWithAggregatesInput = {
 }
 
 export type PriceListItemCreateInput = {
-  id?: string
   priceMinor: bigint | number
   currency: string
   createdAt?: Date | string
@@ -319,10 +334,10 @@ export type PriceListItemCreateInput = {
 }
 
 export type PriceListItemUncheckedCreateInput = {
-  id?: string
-  tenantId: string
-  priceListId: string
-  variantId: string
+  id?: number
+  tenantId: number
+  priceListId: number
+  variantId: number
   priceMinor: bigint | number
   currency: string
   createdAt?: Date | string
@@ -330,7 +345,6 @@ export type PriceListItemUncheckedCreateInput = {
 }
 
 export type PriceListItemUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   priceMinor?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -341,10 +355,10 @@ export type PriceListItemUpdateInput = {
 }
 
 export type PriceListItemUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  priceListId?: Prisma.StringFieldUpdateOperationsInput | string
-  variantId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
+  priceListId?: Prisma.IntFieldUpdateOperationsInput | number
+  variantId?: Prisma.IntFieldUpdateOperationsInput | number
   priceMinor?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -352,10 +366,10 @@ export type PriceListItemUncheckedUpdateInput = {
 }
 
 export type PriceListItemCreateManyInput = {
-  id?: string
-  tenantId: string
-  priceListId: string
-  variantId: string
+  id?: number
+  tenantId: number
+  priceListId: number
+  variantId: number
   priceMinor: bigint | number
   currency: string
   createdAt?: Date | string
@@ -363,7 +377,6 @@ export type PriceListItemCreateManyInput = {
 }
 
 export type PriceListItemUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   priceMinor?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -371,10 +384,10 @@ export type PriceListItemUpdateManyMutationInput = {
 }
 
 export type PriceListItemUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  priceListId?: Prisma.StringFieldUpdateOperationsInput | string
-  variantId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
+  priceListId?: Prisma.IntFieldUpdateOperationsInput | number
+  variantId?: Prisma.IntFieldUpdateOperationsInput | number
   priceMinor?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -392,8 +405,8 @@ export type PriceListItemOrderByRelationAggregateInput = {
 }
 
 export type PriceListItemPriceListIdVariantIdCompoundUniqueInput = {
-  priceListId: string
-  variantId: string
+  priceListId: number
+  variantId: number
 }
 
 export type PriceListItemCountOrderByAggregateInput = {
@@ -408,6 +421,10 @@ export type PriceListItemCountOrderByAggregateInput = {
 }
 
 export type PriceListItemAvgOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
+  priceListId?: Prisma.SortOrder
+  variantId?: Prisma.SortOrder
   priceMinor?: Prisma.SortOrder
 }
 
@@ -434,6 +451,10 @@ export type PriceListItemMinOrderByAggregateInput = {
 }
 
 export type PriceListItemSumOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
+  priceListId?: Prisma.SortOrder
+  variantId?: Prisma.SortOrder
   priceMinor?: Prisma.SortOrder
 }
 
@@ -564,7 +585,6 @@ export type PriceListItemUncheckedUpdateManyWithoutPriceListNestedInput = {
 }
 
 export type PriceListItemCreateWithoutTenantInput = {
-  id?: string
   priceMinor: bigint | number
   currency: string
   createdAt?: Date | string
@@ -574,9 +594,9 @@ export type PriceListItemCreateWithoutTenantInput = {
 }
 
 export type PriceListItemUncheckedCreateWithoutTenantInput = {
-  id?: string
-  priceListId: string
-  variantId: string
+  id?: number
+  priceListId: number
+  variantId: number
   priceMinor: bigint | number
   currency: string
   createdAt?: Date | string
@@ -613,10 +633,10 @@ export type PriceListItemScalarWhereInput = {
   AND?: Prisma.PriceListItemScalarWhereInput | Prisma.PriceListItemScalarWhereInput[]
   OR?: Prisma.PriceListItemScalarWhereInput[]
   NOT?: Prisma.PriceListItemScalarWhereInput | Prisma.PriceListItemScalarWhereInput[]
-  id?: Prisma.UuidFilter<"PriceListItem"> | string
-  tenantId?: Prisma.UuidFilter<"PriceListItem"> | string
-  priceListId?: Prisma.UuidFilter<"PriceListItem"> | string
-  variantId?: Prisma.UuidFilter<"PriceListItem"> | string
+  id?: Prisma.IntFilter<"PriceListItem"> | number
+  tenantId?: Prisma.IntFilter<"PriceListItem"> | number
+  priceListId?: Prisma.IntFilter<"PriceListItem"> | number
+  variantId?: Prisma.IntFilter<"PriceListItem"> | number
   priceMinor?: Prisma.BigIntFilter<"PriceListItem"> | bigint | number
   currency?: Prisma.StringFilter<"PriceListItem"> | string
   createdAt?: Prisma.DateTimeFilter<"PriceListItem"> | Date | string
@@ -624,7 +644,6 @@ export type PriceListItemScalarWhereInput = {
 }
 
 export type PriceListItemCreateWithoutVariantInput = {
-  id?: string
   priceMinor: bigint | number
   currency: string
   createdAt?: Date | string
@@ -634,9 +653,9 @@ export type PriceListItemCreateWithoutVariantInput = {
 }
 
 export type PriceListItemUncheckedCreateWithoutVariantInput = {
-  id?: string
-  tenantId: string
-  priceListId: string
+  id?: number
+  tenantId: number
+  priceListId: number
   priceMinor: bigint | number
   currency: string
   createdAt?: Date | string
@@ -670,7 +689,6 @@ export type PriceListItemUpdateManyWithWhereWithoutVariantInput = {
 }
 
 export type PriceListItemCreateWithoutPriceListInput = {
-  id?: string
   priceMinor: bigint | number
   currency: string
   createdAt?: Date | string
@@ -680,9 +698,9 @@ export type PriceListItemCreateWithoutPriceListInput = {
 }
 
 export type PriceListItemUncheckedCreateWithoutPriceListInput = {
-  id?: string
-  tenantId: string
-  variantId: string
+  id?: number
+  tenantId: number
+  variantId: number
   priceMinor: bigint | number
   currency: string
   createdAt?: Date | string
@@ -716,9 +734,9 @@ export type PriceListItemUpdateManyWithWhereWithoutPriceListInput = {
 }
 
 export type PriceListItemCreateManyTenantInput = {
-  id?: string
-  priceListId: string
-  variantId: string
+  id?: number
+  priceListId: number
+  variantId: number
   priceMinor: bigint | number
   currency: string
   createdAt?: Date | string
@@ -726,7 +744,6 @@ export type PriceListItemCreateManyTenantInput = {
 }
 
 export type PriceListItemUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   priceMinor?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -736,9 +753,9 @@ export type PriceListItemUpdateWithoutTenantInput = {
 }
 
 export type PriceListItemUncheckedUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  priceListId?: Prisma.StringFieldUpdateOperationsInput | string
-  variantId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  priceListId?: Prisma.IntFieldUpdateOperationsInput | number
+  variantId?: Prisma.IntFieldUpdateOperationsInput | number
   priceMinor?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -746,9 +763,9 @@ export type PriceListItemUncheckedUpdateWithoutTenantInput = {
 }
 
 export type PriceListItemUncheckedUpdateManyWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  priceListId?: Prisma.StringFieldUpdateOperationsInput | string
-  variantId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  priceListId?: Prisma.IntFieldUpdateOperationsInput | number
+  variantId?: Prisma.IntFieldUpdateOperationsInput | number
   priceMinor?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -756,9 +773,9 @@ export type PriceListItemUncheckedUpdateManyWithoutTenantInput = {
 }
 
 export type PriceListItemCreateManyVariantInput = {
-  id?: string
-  tenantId: string
-  priceListId: string
+  id?: number
+  tenantId: number
+  priceListId: number
   priceMinor: bigint | number
   currency: string
   createdAt?: Date | string
@@ -766,7 +783,6 @@ export type PriceListItemCreateManyVariantInput = {
 }
 
 export type PriceListItemUpdateWithoutVariantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   priceMinor?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -776,9 +792,9 @@ export type PriceListItemUpdateWithoutVariantInput = {
 }
 
 export type PriceListItemUncheckedUpdateWithoutVariantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  priceListId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
+  priceListId?: Prisma.IntFieldUpdateOperationsInput | number
   priceMinor?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -786,9 +802,9 @@ export type PriceListItemUncheckedUpdateWithoutVariantInput = {
 }
 
 export type PriceListItemUncheckedUpdateManyWithoutVariantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  priceListId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
+  priceListId?: Prisma.IntFieldUpdateOperationsInput | number
   priceMinor?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -796,9 +812,9 @@ export type PriceListItemUncheckedUpdateManyWithoutVariantInput = {
 }
 
 export type PriceListItemCreateManyPriceListInput = {
-  id?: string
-  tenantId: string
-  variantId: string
+  id?: number
+  tenantId: number
+  variantId: number
   priceMinor: bigint | number
   currency: string
   createdAt?: Date | string
@@ -806,7 +822,6 @@ export type PriceListItemCreateManyPriceListInput = {
 }
 
 export type PriceListItemUpdateWithoutPriceListInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   priceMinor?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -816,9 +831,9 @@ export type PriceListItemUpdateWithoutPriceListInput = {
 }
 
 export type PriceListItemUncheckedUpdateWithoutPriceListInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  variantId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
+  variantId?: Prisma.IntFieldUpdateOperationsInput | number
   priceMinor?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -826,9 +841,9 @@ export type PriceListItemUncheckedUpdateWithoutPriceListInput = {
 }
 
 export type PriceListItemUncheckedUpdateManyWithoutPriceListInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  variantId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
+  variantId?: Prisma.IntFieldUpdateOperationsInput | number
   priceMinor?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -915,10 +930,10 @@ export type $PriceListItemPayload<ExtArgs extends runtime.Types.Extensions.Inter
     variant: Prisma.$ProductVariantPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
-    tenantId: string
-    priceListId: string
-    variantId: string
+    id: number
+    tenantId: number
+    priceListId: number
+    variantId: number
     priceMinor: bigint
     currency: string
     createdAt: Date
@@ -1349,10 +1364,10 @@ export interface Prisma__PriceListItemClient<T, Null = never, ExtArgs extends ru
  * Fields of the PriceListItem model
  */
 export interface PriceListItemFieldRefs {
-  readonly id: Prisma.FieldRef<"PriceListItem", 'String'>
-  readonly tenantId: Prisma.FieldRef<"PriceListItem", 'String'>
-  readonly priceListId: Prisma.FieldRef<"PriceListItem", 'String'>
-  readonly variantId: Prisma.FieldRef<"PriceListItem", 'String'>
+  readonly id: Prisma.FieldRef<"PriceListItem", 'Int'>
+  readonly tenantId: Prisma.FieldRef<"PriceListItem", 'Int'>
+  readonly priceListId: Prisma.FieldRef<"PriceListItem", 'Int'>
+  readonly variantId: Prisma.FieldRef<"PriceListItem", 'Int'>
   readonly priceMinor: Prisma.FieldRef<"PriceListItem", 'BigInt'>
   readonly currency: Prisma.FieldRef<"PriceListItem", 'String'>
   readonly createdAt: Prisma.FieldRef<"PriceListItem", 'DateTime'>

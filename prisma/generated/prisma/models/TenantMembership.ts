@@ -20,14 +20,28 @@ export type TenantMembershipModel = runtime.Types.Result.DefaultSelection<Prisma
 
 export type AggregateTenantMembership = {
   _count: TenantMembershipCountAggregateOutputType | null
+  _avg: TenantMembershipAvgAggregateOutputType | null
+  _sum: TenantMembershipSumAggregateOutputType | null
   _min: TenantMembershipMinAggregateOutputType | null
   _max: TenantMembershipMaxAggregateOutputType | null
 }
 
+export type TenantMembershipAvgAggregateOutputType = {
+  id: number | null
+  tenantId: number | null
+  userId: number | null
+}
+
+export type TenantMembershipSumAggregateOutputType = {
+  id: number | null
+  tenantId: number | null
+  userId: number | null
+}
+
 export type TenantMembershipMinAggregateOutputType = {
-  id: string | null
-  tenantId: string | null
-  userId: string | null
+  id: number | null
+  tenantId: number | null
+  userId: number | null
   role: string | null
   status: string | null
   createdAt: Date | null
@@ -35,9 +49,9 @@ export type TenantMembershipMinAggregateOutputType = {
 }
 
 export type TenantMembershipMaxAggregateOutputType = {
-  id: string | null
-  tenantId: string | null
-  userId: string | null
+  id: number | null
+  tenantId: number | null
+  userId: number | null
   role: string | null
   status: string | null
   createdAt: Date | null
@@ -55,6 +69,18 @@ export type TenantMembershipCountAggregateOutputType = {
   _all: number
 }
 
+
+export type TenantMembershipAvgAggregateInputType = {
+  id?: true
+  tenantId?: true
+  userId?: true
+}
+
+export type TenantMembershipSumAggregateInputType = {
+  id?: true
+  tenantId?: true
+  userId?: true
+}
 
 export type TenantMembershipMinAggregateInputType = {
   id?: true
@@ -125,6 +151,18 @@ export type TenantMembershipAggregateArgs<ExtArgs extends runtime.Types.Extensio
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: TenantMembershipAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: TenantMembershipSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: TenantMembershipMinAggregateInputType
@@ -155,19 +193,23 @@ export type TenantMembershipGroupByArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   _count?: TenantMembershipCountAggregateInputType | true
+  _avg?: TenantMembershipAvgAggregateInputType
+  _sum?: TenantMembershipSumAggregateInputType
   _min?: TenantMembershipMinAggregateInputType
   _max?: TenantMembershipMaxAggregateInputType
 }
 
 export type TenantMembershipGroupByOutputType = {
-  id: string
-  tenantId: string
-  userId: string
+  id: number
+  tenantId: number
+  userId: number
   role: string
   status: string
   createdAt: Date
   updatedAt: Date
   _count: TenantMembershipCountAggregateOutputType | null
+  _avg: TenantMembershipAvgAggregateOutputType | null
+  _sum: TenantMembershipSumAggregateOutputType | null
   _min: TenantMembershipMinAggregateOutputType | null
   _max: TenantMembershipMaxAggregateOutputType | null
 }
@@ -191,9 +233,9 @@ export type TenantMembershipWhereInput = {
   AND?: Prisma.TenantMembershipWhereInput | Prisma.TenantMembershipWhereInput[]
   OR?: Prisma.TenantMembershipWhereInput[]
   NOT?: Prisma.TenantMembershipWhereInput | Prisma.TenantMembershipWhereInput[]
-  id?: Prisma.UuidFilter<"TenantMembership"> | string
-  tenantId?: Prisma.UuidFilter<"TenantMembership"> | string
-  userId?: Prisma.UuidFilter<"TenantMembership"> | string
+  id?: Prisma.IntFilter<"TenantMembership"> | number
+  tenantId?: Prisma.IntFilter<"TenantMembership"> | number
+  userId?: Prisma.IntFilter<"TenantMembership"> | number
   role?: Prisma.StringFilter<"TenantMembership"> | string
   status?: Prisma.StringFilter<"TenantMembership"> | string
   createdAt?: Prisma.DateTimeFilter<"TenantMembership"> | Date | string
@@ -215,13 +257,13 @@ export type TenantMembershipOrderByWithRelationInput = {
 }
 
 export type TenantMembershipWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
+  id?: number
   tenantId_userId?: Prisma.TenantMembershipTenantIdUserIdCompoundUniqueInput
   AND?: Prisma.TenantMembershipWhereInput | Prisma.TenantMembershipWhereInput[]
   OR?: Prisma.TenantMembershipWhereInput[]
   NOT?: Prisma.TenantMembershipWhereInput | Prisma.TenantMembershipWhereInput[]
-  tenantId?: Prisma.UuidFilter<"TenantMembership"> | string
-  userId?: Prisma.UuidFilter<"TenantMembership"> | string
+  tenantId?: Prisma.IntFilter<"TenantMembership"> | number
+  userId?: Prisma.IntFilter<"TenantMembership"> | number
   role?: Prisma.StringFilter<"TenantMembership"> | string
   status?: Prisma.StringFilter<"TenantMembership"> | string
   createdAt?: Prisma.DateTimeFilter<"TenantMembership"> | Date | string
@@ -239,17 +281,19 @@ export type TenantMembershipOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.TenantMembershipCountOrderByAggregateInput
+  _avg?: Prisma.TenantMembershipAvgOrderByAggregateInput
   _max?: Prisma.TenantMembershipMaxOrderByAggregateInput
   _min?: Prisma.TenantMembershipMinOrderByAggregateInput
+  _sum?: Prisma.TenantMembershipSumOrderByAggregateInput
 }
 
 export type TenantMembershipScalarWhereWithAggregatesInput = {
   AND?: Prisma.TenantMembershipScalarWhereWithAggregatesInput | Prisma.TenantMembershipScalarWhereWithAggregatesInput[]
   OR?: Prisma.TenantMembershipScalarWhereWithAggregatesInput[]
   NOT?: Prisma.TenantMembershipScalarWhereWithAggregatesInput | Prisma.TenantMembershipScalarWhereWithAggregatesInput[]
-  id?: Prisma.UuidWithAggregatesFilter<"TenantMembership"> | string
-  tenantId?: Prisma.UuidWithAggregatesFilter<"TenantMembership"> | string
-  userId?: Prisma.UuidWithAggregatesFilter<"TenantMembership"> | string
+  id?: Prisma.IntWithAggregatesFilter<"TenantMembership"> | number
+  tenantId?: Prisma.IntWithAggregatesFilter<"TenantMembership"> | number
+  userId?: Prisma.IntWithAggregatesFilter<"TenantMembership"> | number
   role?: Prisma.StringWithAggregatesFilter<"TenantMembership"> | string
   status?: Prisma.StringWithAggregatesFilter<"TenantMembership"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"TenantMembership"> | Date | string
@@ -257,7 +301,6 @@ export type TenantMembershipScalarWhereWithAggregatesInput = {
 }
 
 export type TenantMembershipCreateInput = {
-  id?: string
   role: string
   status: string
   createdAt?: Date | string
@@ -267,9 +310,9 @@ export type TenantMembershipCreateInput = {
 }
 
 export type TenantMembershipUncheckedCreateInput = {
-  id?: string
-  tenantId: string
-  userId: string
+  id?: number
+  tenantId: number
+  userId: number
   role: string
   status: string
   createdAt?: Date | string
@@ -277,7 +320,6 @@ export type TenantMembershipUncheckedCreateInput = {
 }
 
 export type TenantMembershipUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -287,9 +329,9 @@ export type TenantMembershipUpdateInput = {
 }
 
 export type TenantMembershipUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -297,9 +339,9 @@ export type TenantMembershipUncheckedUpdateInput = {
 }
 
 export type TenantMembershipCreateManyInput = {
-  id?: string
-  tenantId: string
-  userId: string
+  id?: number
+  tenantId: number
+  userId: number
   role: string
   status: string
   createdAt?: Date | string
@@ -307,7 +349,6 @@ export type TenantMembershipCreateManyInput = {
 }
 
 export type TenantMembershipUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -315,9 +356,9 @@ export type TenantMembershipUpdateManyMutationInput = {
 }
 
 export type TenantMembershipUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -335,8 +376,8 @@ export type TenantMembershipOrderByRelationAggregateInput = {
 }
 
 export type TenantMembershipTenantIdUserIdCompoundUniqueInput = {
-  tenantId: string
-  userId: string
+  tenantId: number
+  userId: number
 }
 
 export type TenantMembershipCountOrderByAggregateInput = {
@@ -347,6 +388,12 @@ export type TenantMembershipCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type TenantMembershipAvgOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
 }
 
 export type TenantMembershipMaxOrderByAggregateInput = {
@@ -367,6 +414,12 @@ export type TenantMembershipMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type TenantMembershipSumOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
 }
 
 export type TenantMembershipCreateNestedManyWithoutTenantInput = {
@@ -454,7 +507,6 @@ export type TenantMembershipUncheckedUpdateManyWithoutUserNestedInput = {
 }
 
 export type TenantMembershipCreateWithoutTenantInput = {
-  id?: string
   role: string
   status: string
   createdAt?: Date | string
@@ -463,8 +515,8 @@ export type TenantMembershipCreateWithoutTenantInput = {
 }
 
 export type TenantMembershipUncheckedCreateWithoutTenantInput = {
-  id?: string
-  userId: string
+  id?: number
+  userId: number
   role: string
   status: string
   createdAt?: Date | string
@@ -501,9 +553,9 @@ export type TenantMembershipScalarWhereInput = {
   AND?: Prisma.TenantMembershipScalarWhereInput | Prisma.TenantMembershipScalarWhereInput[]
   OR?: Prisma.TenantMembershipScalarWhereInput[]
   NOT?: Prisma.TenantMembershipScalarWhereInput | Prisma.TenantMembershipScalarWhereInput[]
-  id?: Prisma.UuidFilter<"TenantMembership"> | string
-  tenantId?: Prisma.UuidFilter<"TenantMembership"> | string
-  userId?: Prisma.UuidFilter<"TenantMembership"> | string
+  id?: Prisma.IntFilter<"TenantMembership"> | number
+  tenantId?: Prisma.IntFilter<"TenantMembership"> | number
+  userId?: Prisma.IntFilter<"TenantMembership"> | number
   role?: Prisma.StringFilter<"TenantMembership"> | string
   status?: Prisma.StringFilter<"TenantMembership"> | string
   createdAt?: Prisma.DateTimeFilter<"TenantMembership"> | Date | string
@@ -511,7 +563,6 @@ export type TenantMembershipScalarWhereInput = {
 }
 
 export type TenantMembershipCreateWithoutUserInput = {
-  id?: string
   role: string
   status: string
   createdAt?: Date | string
@@ -520,8 +571,8 @@ export type TenantMembershipCreateWithoutUserInput = {
 }
 
 export type TenantMembershipUncheckedCreateWithoutUserInput = {
-  id?: string
-  tenantId: string
+  id?: number
+  tenantId: number
   role: string
   status: string
   createdAt?: Date | string
@@ -555,8 +606,8 @@ export type TenantMembershipUpdateManyWithWhereWithoutUserInput = {
 }
 
 export type TenantMembershipCreateManyTenantInput = {
-  id?: string
-  userId: string
+  id?: number
+  userId: number
   role: string
   status: string
   createdAt?: Date | string
@@ -564,7 +615,6 @@ export type TenantMembershipCreateManyTenantInput = {
 }
 
 export type TenantMembershipUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -573,8 +623,8 @@ export type TenantMembershipUpdateWithoutTenantInput = {
 }
 
 export type TenantMembershipUncheckedUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -582,8 +632,8 @@ export type TenantMembershipUncheckedUpdateWithoutTenantInput = {
 }
 
 export type TenantMembershipUncheckedUpdateManyWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -591,8 +641,8 @@ export type TenantMembershipUncheckedUpdateManyWithoutTenantInput = {
 }
 
 export type TenantMembershipCreateManyUserInput = {
-  id?: string
-  tenantId: string
+  id?: number
+  tenantId: number
   role: string
   status: string
   createdAt?: Date | string
@@ -600,7 +650,6 @@ export type TenantMembershipCreateManyUserInput = {
 }
 
 export type TenantMembershipUpdateWithoutUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -609,8 +658,8 @@ export type TenantMembershipUpdateWithoutUserInput = {
 }
 
 export type TenantMembershipUncheckedUpdateWithoutUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -618,8 +667,8 @@ export type TenantMembershipUncheckedUpdateWithoutUserInput = {
 }
 
 export type TenantMembershipUncheckedUpdateManyWithoutUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -695,9 +744,9 @@ export type $TenantMembershipPayload<ExtArgs extends runtime.Types.Extensions.In
     user: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
-    tenantId: string
-    userId: string
+    id: number
+    tenantId: number
+    userId: number
     role: string
     status: string
     createdAt: Date
@@ -1127,9 +1176,9 @@ export interface Prisma__TenantMembershipClient<T, Null = never, ExtArgs extends
  * Fields of the TenantMembership model
  */
 export interface TenantMembershipFieldRefs {
-  readonly id: Prisma.FieldRef<"TenantMembership", 'String'>
-  readonly tenantId: Prisma.FieldRef<"TenantMembership", 'String'>
-  readonly userId: Prisma.FieldRef<"TenantMembership", 'String'>
+  readonly id: Prisma.FieldRef<"TenantMembership", 'Int'>
+  readonly tenantId: Prisma.FieldRef<"TenantMembership", 'Int'>
+  readonly userId: Prisma.FieldRef<"TenantMembership", 'Int'>
   readonly role: Prisma.FieldRef<"TenantMembership", 'String'>
   readonly status: Prisma.FieldRef<"TenantMembership", 'String'>
   readonly createdAt: Prisma.FieldRef<"TenantMembership", 'DateTime'>

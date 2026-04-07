@@ -27,28 +27,34 @@ export type AggregateInventoryBalance = {
 }
 
 export type InventoryBalanceAvgAggregateOutputType = {
+  id: number | null
+  tenantId: number | null
+  variantId: number | null
   quantityOnHand: number | null
   quantityReserved: number | null
 }
 
 export type InventoryBalanceSumAggregateOutputType = {
+  id: number | null
+  tenantId: number | null
+  variantId: number | null
   quantityOnHand: number | null
   quantityReserved: number | null
 }
 
 export type InventoryBalanceMinAggregateOutputType = {
-  id: string | null
-  tenantId: string | null
-  variantId: string | null
+  id: number | null
+  tenantId: number | null
+  variantId: number | null
   quantityOnHand: number | null
   quantityReserved: number | null
   updatedAt: Date | null
 }
 
 export type InventoryBalanceMaxAggregateOutputType = {
-  id: string | null
-  tenantId: string | null
-  variantId: string | null
+  id: number | null
+  tenantId: number | null
+  variantId: number | null
   quantityOnHand: number | null
   quantityReserved: number | null
   updatedAt: Date | null
@@ -66,11 +72,17 @@ export type InventoryBalanceCountAggregateOutputType = {
 
 
 export type InventoryBalanceAvgAggregateInputType = {
+  id?: true
+  tenantId?: true
+  variantId?: true
   quantityOnHand?: true
   quantityReserved?: true
 }
 
 export type InventoryBalanceSumAggregateInputType = {
+  id?: true
+  tenantId?: true
+  variantId?: true
   quantityOnHand?: true
   quantityReserved?: true
 }
@@ -190,9 +202,9 @@ export type InventoryBalanceGroupByArgs<ExtArgs extends runtime.Types.Extensions
 }
 
 export type InventoryBalanceGroupByOutputType = {
-  id: string
-  tenantId: string
-  variantId: string
+  id: number
+  tenantId: number
+  variantId: number
   quantityOnHand: number
   quantityReserved: number
   updatedAt: Date
@@ -222,9 +234,9 @@ export type InventoryBalanceWhereInput = {
   AND?: Prisma.InventoryBalanceWhereInput | Prisma.InventoryBalanceWhereInput[]
   OR?: Prisma.InventoryBalanceWhereInput[]
   NOT?: Prisma.InventoryBalanceWhereInput | Prisma.InventoryBalanceWhereInput[]
-  id?: Prisma.UuidFilter<"InventoryBalance"> | string
-  tenantId?: Prisma.UuidFilter<"InventoryBalance"> | string
-  variantId?: Prisma.UuidFilter<"InventoryBalance"> | string
+  id?: Prisma.IntFilter<"InventoryBalance"> | number
+  tenantId?: Prisma.IntFilter<"InventoryBalance"> | number
+  variantId?: Prisma.IntFilter<"InventoryBalance"> | number
   quantityOnHand?: Prisma.IntFilter<"InventoryBalance"> | number
   quantityReserved?: Prisma.IntFilter<"InventoryBalance"> | number
   updatedAt?: Prisma.DateTimeFilter<"InventoryBalance"> | Date | string
@@ -244,12 +256,12 @@ export type InventoryBalanceOrderByWithRelationInput = {
 }
 
 export type InventoryBalanceWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
-  variantId?: string
+  id?: number
+  variantId?: number
   AND?: Prisma.InventoryBalanceWhereInput | Prisma.InventoryBalanceWhereInput[]
   OR?: Prisma.InventoryBalanceWhereInput[]
   NOT?: Prisma.InventoryBalanceWhereInput | Prisma.InventoryBalanceWhereInput[]
-  tenantId?: Prisma.UuidFilter<"InventoryBalance"> | string
+  tenantId?: Prisma.IntFilter<"InventoryBalance"> | number
   quantityOnHand?: Prisma.IntFilter<"InventoryBalance"> | number
   quantityReserved?: Prisma.IntFilter<"InventoryBalance"> | number
   updatedAt?: Prisma.DateTimeFilter<"InventoryBalance"> | Date | string
@@ -275,16 +287,15 @@ export type InventoryBalanceScalarWhereWithAggregatesInput = {
   AND?: Prisma.InventoryBalanceScalarWhereWithAggregatesInput | Prisma.InventoryBalanceScalarWhereWithAggregatesInput[]
   OR?: Prisma.InventoryBalanceScalarWhereWithAggregatesInput[]
   NOT?: Prisma.InventoryBalanceScalarWhereWithAggregatesInput | Prisma.InventoryBalanceScalarWhereWithAggregatesInput[]
-  id?: Prisma.UuidWithAggregatesFilter<"InventoryBalance"> | string
-  tenantId?: Prisma.UuidWithAggregatesFilter<"InventoryBalance"> | string
-  variantId?: Prisma.UuidWithAggregatesFilter<"InventoryBalance"> | string
+  id?: Prisma.IntWithAggregatesFilter<"InventoryBalance"> | number
+  tenantId?: Prisma.IntWithAggregatesFilter<"InventoryBalance"> | number
+  variantId?: Prisma.IntWithAggregatesFilter<"InventoryBalance"> | number
   quantityOnHand?: Prisma.IntWithAggregatesFilter<"InventoryBalance"> | number
   quantityReserved?: Prisma.IntWithAggregatesFilter<"InventoryBalance"> | number
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"InventoryBalance"> | Date | string
 }
 
 export type InventoryBalanceCreateInput = {
-  id?: string
   quantityOnHand: number
   quantityReserved?: number
   updatedAt?: Date | string
@@ -293,16 +304,15 @@ export type InventoryBalanceCreateInput = {
 }
 
 export type InventoryBalanceUncheckedCreateInput = {
-  id?: string
-  tenantId: string
-  variantId: string
+  id?: number
+  tenantId: number
+  variantId: number
   quantityOnHand: number
   quantityReserved?: number
   updatedAt?: Date | string
 }
 
 export type InventoryBalanceUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   quantityOnHand?: Prisma.IntFieldUpdateOperationsInput | number
   quantityReserved?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -311,34 +321,33 @@ export type InventoryBalanceUpdateInput = {
 }
 
 export type InventoryBalanceUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  variantId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
+  variantId?: Prisma.IntFieldUpdateOperationsInput | number
   quantityOnHand?: Prisma.IntFieldUpdateOperationsInput | number
   quantityReserved?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type InventoryBalanceCreateManyInput = {
-  id?: string
-  tenantId: string
-  variantId: string
+  id?: number
+  tenantId: number
+  variantId: number
   quantityOnHand: number
   quantityReserved?: number
   updatedAt?: Date | string
 }
 
 export type InventoryBalanceUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   quantityOnHand?: Prisma.IntFieldUpdateOperationsInput | number
   quantityReserved?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type InventoryBalanceUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  variantId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
+  variantId?: Prisma.IntFieldUpdateOperationsInput | number
   quantityOnHand?: Prisma.IntFieldUpdateOperationsInput | number
   quantityReserved?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -369,6 +378,9 @@ export type InventoryBalanceCountOrderByAggregateInput = {
 }
 
 export type InventoryBalanceAvgOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
+  variantId?: Prisma.SortOrder
   quantityOnHand?: Prisma.SortOrder
   quantityReserved?: Prisma.SortOrder
 }
@@ -392,6 +404,9 @@ export type InventoryBalanceMinOrderByAggregateInput = {
 }
 
 export type InventoryBalanceSumOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
+  variantId?: Prisma.SortOrder
   quantityOnHand?: Prisma.SortOrder
   quantityReserved?: Prisma.SortOrder
 }
@@ -471,7 +486,6 @@ export type InventoryBalanceUncheckedUpdateOneWithoutVariantNestedInput = {
 }
 
 export type InventoryBalanceCreateWithoutTenantInput = {
-  id?: string
   quantityOnHand: number
   quantityReserved?: number
   updatedAt?: Date | string
@@ -479,8 +493,8 @@ export type InventoryBalanceCreateWithoutTenantInput = {
 }
 
 export type InventoryBalanceUncheckedCreateWithoutTenantInput = {
-  id?: string
-  variantId: string
+  id?: number
+  variantId: number
   quantityOnHand: number
   quantityReserved?: number
   updatedAt?: Date | string
@@ -516,16 +530,15 @@ export type InventoryBalanceScalarWhereInput = {
   AND?: Prisma.InventoryBalanceScalarWhereInput | Prisma.InventoryBalanceScalarWhereInput[]
   OR?: Prisma.InventoryBalanceScalarWhereInput[]
   NOT?: Prisma.InventoryBalanceScalarWhereInput | Prisma.InventoryBalanceScalarWhereInput[]
-  id?: Prisma.UuidFilter<"InventoryBalance"> | string
-  tenantId?: Prisma.UuidFilter<"InventoryBalance"> | string
-  variantId?: Prisma.UuidFilter<"InventoryBalance"> | string
+  id?: Prisma.IntFilter<"InventoryBalance"> | number
+  tenantId?: Prisma.IntFilter<"InventoryBalance"> | number
+  variantId?: Prisma.IntFilter<"InventoryBalance"> | number
   quantityOnHand?: Prisma.IntFilter<"InventoryBalance"> | number
   quantityReserved?: Prisma.IntFilter<"InventoryBalance"> | number
   updatedAt?: Prisma.DateTimeFilter<"InventoryBalance"> | Date | string
 }
 
 export type InventoryBalanceCreateWithoutVariantInput = {
-  id?: string
   quantityOnHand: number
   quantityReserved?: number
   updatedAt?: Date | string
@@ -533,8 +546,8 @@ export type InventoryBalanceCreateWithoutVariantInput = {
 }
 
 export type InventoryBalanceUncheckedCreateWithoutVariantInput = {
-  id?: string
-  tenantId: string
+  id?: number
+  tenantId: number
   quantityOnHand: number
   quantityReserved?: number
   updatedAt?: Date | string
@@ -557,7 +570,6 @@ export type InventoryBalanceUpdateToOneWithWhereWithoutVariantInput = {
 }
 
 export type InventoryBalanceUpdateWithoutVariantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   quantityOnHand?: Prisma.IntFieldUpdateOperationsInput | number
   quantityReserved?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -565,23 +577,22 @@ export type InventoryBalanceUpdateWithoutVariantInput = {
 }
 
 export type InventoryBalanceUncheckedUpdateWithoutVariantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
   quantityOnHand?: Prisma.IntFieldUpdateOperationsInput | number
   quantityReserved?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type InventoryBalanceCreateManyTenantInput = {
-  id?: string
-  variantId: string
+  id?: number
+  variantId: number
   quantityOnHand: number
   quantityReserved?: number
   updatedAt?: Date | string
 }
 
 export type InventoryBalanceUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   quantityOnHand?: Prisma.IntFieldUpdateOperationsInput | number
   quantityReserved?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -589,16 +600,16 @@ export type InventoryBalanceUpdateWithoutTenantInput = {
 }
 
 export type InventoryBalanceUncheckedUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  variantId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  variantId?: Prisma.IntFieldUpdateOperationsInput | number
   quantityOnHand?: Prisma.IntFieldUpdateOperationsInput | number
   quantityReserved?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type InventoryBalanceUncheckedUpdateManyWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  variantId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  variantId?: Prisma.IntFieldUpdateOperationsInput | number
   quantityOnHand?: Prisma.IntFieldUpdateOperationsInput | number
   quantityReserved?: Prisma.IntFieldUpdateOperationsInput | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -669,9 +680,9 @@ export type $InventoryBalancePayload<ExtArgs extends runtime.Types.Extensions.In
     variant: Prisma.$ProductVariantPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
-    tenantId: string
-    variantId: string
+    id: number
+    tenantId: number
+    variantId: number
     quantityOnHand: number
     quantityReserved: number
     updatedAt: Date
@@ -1100,9 +1111,9 @@ export interface Prisma__InventoryBalanceClient<T, Null = never, ExtArgs extends
  * Fields of the InventoryBalance model
  */
 export interface InventoryBalanceFieldRefs {
-  readonly id: Prisma.FieldRef<"InventoryBalance", 'String'>
-  readonly tenantId: Prisma.FieldRef<"InventoryBalance", 'String'>
-  readonly variantId: Prisma.FieldRef<"InventoryBalance", 'String'>
+  readonly id: Prisma.FieldRef<"InventoryBalance", 'Int'>
+  readonly tenantId: Prisma.FieldRef<"InventoryBalance", 'Int'>
+  readonly variantId: Prisma.FieldRef<"InventoryBalance", 'Int'>
   readonly quantityOnHand: Prisma.FieldRef<"InventoryBalance", 'Int'>
   readonly quantityReserved: Prisma.FieldRef<"InventoryBalance", 'Int'>
   readonly updatedAt: Prisma.FieldRef<"InventoryBalance", 'DateTime'>

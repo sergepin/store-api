@@ -20,13 +20,25 @@ export type CompanyModel = runtime.Types.Result.DefaultSelection<Prisma.$Company
 
 export type AggregateCompany = {
   _count: CompanyCountAggregateOutputType | null
+  _avg: CompanyAvgAggregateOutputType | null
+  _sum: CompanySumAggregateOutputType | null
   _min: CompanyMinAggregateOutputType | null
   _max: CompanyMaxAggregateOutputType | null
 }
 
+export type CompanyAvgAggregateOutputType = {
+  id: number | null
+  tenantId: number | null
+}
+
+export type CompanySumAggregateOutputType = {
+  id: number | null
+  tenantId: number | null
+}
+
 export type CompanyMinAggregateOutputType = {
-  id: string | null
-  tenantId: string | null
+  id: number | null
+  tenantId: number | null
   legalName: string | null
   taxId: string | null
   status: string | null
@@ -35,8 +47,8 @@ export type CompanyMinAggregateOutputType = {
 }
 
 export type CompanyMaxAggregateOutputType = {
-  id: string | null
-  tenantId: string | null
+  id: number | null
+  tenantId: number | null
   legalName: string | null
   taxId: string | null
   status: string | null
@@ -56,6 +68,16 @@ export type CompanyCountAggregateOutputType = {
   _all: number
 }
 
+
+export type CompanyAvgAggregateInputType = {
+  id?: true
+  tenantId?: true
+}
+
+export type CompanySumAggregateInputType = {
+  id?: true
+  tenantId?: true
+}
 
 export type CompanyMinAggregateInputType = {
   id?: true
@@ -127,6 +149,18 @@ export type CompanyAggregateArgs<ExtArgs extends runtime.Types.Extensions.Intern
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: CompanyAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: CompanySumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: CompanyMinAggregateInputType
@@ -157,13 +191,15 @@ export type CompanyGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   _count?: CompanyCountAggregateInputType | true
+  _avg?: CompanyAvgAggregateInputType
+  _sum?: CompanySumAggregateInputType
   _min?: CompanyMinAggregateInputType
   _max?: CompanyMaxAggregateInputType
 }
 
 export type CompanyGroupByOutputType = {
-  id: string
-  tenantId: string
+  id: number
+  tenantId: number
   legalName: string
   taxId: string | null
   billingAddress: runtime.JsonValue | null
@@ -171,6 +207,8 @@ export type CompanyGroupByOutputType = {
   createdAt: Date
   updatedAt: Date
   _count: CompanyCountAggregateOutputType | null
+  _avg: CompanyAvgAggregateOutputType | null
+  _sum: CompanySumAggregateOutputType | null
   _min: CompanyMinAggregateOutputType | null
   _max: CompanyMaxAggregateOutputType | null
 }
@@ -194,8 +232,8 @@ export type CompanyWhereInput = {
   AND?: Prisma.CompanyWhereInput | Prisma.CompanyWhereInput[]
   OR?: Prisma.CompanyWhereInput[]
   NOT?: Prisma.CompanyWhereInput | Prisma.CompanyWhereInput[]
-  id?: Prisma.UuidFilter<"Company"> | string
-  tenantId?: Prisma.UuidFilter<"Company"> | string
+  id?: Prisma.IntFilter<"Company"> | number
+  tenantId?: Prisma.IntFilter<"Company"> | number
   legalName?: Prisma.StringFilter<"Company"> | string
   taxId?: Prisma.StringNullableFilter<"Company"> | string | null
   billingAddress?: Prisma.JsonNullableFilter<"Company">
@@ -222,12 +260,12 @@ export type CompanyOrderByWithRelationInput = {
 }
 
 export type CompanyWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
+  id?: number
   tenantId_taxId?: Prisma.CompanyTenantIdTaxIdCompoundUniqueInput
   AND?: Prisma.CompanyWhereInput | Prisma.CompanyWhereInput[]
   OR?: Prisma.CompanyWhereInput[]
   NOT?: Prisma.CompanyWhereInput | Prisma.CompanyWhereInput[]
-  tenantId?: Prisma.UuidFilter<"Company"> | string
+  tenantId?: Prisma.IntFilter<"Company"> | number
   legalName?: Prisma.StringFilter<"Company"> | string
   taxId?: Prisma.StringNullableFilter<"Company"> | string | null
   billingAddress?: Prisma.JsonNullableFilter<"Company">
@@ -249,16 +287,18 @@ export type CompanyOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.CompanyCountOrderByAggregateInput
+  _avg?: Prisma.CompanyAvgOrderByAggregateInput
   _max?: Prisma.CompanyMaxOrderByAggregateInput
   _min?: Prisma.CompanyMinOrderByAggregateInput
+  _sum?: Prisma.CompanySumOrderByAggregateInput
 }
 
 export type CompanyScalarWhereWithAggregatesInput = {
   AND?: Prisma.CompanyScalarWhereWithAggregatesInput | Prisma.CompanyScalarWhereWithAggregatesInput[]
   OR?: Prisma.CompanyScalarWhereWithAggregatesInput[]
   NOT?: Prisma.CompanyScalarWhereWithAggregatesInput | Prisma.CompanyScalarWhereWithAggregatesInput[]
-  id?: Prisma.UuidWithAggregatesFilter<"Company"> | string
-  tenantId?: Prisma.UuidWithAggregatesFilter<"Company"> | string
+  id?: Prisma.IntWithAggregatesFilter<"Company"> | number
+  tenantId?: Prisma.IntWithAggregatesFilter<"Company"> | number
   legalName?: Prisma.StringWithAggregatesFilter<"Company"> | string
   taxId?: Prisma.StringNullableWithAggregatesFilter<"Company"> | string | null
   billingAddress?: Prisma.JsonNullableWithAggregatesFilter<"Company">
@@ -268,7 +308,6 @@ export type CompanyScalarWhereWithAggregatesInput = {
 }
 
 export type CompanyCreateInput = {
-  id?: string
   legalName: string
   taxId?: string | null
   billingAddress?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -281,8 +320,8 @@ export type CompanyCreateInput = {
 }
 
 export type CompanyUncheckedCreateInput = {
-  id?: string
-  tenantId: string
+  id?: number
+  tenantId: number
   legalName: string
   taxId?: string | null
   billingAddress?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -294,7 +333,6 @@ export type CompanyUncheckedCreateInput = {
 }
 
 export type CompanyUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   legalName?: Prisma.StringFieldUpdateOperationsInput | string
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   billingAddress?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -307,8 +345,8 @@ export type CompanyUpdateInput = {
 }
 
 export type CompanyUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
   legalName?: Prisma.StringFieldUpdateOperationsInput | string
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   billingAddress?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -320,8 +358,8 @@ export type CompanyUncheckedUpdateInput = {
 }
 
 export type CompanyCreateManyInput = {
-  id?: string
-  tenantId: string
+  id?: number
+  tenantId: number
   legalName: string
   taxId?: string | null
   billingAddress?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -331,7 +369,6 @@ export type CompanyCreateManyInput = {
 }
 
 export type CompanyUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   legalName?: Prisma.StringFieldUpdateOperationsInput | string
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   billingAddress?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -341,8 +378,8 @@ export type CompanyUpdateManyMutationInput = {
 }
 
 export type CompanyUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
   legalName?: Prisma.StringFieldUpdateOperationsInput | string
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   billingAddress?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -362,7 +399,7 @@ export type CompanyOrderByRelationAggregateInput = {
 }
 
 export type CompanyTenantIdTaxIdCompoundUniqueInput = {
-  tenantId: string
+  tenantId: number
   taxId: string
 }
 
@@ -375,6 +412,11 @@ export type CompanyCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type CompanyAvgOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
 }
 
 export type CompanyMaxOrderByAggregateInput = {
@@ -395,6 +437,11 @@ export type CompanyMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type CompanySumOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
 }
 
 export type CompanyNullableScalarRelationFilter = {
@@ -480,7 +527,6 @@ export type CompanyUpdateOneRequiredWithoutPriceListsNestedInput = {
 }
 
 export type CompanyCreateWithoutTenantInput = {
-  id?: string
   legalName: string
   taxId?: string | null
   billingAddress?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -492,7 +538,7 @@ export type CompanyCreateWithoutTenantInput = {
 }
 
 export type CompanyUncheckedCreateWithoutTenantInput = {
-  id?: string
+  id?: number
   legalName: string
   taxId?: string | null
   billingAddress?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -533,8 +579,8 @@ export type CompanyScalarWhereInput = {
   AND?: Prisma.CompanyScalarWhereInput | Prisma.CompanyScalarWhereInput[]
   OR?: Prisma.CompanyScalarWhereInput[]
   NOT?: Prisma.CompanyScalarWhereInput | Prisma.CompanyScalarWhereInput[]
-  id?: Prisma.UuidFilter<"Company"> | string
-  tenantId?: Prisma.UuidFilter<"Company"> | string
+  id?: Prisma.IntFilter<"Company"> | number
+  tenantId?: Prisma.IntFilter<"Company"> | number
   legalName?: Prisma.StringFilter<"Company"> | string
   taxId?: Prisma.StringNullableFilter<"Company"> | string | null
   billingAddress?: Prisma.JsonNullableFilter<"Company">
@@ -544,7 +590,6 @@ export type CompanyScalarWhereInput = {
 }
 
 export type CompanyCreateWithoutCustomersInput = {
-  id?: string
   legalName: string
   taxId?: string | null
   billingAddress?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -556,8 +601,8 @@ export type CompanyCreateWithoutCustomersInput = {
 }
 
 export type CompanyUncheckedCreateWithoutCustomersInput = {
-  id?: string
-  tenantId: string
+  id?: number
+  tenantId: number
   legalName: string
   taxId?: string | null
   billingAddress?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -584,7 +629,6 @@ export type CompanyUpdateToOneWithWhereWithoutCustomersInput = {
 }
 
 export type CompanyUpdateWithoutCustomersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   legalName?: Prisma.StringFieldUpdateOperationsInput | string
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   billingAddress?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -596,8 +640,8 @@ export type CompanyUpdateWithoutCustomersInput = {
 }
 
 export type CompanyUncheckedUpdateWithoutCustomersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
   legalName?: Prisma.StringFieldUpdateOperationsInput | string
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   billingAddress?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -608,7 +652,6 @@ export type CompanyUncheckedUpdateWithoutCustomersInput = {
 }
 
 export type CompanyCreateWithoutPriceListsInput = {
-  id?: string
   legalName: string
   taxId?: string | null
   billingAddress?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -620,8 +663,8 @@ export type CompanyCreateWithoutPriceListsInput = {
 }
 
 export type CompanyUncheckedCreateWithoutPriceListsInput = {
-  id?: string
-  tenantId: string
+  id?: number
+  tenantId: number
   legalName: string
   taxId?: string | null
   billingAddress?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -648,7 +691,6 @@ export type CompanyUpdateToOneWithWhereWithoutPriceListsInput = {
 }
 
 export type CompanyUpdateWithoutPriceListsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   legalName?: Prisma.StringFieldUpdateOperationsInput | string
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   billingAddress?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -660,8 +702,8 @@ export type CompanyUpdateWithoutPriceListsInput = {
 }
 
 export type CompanyUncheckedUpdateWithoutPriceListsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
   legalName?: Prisma.StringFieldUpdateOperationsInput | string
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   billingAddress?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -672,7 +714,7 @@ export type CompanyUncheckedUpdateWithoutPriceListsInput = {
 }
 
 export type CompanyCreateManyTenantInput = {
-  id?: string
+  id?: number
   legalName: string
   taxId?: string | null
   billingAddress?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -682,7 +724,6 @@ export type CompanyCreateManyTenantInput = {
 }
 
 export type CompanyUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   legalName?: Prisma.StringFieldUpdateOperationsInput | string
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   billingAddress?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -694,7 +735,7 @@ export type CompanyUpdateWithoutTenantInput = {
 }
 
 export type CompanyUncheckedUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   legalName?: Prisma.StringFieldUpdateOperationsInput | string
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   billingAddress?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -706,7 +747,7 @@ export type CompanyUncheckedUpdateWithoutTenantInput = {
 }
 
 export type CompanyUncheckedUpdateManyWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   legalName?: Prisma.StringFieldUpdateOperationsInput | string
   taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   billingAddress?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -827,8 +868,8 @@ export type $CompanyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     priceLists: Prisma.$CompanyPriceListPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
-    tenantId: string
+    id: number
+    tenantId: number
     legalName: string
     taxId: string | null
     billingAddress: runtime.JsonValue | null
@@ -1261,8 +1302,8 @@ export interface Prisma__CompanyClient<T, Null = never, ExtArgs extends runtime.
  * Fields of the Company model
  */
 export interface CompanyFieldRefs {
-  readonly id: Prisma.FieldRef<"Company", 'String'>
-  readonly tenantId: Prisma.FieldRef<"Company", 'String'>
+  readonly id: Prisma.FieldRef<"Company", 'Int'>
+  readonly tenantId: Prisma.FieldRef<"Company", 'Int'>
   readonly legalName: Prisma.FieldRef<"Company", 'String'>
   readonly taxId: Prisma.FieldRef<"Company", 'String'>
   readonly billingAddress: Prisma.FieldRef<"Company", 'Json'>

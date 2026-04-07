@@ -27,22 +27,30 @@ export type AggregateOrderItem = {
 }
 
 export type OrderItemAvgAggregateOutputType = {
+  id: number | null
+  tenantId: number | null
+  orderId: number | null
+  variantId: number | null
   unitPriceMinor: number | null
   quantity: number | null
   lineTotalMinor: number | null
 }
 
 export type OrderItemSumAggregateOutputType = {
+  id: number | null
+  tenantId: number | null
+  orderId: number | null
+  variantId: number | null
   unitPriceMinor: bigint | null
   quantity: number | null
   lineTotalMinor: bigint | null
 }
 
 export type OrderItemMinAggregateOutputType = {
-  id: string | null
-  tenantId: string | null
-  orderId: string | null
-  variantId: string | null
+  id: number | null
+  tenantId: number | null
+  orderId: number | null
+  variantId: number | null
   productNameSnapshot: string | null
   variantSkuSnapshot: string | null
   unitPriceMinor: bigint | null
@@ -52,10 +60,10 @@ export type OrderItemMinAggregateOutputType = {
 }
 
 export type OrderItemMaxAggregateOutputType = {
-  id: string | null
-  tenantId: string | null
-  orderId: string | null
-  variantId: string | null
+  id: number | null
+  tenantId: number | null
+  orderId: number | null
+  variantId: number | null
   productNameSnapshot: string | null
   variantSkuSnapshot: string | null
   unitPriceMinor: bigint | null
@@ -80,12 +88,20 @@ export type OrderItemCountAggregateOutputType = {
 
 
 export type OrderItemAvgAggregateInputType = {
+  id?: true
+  tenantId?: true
+  orderId?: true
+  variantId?: true
   unitPriceMinor?: true
   quantity?: true
   lineTotalMinor?: true
 }
 
 export type OrderItemSumAggregateInputType = {
+  id?: true
+  tenantId?: true
+  orderId?: true
+  variantId?: true
   unitPriceMinor?: true
   quantity?: true
   lineTotalMinor?: true
@@ -218,10 +234,10 @@ export type OrderItemGroupByArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 export type OrderItemGroupByOutputType = {
-  id: string
-  tenantId: string
-  orderId: string
-  variantId: string | null
+  id: number
+  tenantId: number
+  orderId: number
+  variantId: number | null
   productNameSnapshot: string
   variantSkuSnapshot: string
   unitPriceMinor: bigint
@@ -254,10 +270,10 @@ export type OrderItemWhereInput = {
   AND?: Prisma.OrderItemWhereInput | Prisma.OrderItemWhereInput[]
   OR?: Prisma.OrderItemWhereInput[]
   NOT?: Prisma.OrderItemWhereInput | Prisma.OrderItemWhereInput[]
-  id?: Prisma.UuidFilter<"OrderItem"> | string
-  tenantId?: Prisma.UuidFilter<"OrderItem"> | string
-  orderId?: Prisma.UuidFilter<"OrderItem"> | string
-  variantId?: Prisma.UuidNullableFilter<"OrderItem"> | string | null
+  id?: Prisma.IntFilter<"OrderItem"> | number
+  tenantId?: Prisma.IntFilter<"OrderItem"> | number
+  orderId?: Prisma.IntFilter<"OrderItem"> | number
+  variantId?: Prisma.IntNullableFilter<"OrderItem"> | number | null
   productNameSnapshot?: Prisma.StringFilter<"OrderItem"> | string
   variantSkuSnapshot?: Prisma.StringFilter<"OrderItem"> | string
   unitPriceMinor?: Prisma.BigIntFilter<"OrderItem"> | bigint | number
@@ -286,13 +302,13 @@ export type OrderItemOrderByWithRelationInput = {
 }
 
 export type OrderItemWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
+  id?: number
   AND?: Prisma.OrderItemWhereInput | Prisma.OrderItemWhereInput[]
   OR?: Prisma.OrderItemWhereInput[]
   NOT?: Prisma.OrderItemWhereInput | Prisma.OrderItemWhereInput[]
-  tenantId?: Prisma.UuidFilter<"OrderItem"> | string
-  orderId?: Prisma.UuidFilter<"OrderItem"> | string
-  variantId?: Prisma.UuidNullableFilter<"OrderItem"> | string | null
+  tenantId?: Prisma.IntFilter<"OrderItem"> | number
+  orderId?: Prisma.IntFilter<"OrderItem"> | number
+  variantId?: Prisma.IntNullableFilter<"OrderItem"> | number | null
   productNameSnapshot?: Prisma.StringFilter<"OrderItem"> | string
   variantSkuSnapshot?: Prisma.StringFilter<"OrderItem"> | string
   unitPriceMinor?: Prisma.BigIntFilter<"OrderItem"> | bigint | number
@@ -326,10 +342,10 @@ export type OrderItemScalarWhereWithAggregatesInput = {
   AND?: Prisma.OrderItemScalarWhereWithAggregatesInput | Prisma.OrderItemScalarWhereWithAggregatesInput[]
   OR?: Prisma.OrderItemScalarWhereWithAggregatesInput[]
   NOT?: Prisma.OrderItemScalarWhereWithAggregatesInput | Prisma.OrderItemScalarWhereWithAggregatesInput[]
-  id?: Prisma.UuidWithAggregatesFilter<"OrderItem"> | string
-  tenantId?: Prisma.UuidWithAggregatesFilter<"OrderItem"> | string
-  orderId?: Prisma.UuidWithAggregatesFilter<"OrderItem"> | string
-  variantId?: Prisma.UuidNullableWithAggregatesFilter<"OrderItem"> | string | null
+  id?: Prisma.IntWithAggregatesFilter<"OrderItem"> | number
+  tenantId?: Prisma.IntWithAggregatesFilter<"OrderItem"> | number
+  orderId?: Prisma.IntWithAggregatesFilter<"OrderItem"> | number
+  variantId?: Prisma.IntNullableWithAggregatesFilter<"OrderItem"> | number | null
   productNameSnapshot?: Prisma.StringWithAggregatesFilter<"OrderItem"> | string
   variantSkuSnapshot?: Prisma.StringWithAggregatesFilter<"OrderItem"> | string
   unitPriceMinor?: Prisma.BigIntWithAggregatesFilter<"OrderItem"> | bigint | number
@@ -339,7 +355,6 @@ export type OrderItemScalarWhereWithAggregatesInput = {
 }
 
 export type OrderItemCreateInput = {
-  id?: string
   productNameSnapshot: string
   variantSkuSnapshot: string
   unitPriceMinor: bigint | number
@@ -352,10 +367,10 @@ export type OrderItemCreateInput = {
 }
 
 export type OrderItemUncheckedCreateInput = {
-  id?: string
-  tenantId: string
-  orderId: string
-  variantId?: string | null
+  id?: number
+  tenantId: number
+  orderId: number
+  variantId?: number | null
   productNameSnapshot: string
   variantSkuSnapshot: string
   unitPriceMinor: bigint | number
@@ -365,7 +380,6 @@ export type OrderItemUncheckedCreateInput = {
 }
 
 export type OrderItemUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   productNameSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   variantSkuSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   unitPriceMinor?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -378,10 +392,10 @@ export type OrderItemUpdateInput = {
 }
 
 export type OrderItemUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  orderId?: Prisma.StringFieldUpdateOperationsInput | string
-  variantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
+  orderId?: Prisma.IntFieldUpdateOperationsInput | number
+  variantId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   productNameSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   variantSkuSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   unitPriceMinor?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -391,10 +405,10 @@ export type OrderItemUncheckedUpdateInput = {
 }
 
 export type OrderItemCreateManyInput = {
-  id?: string
-  tenantId: string
-  orderId: string
-  variantId?: string | null
+  id?: number
+  tenantId: number
+  orderId: number
+  variantId?: number | null
   productNameSnapshot: string
   variantSkuSnapshot: string
   unitPriceMinor: bigint | number
@@ -404,7 +418,6 @@ export type OrderItemCreateManyInput = {
 }
 
 export type OrderItemUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   productNameSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   variantSkuSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   unitPriceMinor?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -414,10 +427,10 @@ export type OrderItemUpdateManyMutationInput = {
 }
 
 export type OrderItemUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  orderId?: Prisma.StringFieldUpdateOperationsInput | string
-  variantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
+  orderId?: Prisma.IntFieldUpdateOperationsInput | number
+  variantId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   productNameSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   variantSkuSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   unitPriceMinor?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -450,6 +463,10 @@ export type OrderItemCountOrderByAggregateInput = {
 }
 
 export type OrderItemAvgOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
+  orderId?: Prisma.SortOrder
+  variantId?: Prisma.SortOrder
   unitPriceMinor?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   lineTotalMinor?: Prisma.SortOrder
@@ -482,6 +499,10 @@ export type OrderItemMinOrderByAggregateInput = {
 }
 
 export type OrderItemSumOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
+  orderId?: Prisma.SortOrder
+  variantId?: Prisma.SortOrder
   unitPriceMinor?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   lineTotalMinor?: Prisma.SortOrder
@@ -614,7 +635,6 @@ export type OrderItemUncheckedUpdateManyWithoutOrderNestedInput = {
 }
 
 export type OrderItemCreateWithoutTenantInput = {
-  id?: string
   productNameSnapshot: string
   variantSkuSnapshot: string
   unitPriceMinor: bigint | number
@@ -626,9 +646,9 @@ export type OrderItemCreateWithoutTenantInput = {
 }
 
 export type OrderItemUncheckedCreateWithoutTenantInput = {
-  id?: string
-  orderId: string
-  variantId?: string | null
+  id?: number
+  orderId: number
+  variantId?: number | null
   productNameSnapshot: string
   variantSkuSnapshot: string
   unitPriceMinor: bigint | number
@@ -667,10 +687,10 @@ export type OrderItemScalarWhereInput = {
   AND?: Prisma.OrderItemScalarWhereInput | Prisma.OrderItemScalarWhereInput[]
   OR?: Prisma.OrderItemScalarWhereInput[]
   NOT?: Prisma.OrderItemScalarWhereInput | Prisma.OrderItemScalarWhereInput[]
-  id?: Prisma.UuidFilter<"OrderItem"> | string
-  tenantId?: Prisma.UuidFilter<"OrderItem"> | string
-  orderId?: Prisma.UuidFilter<"OrderItem"> | string
-  variantId?: Prisma.UuidNullableFilter<"OrderItem"> | string | null
+  id?: Prisma.IntFilter<"OrderItem"> | number
+  tenantId?: Prisma.IntFilter<"OrderItem"> | number
+  orderId?: Prisma.IntFilter<"OrderItem"> | number
+  variantId?: Prisma.IntNullableFilter<"OrderItem"> | number | null
   productNameSnapshot?: Prisma.StringFilter<"OrderItem"> | string
   variantSkuSnapshot?: Prisma.StringFilter<"OrderItem"> | string
   unitPriceMinor?: Prisma.BigIntFilter<"OrderItem"> | bigint | number
@@ -680,7 +700,6 @@ export type OrderItemScalarWhereInput = {
 }
 
 export type OrderItemCreateWithoutVariantInput = {
-  id?: string
   productNameSnapshot: string
   variantSkuSnapshot: string
   unitPriceMinor: bigint | number
@@ -692,9 +711,9 @@ export type OrderItemCreateWithoutVariantInput = {
 }
 
 export type OrderItemUncheckedCreateWithoutVariantInput = {
-  id?: string
-  tenantId: string
-  orderId: string
+  id?: number
+  tenantId: number
+  orderId: number
   productNameSnapshot: string
   variantSkuSnapshot: string
   unitPriceMinor: bigint | number
@@ -730,7 +749,6 @@ export type OrderItemUpdateManyWithWhereWithoutVariantInput = {
 }
 
 export type OrderItemCreateWithoutOrderInput = {
-  id?: string
   productNameSnapshot: string
   variantSkuSnapshot: string
   unitPriceMinor: bigint | number
@@ -742,9 +760,9 @@ export type OrderItemCreateWithoutOrderInput = {
 }
 
 export type OrderItemUncheckedCreateWithoutOrderInput = {
-  id?: string
-  tenantId: string
-  variantId?: string | null
+  id?: number
+  tenantId: number
+  variantId?: number | null
   productNameSnapshot: string
   variantSkuSnapshot: string
   unitPriceMinor: bigint | number
@@ -780,9 +798,9 @@ export type OrderItemUpdateManyWithWhereWithoutOrderInput = {
 }
 
 export type OrderItemCreateManyTenantInput = {
-  id?: string
-  orderId: string
-  variantId?: string | null
+  id?: number
+  orderId: number
+  variantId?: number | null
   productNameSnapshot: string
   variantSkuSnapshot: string
   unitPriceMinor: bigint | number
@@ -792,7 +810,6 @@ export type OrderItemCreateManyTenantInput = {
 }
 
 export type OrderItemUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   productNameSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   variantSkuSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   unitPriceMinor?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -804,9 +821,9 @@ export type OrderItemUpdateWithoutTenantInput = {
 }
 
 export type OrderItemUncheckedUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  orderId?: Prisma.StringFieldUpdateOperationsInput | string
-  variantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  orderId?: Prisma.IntFieldUpdateOperationsInput | number
+  variantId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   productNameSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   variantSkuSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   unitPriceMinor?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -816,9 +833,9 @@ export type OrderItemUncheckedUpdateWithoutTenantInput = {
 }
 
 export type OrderItemUncheckedUpdateManyWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  orderId?: Prisma.StringFieldUpdateOperationsInput | string
-  variantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  orderId?: Prisma.IntFieldUpdateOperationsInput | number
+  variantId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   productNameSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   variantSkuSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   unitPriceMinor?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -828,9 +845,9 @@ export type OrderItemUncheckedUpdateManyWithoutTenantInput = {
 }
 
 export type OrderItemCreateManyVariantInput = {
-  id?: string
-  tenantId: string
-  orderId: string
+  id?: number
+  tenantId: number
+  orderId: number
   productNameSnapshot: string
   variantSkuSnapshot: string
   unitPriceMinor: bigint | number
@@ -840,7 +857,6 @@ export type OrderItemCreateManyVariantInput = {
 }
 
 export type OrderItemUpdateWithoutVariantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   productNameSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   variantSkuSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   unitPriceMinor?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -852,9 +868,9 @@ export type OrderItemUpdateWithoutVariantInput = {
 }
 
 export type OrderItemUncheckedUpdateWithoutVariantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  orderId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
+  orderId?: Prisma.IntFieldUpdateOperationsInput | number
   productNameSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   variantSkuSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   unitPriceMinor?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -864,9 +880,9 @@ export type OrderItemUncheckedUpdateWithoutVariantInput = {
 }
 
 export type OrderItemUncheckedUpdateManyWithoutVariantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  orderId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
+  orderId?: Prisma.IntFieldUpdateOperationsInput | number
   productNameSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   variantSkuSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   unitPriceMinor?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -876,9 +892,9 @@ export type OrderItemUncheckedUpdateManyWithoutVariantInput = {
 }
 
 export type OrderItemCreateManyOrderInput = {
-  id?: string
-  tenantId: string
-  variantId?: string | null
+  id?: number
+  tenantId: number
+  variantId?: number | null
   productNameSnapshot: string
   variantSkuSnapshot: string
   unitPriceMinor: bigint | number
@@ -888,7 +904,6 @@ export type OrderItemCreateManyOrderInput = {
 }
 
 export type OrderItemUpdateWithoutOrderInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   productNameSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   variantSkuSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   unitPriceMinor?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -900,9 +915,9 @@ export type OrderItemUpdateWithoutOrderInput = {
 }
 
 export type OrderItemUncheckedUpdateWithoutOrderInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  variantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
+  variantId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   productNameSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   variantSkuSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   unitPriceMinor?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -912,9 +927,9 @@ export type OrderItemUncheckedUpdateWithoutOrderInput = {
 }
 
 export type OrderItemUncheckedUpdateManyWithoutOrderInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  variantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
+  variantId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   productNameSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   variantSkuSnapshot?: Prisma.StringFieldUpdateOperationsInput | string
   unitPriceMinor?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -1011,10 +1026,10 @@ export type $OrderItemPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     variant: Prisma.$ProductVariantPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
-    tenantId: string
-    orderId: string
-    variantId: string | null
+    id: number
+    tenantId: number
+    orderId: number
+    variantId: number | null
     productNameSnapshot: string
     variantSkuSnapshot: string
     unitPriceMinor: bigint
@@ -1447,10 +1462,10 @@ export interface Prisma__OrderItemClient<T, Null = never, ExtArgs extends runtim
  * Fields of the OrderItem model
  */
 export interface OrderItemFieldRefs {
-  readonly id: Prisma.FieldRef<"OrderItem", 'String'>
-  readonly tenantId: Prisma.FieldRef<"OrderItem", 'String'>
-  readonly orderId: Prisma.FieldRef<"OrderItem", 'String'>
-  readonly variantId: Prisma.FieldRef<"OrderItem", 'String'>
+  readonly id: Prisma.FieldRef<"OrderItem", 'Int'>
+  readonly tenantId: Prisma.FieldRef<"OrderItem", 'Int'>
+  readonly orderId: Prisma.FieldRef<"OrderItem", 'Int'>
+  readonly variantId: Prisma.FieldRef<"OrderItem", 'Int'>
   readonly productNameSnapshot: Prisma.FieldRef<"OrderItem", 'String'>
   readonly variantSkuSnapshot: Prisma.FieldRef<"OrderItem", 'String'>
   readonly unitPriceMinor: Prisma.FieldRef<"OrderItem", 'BigInt'>

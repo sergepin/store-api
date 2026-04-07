@@ -20,18 +20,30 @@ export type CompanyPriceListModel = runtime.Types.Result.DefaultSelection<Prisma
 
 export type AggregateCompanyPriceList = {
   _count: CompanyPriceListCountAggregateOutputType | null
+  _avg: CompanyPriceListAvgAggregateOutputType | null
+  _sum: CompanyPriceListSumAggregateOutputType | null
   _min: CompanyPriceListMinAggregateOutputType | null
   _max: CompanyPriceListMaxAggregateOutputType | null
 }
 
+export type CompanyPriceListAvgAggregateOutputType = {
+  companyId: number | null
+  priceListId: number | null
+}
+
+export type CompanyPriceListSumAggregateOutputType = {
+  companyId: number | null
+  priceListId: number | null
+}
+
 export type CompanyPriceListMinAggregateOutputType = {
-  companyId: string | null
-  priceListId: string | null
+  companyId: number | null
+  priceListId: number | null
 }
 
 export type CompanyPriceListMaxAggregateOutputType = {
-  companyId: string | null
-  priceListId: string | null
+  companyId: number | null
+  priceListId: number | null
 }
 
 export type CompanyPriceListCountAggregateOutputType = {
@@ -40,6 +52,16 @@ export type CompanyPriceListCountAggregateOutputType = {
   _all: number
 }
 
+
+export type CompanyPriceListAvgAggregateInputType = {
+  companyId?: true
+  priceListId?: true
+}
+
+export type CompanyPriceListSumAggregateInputType = {
+  companyId?: true
+  priceListId?: true
+}
 
 export type CompanyPriceListMinAggregateInputType = {
   companyId?: true
@@ -95,6 +117,18 @@ export type CompanyPriceListAggregateArgs<ExtArgs extends runtime.Types.Extensio
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: CompanyPriceListAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: CompanyPriceListSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: CompanyPriceListMinAggregateInputType
@@ -125,14 +159,18 @@ export type CompanyPriceListGroupByArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   _count?: CompanyPriceListCountAggregateInputType | true
+  _avg?: CompanyPriceListAvgAggregateInputType
+  _sum?: CompanyPriceListSumAggregateInputType
   _min?: CompanyPriceListMinAggregateInputType
   _max?: CompanyPriceListMaxAggregateInputType
 }
 
 export type CompanyPriceListGroupByOutputType = {
-  companyId: string
-  priceListId: string
+  companyId: number
+  priceListId: number
   _count: CompanyPriceListCountAggregateOutputType | null
+  _avg: CompanyPriceListAvgAggregateOutputType | null
+  _sum: CompanyPriceListSumAggregateOutputType | null
   _min: CompanyPriceListMinAggregateOutputType | null
   _max: CompanyPriceListMaxAggregateOutputType | null
 }
@@ -156,8 +194,8 @@ export type CompanyPriceListWhereInput = {
   AND?: Prisma.CompanyPriceListWhereInput | Prisma.CompanyPriceListWhereInput[]
   OR?: Prisma.CompanyPriceListWhereInput[]
   NOT?: Prisma.CompanyPriceListWhereInput | Prisma.CompanyPriceListWhereInput[]
-  companyId?: Prisma.UuidFilter<"CompanyPriceList"> | string
-  priceListId?: Prisma.UuidFilter<"CompanyPriceList"> | string
+  companyId?: Prisma.IntFilter<"CompanyPriceList"> | number
+  priceListId?: Prisma.IntFilter<"CompanyPriceList"> | number
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   priceList?: Prisma.XOR<Prisma.PriceListScalarRelationFilter, Prisma.PriceListWhereInput>
 }
@@ -174,8 +212,8 @@ export type CompanyPriceListWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.CompanyPriceListWhereInput | Prisma.CompanyPriceListWhereInput[]
   OR?: Prisma.CompanyPriceListWhereInput[]
   NOT?: Prisma.CompanyPriceListWhereInput | Prisma.CompanyPriceListWhereInput[]
-  companyId?: Prisma.UuidFilter<"CompanyPriceList"> | string
-  priceListId?: Prisma.UuidFilter<"CompanyPriceList"> | string
+  companyId?: Prisma.IntFilter<"CompanyPriceList"> | number
+  priceListId?: Prisma.IntFilter<"CompanyPriceList"> | number
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   priceList?: Prisma.XOR<Prisma.PriceListScalarRelationFilter, Prisma.PriceListWhereInput>
 }, "companyId_priceListId">
@@ -184,16 +222,18 @@ export type CompanyPriceListOrderByWithAggregationInput = {
   companyId?: Prisma.SortOrder
   priceListId?: Prisma.SortOrder
   _count?: Prisma.CompanyPriceListCountOrderByAggregateInput
+  _avg?: Prisma.CompanyPriceListAvgOrderByAggregateInput
   _max?: Prisma.CompanyPriceListMaxOrderByAggregateInput
   _min?: Prisma.CompanyPriceListMinOrderByAggregateInput
+  _sum?: Prisma.CompanyPriceListSumOrderByAggregateInput
 }
 
 export type CompanyPriceListScalarWhereWithAggregatesInput = {
   AND?: Prisma.CompanyPriceListScalarWhereWithAggregatesInput | Prisma.CompanyPriceListScalarWhereWithAggregatesInput[]
   OR?: Prisma.CompanyPriceListScalarWhereWithAggregatesInput[]
   NOT?: Prisma.CompanyPriceListScalarWhereWithAggregatesInput | Prisma.CompanyPriceListScalarWhereWithAggregatesInput[]
-  companyId?: Prisma.UuidWithAggregatesFilter<"CompanyPriceList"> | string
-  priceListId?: Prisma.UuidWithAggregatesFilter<"CompanyPriceList"> | string
+  companyId?: Prisma.IntWithAggregatesFilter<"CompanyPriceList"> | number
+  priceListId?: Prisma.IntWithAggregatesFilter<"CompanyPriceList"> | number
 }
 
 export type CompanyPriceListCreateInput = {
@@ -202,8 +242,8 @@ export type CompanyPriceListCreateInput = {
 }
 
 export type CompanyPriceListUncheckedCreateInput = {
-  companyId: string
-  priceListId: string
+  companyId: number
+  priceListId: number
 }
 
 export type CompanyPriceListUpdateInput = {
@@ -212,13 +252,13 @@ export type CompanyPriceListUpdateInput = {
 }
 
 export type CompanyPriceListUncheckedUpdateInput = {
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
-  priceListId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.IntFieldUpdateOperationsInput | number
+  priceListId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type CompanyPriceListCreateManyInput = {
-  companyId: string
-  priceListId: string
+  companyId: number
+  priceListId: number
 }
 
 export type CompanyPriceListUpdateManyMutationInput = {
@@ -226,8 +266,8 @@ export type CompanyPriceListUpdateManyMutationInput = {
 }
 
 export type CompanyPriceListUncheckedUpdateManyInput = {
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
-  priceListId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.IntFieldUpdateOperationsInput | number
+  priceListId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type CompanyPriceListListRelationFilter = {
@@ -241,11 +281,16 @@ export type CompanyPriceListOrderByRelationAggregateInput = {
 }
 
 export type CompanyPriceListCompanyIdPriceListIdCompoundUniqueInput = {
-  companyId: string
-  priceListId: string
+  companyId: number
+  priceListId: number
 }
 
 export type CompanyPriceListCountOrderByAggregateInput = {
+  companyId?: Prisma.SortOrder
+  priceListId?: Prisma.SortOrder
+}
+
+export type CompanyPriceListAvgOrderByAggregateInput = {
   companyId?: Prisma.SortOrder
   priceListId?: Prisma.SortOrder
 }
@@ -256,6 +301,11 @@ export type CompanyPriceListMaxOrderByAggregateInput = {
 }
 
 export type CompanyPriceListMinOrderByAggregateInput = {
+  companyId?: Prisma.SortOrder
+  priceListId?: Prisma.SortOrder
+}
+
+export type CompanyPriceListSumOrderByAggregateInput = {
   companyId?: Prisma.SortOrder
   priceListId?: Prisma.SortOrder
 }
@@ -349,7 +399,7 @@ export type CompanyPriceListCreateWithoutCompanyInput = {
 }
 
 export type CompanyPriceListUncheckedCreateWithoutCompanyInput = {
-  priceListId: string
+  priceListId: number
 }
 
 export type CompanyPriceListCreateOrConnectWithoutCompanyInput = {
@@ -382,8 +432,8 @@ export type CompanyPriceListScalarWhereInput = {
   AND?: Prisma.CompanyPriceListScalarWhereInput | Prisma.CompanyPriceListScalarWhereInput[]
   OR?: Prisma.CompanyPriceListScalarWhereInput[]
   NOT?: Prisma.CompanyPriceListScalarWhereInput | Prisma.CompanyPriceListScalarWhereInput[]
-  companyId?: Prisma.UuidFilter<"CompanyPriceList"> | string
-  priceListId?: Prisma.UuidFilter<"CompanyPriceList"> | string
+  companyId?: Prisma.IntFilter<"CompanyPriceList"> | number
+  priceListId?: Prisma.IntFilter<"CompanyPriceList"> | number
 }
 
 export type CompanyPriceListCreateWithoutPriceListInput = {
@@ -391,7 +441,7 @@ export type CompanyPriceListCreateWithoutPriceListInput = {
 }
 
 export type CompanyPriceListUncheckedCreateWithoutPriceListInput = {
-  companyId: string
+  companyId: number
 }
 
 export type CompanyPriceListCreateOrConnectWithoutPriceListInput = {
@@ -421,7 +471,7 @@ export type CompanyPriceListUpdateManyWithWhereWithoutPriceListInput = {
 }
 
 export type CompanyPriceListCreateManyCompanyInput = {
-  priceListId: string
+  priceListId: number
 }
 
 export type CompanyPriceListUpdateWithoutCompanyInput = {
@@ -429,15 +479,15 @@ export type CompanyPriceListUpdateWithoutCompanyInput = {
 }
 
 export type CompanyPriceListUncheckedUpdateWithoutCompanyInput = {
-  priceListId?: Prisma.StringFieldUpdateOperationsInput | string
+  priceListId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type CompanyPriceListUncheckedUpdateManyWithoutCompanyInput = {
-  priceListId?: Prisma.StringFieldUpdateOperationsInput | string
+  priceListId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type CompanyPriceListCreateManyPriceListInput = {
-  companyId: string
+  companyId: number
 }
 
 export type CompanyPriceListUpdateWithoutPriceListInput = {
@@ -445,11 +495,11 @@ export type CompanyPriceListUpdateWithoutPriceListInput = {
 }
 
 export type CompanyPriceListUncheckedUpdateWithoutPriceListInput = {
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type CompanyPriceListUncheckedUpdateManyWithoutPriceListInput = {
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
@@ -501,8 +551,8 @@ export type $CompanyPriceListPayload<ExtArgs extends runtime.Types.Extensions.In
     priceList: Prisma.$PriceListPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    companyId: string
-    priceListId: string
+    companyId: number
+    priceListId: number
   }, ExtArgs["result"]["companyPriceList"]>
   composites: {}
 }
@@ -928,8 +978,8 @@ export interface Prisma__CompanyPriceListClient<T, Null = never, ExtArgs extends
  * Fields of the CompanyPriceList model
  */
 export interface CompanyPriceListFieldRefs {
-  readonly companyId: Prisma.FieldRef<"CompanyPriceList", 'String'>
-  readonly priceListId: Prisma.FieldRef<"CompanyPriceList", 'String'>
+  readonly companyId: Prisma.FieldRef<"CompanyPriceList", 'Int'>
+  readonly priceListId: Prisma.FieldRef<"CompanyPriceList", 'Int'>
 }
     
 

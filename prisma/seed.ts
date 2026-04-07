@@ -40,7 +40,7 @@ async function main() {
     { name: 'Sillas Gamer', slug: 'sillas-gamer' },
   ];
 
-  const categories: Record<string, string> = {};
+  const categories: Record<string, number> = {};
   for (const cat of categoryData) {
     const c = await prisma.category.upsert({
       where: { tenantId_slug: { tenantId: tenant.id, slug: cat.slug } },

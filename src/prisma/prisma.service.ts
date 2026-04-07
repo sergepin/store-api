@@ -1,17 +1,21 @@
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+import 'dotenv/config'; // Enforce immediate loading of .env
 import { PrismaClient } from '../../prisma/generated/prisma/client.js';
 import { PrismaPg } from '@prisma/adapter-pg';
 
-function createPrismaClient() {
-  const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
-  return new PrismaClient({ adapter });
-}
-
-const prismaInstance = createPrismaClient();
-
 @Injectable()
 export class PrismaService implements OnModuleInit, OnModuleDestroy {
-  readonly client = prismaInstance;
+  public client: PrismaClient;
+
+  constructor() {
+    const connectionString = process.env.DATABASE_URL;
+    if (!connectionString) {
+      // If still not defined, it's a configuration error
+      throw new Error('DATABASE_URL is not defined in environment variables');
+    }
+    const adapter = new PrismaPg({ connectionString });
+    this.client = new PrismaClient({ adapter });
+  }
 
   get tenant() { return this.client.tenant; }
   get tenantOrderSequence() { return this.client.tenantOrderSequence; }

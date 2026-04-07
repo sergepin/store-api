@@ -1,10 +1,11 @@
-import { IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsInt, IsOptional, IsString } from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export class GetProductsQueryDto {
   @IsOptional()
-  @IsUUID()
-  categoryId?: string;
+  @IsInt()
+  @Transform(({ value }) => parseInt(value, 10))
+  categoryId?: number;
 
   @IsOptional()
   @IsString()

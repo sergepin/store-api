@@ -27,17 +27,23 @@ export type AggregatePayment = {
 }
 
 export type PaymentAvgAggregateOutputType = {
+  id: number | null
+  tenantId: number | null
+  orderId: number | null
   amountMinor: number | null
 }
 
 export type PaymentSumAggregateOutputType = {
+  id: number | null
+  tenantId: number | null
+  orderId: number | null
   amountMinor: bigint | null
 }
 
 export type PaymentMinAggregateOutputType = {
-  id: string | null
-  tenantId: string | null
-  orderId: string | null
+  id: number | null
+  tenantId: number | null
+  orderId: number | null
   provider: string | null
   providerPaymentId: string | null
   status: string | null
@@ -50,9 +56,9 @@ export type PaymentMinAggregateOutputType = {
 }
 
 export type PaymentMaxAggregateOutputType = {
-  id: string | null
-  tenantId: string | null
-  orderId: string | null
+  id: number | null
+  tenantId: number | null
+  orderId: number | null
   provider: string | null
   providerPaymentId: string | null
   status: string | null
@@ -83,10 +89,16 @@ export type PaymentCountAggregateOutputType = {
 
 
 export type PaymentAvgAggregateInputType = {
+  id?: true
+  tenantId?: true
+  orderId?: true
   amountMinor?: true
 }
 
 export type PaymentSumAggregateInputType = {
+  id?: true
+  tenantId?: true
+  orderId?: true
   amountMinor?: true
 }
 
@@ -224,9 +236,9 @@ export type PaymentGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 export type PaymentGroupByOutputType = {
-  id: string
-  tenantId: string
-  orderId: string
+  id: number
+  tenantId: number
+  orderId: number
   provider: string
   providerPaymentId: string | null
   status: string
@@ -263,9 +275,9 @@ export type PaymentWhereInput = {
   AND?: Prisma.PaymentWhereInput | Prisma.PaymentWhereInput[]
   OR?: Prisma.PaymentWhereInput[]
   NOT?: Prisma.PaymentWhereInput | Prisma.PaymentWhereInput[]
-  id?: Prisma.UuidFilter<"Payment"> | string
-  tenantId?: Prisma.UuidFilter<"Payment"> | string
-  orderId?: Prisma.UuidFilter<"Payment"> | string
+  id?: Prisma.IntFilter<"Payment"> | number
+  tenantId?: Prisma.IntFilter<"Payment"> | number
+  orderId?: Prisma.IntFilter<"Payment"> | number
   provider?: Prisma.StringFilter<"Payment"> | string
   providerPaymentId?: Prisma.StringNullableFilter<"Payment"> | string | null
   status?: Prisma.StringFilter<"Payment"> | string
@@ -301,14 +313,14 @@ export type PaymentOrderByWithRelationInput = {
 }
 
 export type PaymentWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
+  id?: number
   idempotencyKey?: string
   tenantId_providerPaymentId?: Prisma.PaymentTenantIdProviderPaymentIdCompoundUniqueInput
   AND?: Prisma.PaymentWhereInput | Prisma.PaymentWhereInput[]
   OR?: Prisma.PaymentWhereInput[]
   NOT?: Prisma.PaymentWhereInput | Prisma.PaymentWhereInput[]
-  tenantId?: Prisma.UuidFilter<"Payment"> | string
-  orderId?: Prisma.UuidFilter<"Payment"> | string
+  tenantId?: Prisma.IntFilter<"Payment"> | number
+  orderId?: Prisma.IntFilter<"Payment"> | number
   provider?: Prisma.StringFilter<"Payment"> | string
   providerPaymentId?: Prisma.StringNullableFilter<"Payment"> | string | null
   status?: Prisma.StringFilter<"Payment"> | string
@@ -348,9 +360,9 @@ export type PaymentScalarWhereWithAggregatesInput = {
   AND?: Prisma.PaymentScalarWhereWithAggregatesInput | Prisma.PaymentScalarWhereWithAggregatesInput[]
   OR?: Prisma.PaymentScalarWhereWithAggregatesInput[]
   NOT?: Prisma.PaymentScalarWhereWithAggregatesInput | Prisma.PaymentScalarWhereWithAggregatesInput[]
-  id?: Prisma.UuidWithAggregatesFilter<"Payment"> | string
-  tenantId?: Prisma.UuidWithAggregatesFilter<"Payment"> | string
-  orderId?: Prisma.UuidWithAggregatesFilter<"Payment"> | string
+  id?: Prisma.IntWithAggregatesFilter<"Payment"> | number
+  tenantId?: Prisma.IntWithAggregatesFilter<"Payment"> | number
+  orderId?: Prisma.IntWithAggregatesFilter<"Payment"> | number
   provider?: Prisma.StringWithAggregatesFilter<"Payment"> | string
   providerPaymentId?: Prisma.StringNullableWithAggregatesFilter<"Payment"> | string | null
   status?: Prisma.StringWithAggregatesFilter<"Payment"> | string
@@ -364,7 +376,6 @@ export type PaymentScalarWhereWithAggregatesInput = {
 }
 
 export type PaymentCreateInput = {
-  id?: string
   provider: string
   providerPaymentId?: string | null
   status: string
@@ -381,9 +392,9 @@ export type PaymentCreateInput = {
 }
 
 export type PaymentUncheckedCreateInput = {
-  id?: string
-  tenantId: string
-  orderId: string
+  id?: number
+  tenantId: number
+  orderId: number
   provider: string
   providerPaymentId?: string | null
   status: string
@@ -398,7 +409,6 @@ export type PaymentUncheckedCreateInput = {
 }
 
 export type PaymentUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   providerPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -415,9 +425,9 @@ export type PaymentUpdateInput = {
 }
 
 export type PaymentUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  orderId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
+  orderId?: Prisma.IntFieldUpdateOperationsInput | number
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   providerPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -432,9 +442,9 @@ export type PaymentUncheckedUpdateInput = {
 }
 
 export type PaymentCreateManyInput = {
-  id?: string
-  tenantId: string
-  orderId: string
+  id?: number
+  tenantId: number
+  orderId: number
   provider: string
   providerPaymentId?: string | null
   status: string
@@ -448,7 +458,6 @@ export type PaymentCreateManyInput = {
 }
 
 export type PaymentUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   providerPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -462,9 +471,9 @@ export type PaymentUpdateManyMutationInput = {
 }
 
 export type PaymentUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  orderId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
+  orderId?: Prisma.IntFieldUpdateOperationsInput | number
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   providerPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -488,7 +497,7 @@ export type PaymentOrderByRelationAggregateInput = {
 }
 
 export type PaymentTenantIdProviderPaymentIdCompoundUniqueInput = {
-  tenantId: string
+  tenantId: number
   providerPaymentId: string
 }
 
@@ -509,6 +518,9 @@ export type PaymentCountOrderByAggregateInput = {
 }
 
 export type PaymentAvgOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
+  orderId?: Prisma.SortOrder
   amountMinor?: Prisma.SortOrder
 }
 
@@ -543,6 +555,9 @@ export type PaymentMinOrderByAggregateInput = {
 }
 
 export type PaymentSumOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
+  orderId?: Prisma.SortOrder
   amountMinor?: Prisma.SortOrder
 }
 
@@ -650,7 +665,6 @@ export type PaymentUpdateOneRequiredWithoutEventsNestedInput = {
 }
 
 export type PaymentCreateWithoutTenantInput = {
-  id?: string
   provider: string
   providerPaymentId?: string | null
   status: string
@@ -666,8 +680,8 @@ export type PaymentCreateWithoutTenantInput = {
 }
 
 export type PaymentUncheckedCreateWithoutTenantInput = {
-  id?: string
-  orderId: string
+  id?: number
+  orderId: number
   provider: string
   providerPaymentId?: string | null
   status: string
@@ -711,9 +725,9 @@ export type PaymentScalarWhereInput = {
   AND?: Prisma.PaymentScalarWhereInput | Prisma.PaymentScalarWhereInput[]
   OR?: Prisma.PaymentScalarWhereInput[]
   NOT?: Prisma.PaymentScalarWhereInput | Prisma.PaymentScalarWhereInput[]
-  id?: Prisma.UuidFilter<"Payment"> | string
-  tenantId?: Prisma.UuidFilter<"Payment"> | string
-  orderId?: Prisma.UuidFilter<"Payment"> | string
+  id?: Prisma.IntFilter<"Payment"> | number
+  tenantId?: Prisma.IntFilter<"Payment"> | number
+  orderId?: Prisma.IntFilter<"Payment"> | number
   provider?: Prisma.StringFilter<"Payment"> | string
   providerPaymentId?: Prisma.StringNullableFilter<"Payment"> | string | null
   status?: Prisma.StringFilter<"Payment"> | string
@@ -727,7 +741,6 @@ export type PaymentScalarWhereInput = {
 }
 
 export type PaymentCreateWithoutOrderInput = {
-  id?: string
   provider: string
   providerPaymentId?: string | null
   status: string
@@ -743,8 +756,8 @@ export type PaymentCreateWithoutOrderInput = {
 }
 
 export type PaymentUncheckedCreateWithoutOrderInput = {
-  id?: string
-  tenantId: string
+  id?: number
+  tenantId: number
   provider: string
   providerPaymentId?: string | null
   status: string
@@ -785,7 +798,6 @@ export type PaymentUpdateManyWithWhereWithoutOrderInput = {
 }
 
 export type PaymentCreateWithoutEventsInput = {
-  id?: string
   provider: string
   providerPaymentId?: string | null
   status: string
@@ -801,9 +813,9 @@ export type PaymentCreateWithoutEventsInput = {
 }
 
 export type PaymentUncheckedCreateWithoutEventsInput = {
-  id?: string
-  tenantId: string
-  orderId: string
+  id?: number
+  tenantId: number
+  orderId: number
   provider: string
   providerPaymentId?: string | null
   status: string
@@ -833,7 +845,6 @@ export type PaymentUpdateToOneWithWhereWithoutEventsInput = {
 }
 
 export type PaymentUpdateWithoutEventsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   providerPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -849,9 +860,9 @@ export type PaymentUpdateWithoutEventsInput = {
 }
 
 export type PaymentUncheckedUpdateWithoutEventsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  orderId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
+  orderId?: Prisma.IntFieldUpdateOperationsInput | number
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   providerPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -865,8 +876,8 @@ export type PaymentUncheckedUpdateWithoutEventsInput = {
 }
 
 export type PaymentCreateManyTenantInput = {
-  id?: string
-  orderId: string
+  id?: number
+  orderId: number
   provider: string
   providerPaymentId?: string | null
   status: string
@@ -880,7 +891,6 @@ export type PaymentCreateManyTenantInput = {
 }
 
 export type PaymentUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   providerPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -896,8 +906,8 @@ export type PaymentUpdateWithoutTenantInput = {
 }
 
 export type PaymentUncheckedUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  orderId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  orderId?: Prisma.IntFieldUpdateOperationsInput | number
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   providerPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -912,8 +922,8 @@ export type PaymentUncheckedUpdateWithoutTenantInput = {
 }
 
 export type PaymentUncheckedUpdateManyWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  orderId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  orderId?: Prisma.IntFieldUpdateOperationsInput | number
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   providerPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -927,8 +937,8 @@ export type PaymentUncheckedUpdateManyWithoutTenantInput = {
 }
 
 export type PaymentCreateManyOrderInput = {
-  id?: string
-  tenantId: string
+  id?: number
+  tenantId: number
   provider: string
   providerPaymentId?: string | null
   status: string
@@ -942,7 +952,6 @@ export type PaymentCreateManyOrderInput = {
 }
 
 export type PaymentUpdateWithoutOrderInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   providerPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -958,8 +967,8 @@ export type PaymentUpdateWithoutOrderInput = {
 }
 
 export type PaymentUncheckedUpdateWithoutOrderInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   providerPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -974,8 +983,8 @@ export type PaymentUncheckedUpdateWithoutOrderInput = {
 }
 
 export type PaymentUncheckedUpdateManyWithoutOrderInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   providerPaymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1115,9 +1124,9 @@ export type $PaymentPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     events: Prisma.$PaymentEventPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
-    tenantId: string
-    orderId: string
+    id: number
+    tenantId: number
+    orderId: number
     provider: string
     providerPaymentId: string | null
     status: string
@@ -1554,9 +1563,9 @@ export interface Prisma__PaymentClient<T, Null = never, ExtArgs extends runtime.
  * Fields of the Payment model
  */
 export interface PaymentFieldRefs {
-  readonly id: Prisma.FieldRef<"Payment", 'String'>
-  readonly tenantId: Prisma.FieldRef<"Payment", 'String'>
-  readonly orderId: Prisma.FieldRef<"Payment", 'String'>
+  readonly id: Prisma.FieldRef<"Payment", 'Int'>
+  readonly tenantId: Prisma.FieldRef<"Payment", 'Int'>
+  readonly orderId: Prisma.FieldRef<"Payment", 'Int'>
   readonly provider: Prisma.FieldRef<"Payment", 'String'>
   readonly providerPaymentId: Prisma.FieldRef<"Payment", 'String'>
   readonly status: Prisma.FieldRef<"Payment", 'String'>

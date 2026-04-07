@@ -27,32 +27,40 @@ export type AggregateInventoryMovement = {
 }
 
 export type InventoryMovementAvgAggregateOutputType = {
+  id: number | null
+  tenantId: number | null
+  variantId: number | null
   delta: number | null
+  referenceId: number | null
 }
 
 export type InventoryMovementSumAggregateOutputType = {
+  id: number | null
+  tenantId: number | null
+  variantId: number | null
   delta: number | null
+  referenceId: number | null
 }
 
 export type InventoryMovementMinAggregateOutputType = {
-  id: string | null
-  tenantId: string | null
-  variantId: string | null
+  id: number | null
+  tenantId: number | null
+  variantId: number | null
   delta: number | null
   reason: string | null
   referenceType: string | null
-  referenceId: string | null
+  referenceId: number | null
   createdAt: Date | null
 }
 
 export type InventoryMovementMaxAggregateOutputType = {
-  id: string | null
-  tenantId: string | null
-  variantId: string | null
+  id: number | null
+  tenantId: number | null
+  variantId: number | null
   delta: number | null
   reason: string | null
   referenceType: string | null
-  referenceId: string | null
+  referenceId: number | null
   createdAt: Date | null
 }
 
@@ -70,11 +78,19 @@ export type InventoryMovementCountAggregateOutputType = {
 
 
 export type InventoryMovementAvgAggregateInputType = {
+  id?: true
+  tenantId?: true
+  variantId?: true
   delta?: true
+  referenceId?: true
 }
 
 export type InventoryMovementSumAggregateInputType = {
+  id?: true
+  tenantId?: true
+  variantId?: true
   delta?: true
+  referenceId?: true
 }
 
 export type InventoryMovementMinAggregateInputType = {
@@ -198,13 +214,13 @@ export type InventoryMovementGroupByArgs<ExtArgs extends runtime.Types.Extension
 }
 
 export type InventoryMovementGroupByOutputType = {
-  id: string
-  tenantId: string
-  variantId: string
+  id: number
+  tenantId: number
+  variantId: number
   delta: number
   reason: string
   referenceType: string | null
-  referenceId: string | null
+  referenceId: number | null
   createdAt: Date
   _count: InventoryMovementCountAggregateOutputType | null
   _avg: InventoryMovementAvgAggregateOutputType | null
@@ -232,13 +248,13 @@ export type InventoryMovementWhereInput = {
   AND?: Prisma.InventoryMovementWhereInput | Prisma.InventoryMovementWhereInput[]
   OR?: Prisma.InventoryMovementWhereInput[]
   NOT?: Prisma.InventoryMovementWhereInput | Prisma.InventoryMovementWhereInput[]
-  id?: Prisma.UuidFilter<"InventoryMovement"> | string
-  tenantId?: Prisma.UuidFilter<"InventoryMovement"> | string
-  variantId?: Prisma.UuidFilter<"InventoryMovement"> | string
+  id?: Prisma.IntFilter<"InventoryMovement"> | number
+  tenantId?: Prisma.IntFilter<"InventoryMovement"> | number
+  variantId?: Prisma.IntFilter<"InventoryMovement"> | number
   delta?: Prisma.IntFilter<"InventoryMovement"> | number
   reason?: Prisma.StringFilter<"InventoryMovement"> | string
   referenceType?: Prisma.StringNullableFilter<"InventoryMovement"> | string | null
-  referenceId?: Prisma.UuidNullableFilter<"InventoryMovement"> | string | null
+  referenceId?: Prisma.IntNullableFilter<"InventoryMovement"> | number | null
   createdAt?: Prisma.DateTimeFilter<"InventoryMovement"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   variant?: Prisma.XOR<Prisma.ProductVariantScalarRelationFilter, Prisma.ProductVariantWhereInput>
@@ -258,16 +274,16 @@ export type InventoryMovementOrderByWithRelationInput = {
 }
 
 export type InventoryMovementWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
+  id?: number
   AND?: Prisma.InventoryMovementWhereInput | Prisma.InventoryMovementWhereInput[]
   OR?: Prisma.InventoryMovementWhereInput[]
   NOT?: Prisma.InventoryMovementWhereInput | Prisma.InventoryMovementWhereInput[]
-  tenantId?: Prisma.UuidFilter<"InventoryMovement"> | string
-  variantId?: Prisma.UuidFilter<"InventoryMovement"> | string
+  tenantId?: Prisma.IntFilter<"InventoryMovement"> | number
+  variantId?: Prisma.IntFilter<"InventoryMovement"> | number
   delta?: Prisma.IntFilter<"InventoryMovement"> | number
   reason?: Prisma.StringFilter<"InventoryMovement"> | string
   referenceType?: Prisma.StringNullableFilter<"InventoryMovement"> | string | null
-  referenceId?: Prisma.UuidNullableFilter<"InventoryMovement"> | string | null
+  referenceId?: Prisma.IntNullableFilter<"InventoryMovement"> | number | null
   createdAt?: Prisma.DateTimeFilter<"InventoryMovement"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   variant?: Prisma.XOR<Prisma.ProductVariantScalarRelationFilter, Prisma.ProductVariantWhereInput>
@@ -293,88 +309,85 @@ export type InventoryMovementScalarWhereWithAggregatesInput = {
   AND?: Prisma.InventoryMovementScalarWhereWithAggregatesInput | Prisma.InventoryMovementScalarWhereWithAggregatesInput[]
   OR?: Prisma.InventoryMovementScalarWhereWithAggregatesInput[]
   NOT?: Prisma.InventoryMovementScalarWhereWithAggregatesInput | Prisma.InventoryMovementScalarWhereWithAggregatesInput[]
-  id?: Prisma.UuidWithAggregatesFilter<"InventoryMovement"> | string
-  tenantId?: Prisma.UuidWithAggregatesFilter<"InventoryMovement"> | string
-  variantId?: Prisma.UuidWithAggregatesFilter<"InventoryMovement"> | string
+  id?: Prisma.IntWithAggregatesFilter<"InventoryMovement"> | number
+  tenantId?: Prisma.IntWithAggregatesFilter<"InventoryMovement"> | number
+  variantId?: Prisma.IntWithAggregatesFilter<"InventoryMovement"> | number
   delta?: Prisma.IntWithAggregatesFilter<"InventoryMovement"> | number
   reason?: Prisma.StringWithAggregatesFilter<"InventoryMovement"> | string
   referenceType?: Prisma.StringNullableWithAggregatesFilter<"InventoryMovement"> | string | null
-  referenceId?: Prisma.UuidNullableWithAggregatesFilter<"InventoryMovement"> | string | null
+  referenceId?: Prisma.IntNullableWithAggregatesFilter<"InventoryMovement"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"InventoryMovement"> | Date | string
 }
 
 export type InventoryMovementCreateInput = {
-  id?: string
   delta: number
   reason: string
   referenceType?: string | null
-  referenceId?: string | null
+  referenceId?: number | null
   createdAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutInventoryMovementsInput
   variant: Prisma.ProductVariantCreateNestedOneWithoutInventoryMovementsInput
 }
 
 export type InventoryMovementUncheckedCreateInput = {
-  id?: string
-  tenantId: string
-  variantId: string
+  id?: number
+  tenantId: number
+  variantId: number
   delta: number
   reason: string
   referenceType?: string | null
-  referenceId?: string | null
+  referenceId?: number | null
   createdAt?: Date | string
 }
 
 export type InventoryMovementUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   delta?: Prisma.IntFieldUpdateOperationsInput | number
   reason?: Prisma.StringFieldUpdateOperationsInput | string
   referenceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referenceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutInventoryMovementsNestedInput
   variant?: Prisma.ProductVariantUpdateOneRequiredWithoutInventoryMovementsNestedInput
 }
 
 export type InventoryMovementUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  variantId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
+  variantId?: Prisma.IntFieldUpdateOperationsInput | number
   delta?: Prisma.IntFieldUpdateOperationsInput | number
   reason?: Prisma.StringFieldUpdateOperationsInput | string
   referenceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referenceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type InventoryMovementCreateManyInput = {
-  id?: string
-  tenantId: string
-  variantId: string
+  id?: number
+  tenantId: number
+  variantId: number
   delta: number
   reason: string
   referenceType?: string | null
-  referenceId?: string | null
+  referenceId?: number | null
   createdAt?: Date | string
 }
 
 export type InventoryMovementUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   delta?: Prisma.IntFieldUpdateOperationsInput | number
   reason?: Prisma.StringFieldUpdateOperationsInput | string
   referenceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referenceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type InventoryMovementUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  variantId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
+  variantId?: Prisma.IntFieldUpdateOperationsInput | number
   delta?: Prisma.IntFieldUpdateOperationsInput | number
   reason?: Prisma.StringFieldUpdateOperationsInput | string
   referenceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referenceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -400,7 +413,11 @@ export type InventoryMovementCountOrderByAggregateInput = {
 }
 
 export type InventoryMovementAvgOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
+  variantId?: Prisma.SortOrder
   delta?: Prisma.SortOrder
+  referenceId?: Prisma.SortOrder
 }
 
 export type InventoryMovementMaxOrderByAggregateInput = {
@@ -426,7 +443,11 @@ export type InventoryMovementMinOrderByAggregateInput = {
 }
 
 export type InventoryMovementSumOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
+  variantId?: Prisma.SortOrder
   delta?: Prisma.SortOrder
+  referenceId?: Prisma.SortOrder
 }
 
 export type InventoryMovementCreateNestedManyWithoutTenantInput = {
@@ -514,22 +535,21 @@ export type InventoryMovementUncheckedUpdateManyWithoutVariantNestedInput = {
 }
 
 export type InventoryMovementCreateWithoutTenantInput = {
-  id?: string
   delta: number
   reason: string
   referenceType?: string | null
-  referenceId?: string | null
+  referenceId?: number | null
   createdAt?: Date | string
   variant: Prisma.ProductVariantCreateNestedOneWithoutInventoryMovementsInput
 }
 
 export type InventoryMovementUncheckedCreateWithoutTenantInput = {
-  id?: string
-  variantId: string
+  id?: number
+  variantId: number
   delta: number
   reason: string
   referenceType?: string | null
-  referenceId?: string | null
+  referenceId?: number | null
   createdAt?: Date | string
 }
 
@@ -563,33 +583,32 @@ export type InventoryMovementScalarWhereInput = {
   AND?: Prisma.InventoryMovementScalarWhereInput | Prisma.InventoryMovementScalarWhereInput[]
   OR?: Prisma.InventoryMovementScalarWhereInput[]
   NOT?: Prisma.InventoryMovementScalarWhereInput | Prisma.InventoryMovementScalarWhereInput[]
-  id?: Prisma.UuidFilter<"InventoryMovement"> | string
-  tenantId?: Prisma.UuidFilter<"InventoryMovement"> | string
-  variantId?: Prisma.UuidFilter<"InventoryMovement"> | string
+  id?: Prisma.IntFilter<"InventoryMovement"> | number
+  tenantId?: Prisma.IntFilter<"InventoryMovement"> | number
+  variantId?: Prisma.IntFilter<"InventoryMovement"> | number
   delta?: Prisma.IntFilter<"InventoryMovement"> | number
   reason?: Prisma.StringFilter<"InventoryMovement"> | string
   referenceType?: Prisma.StringNullableFilter<"InventoryMovement"> | string | null
-  referenceId?: Prisma.UuidNullableFilter<"InventoryMovement"> | string | null
+  referenceId?: Prisma.IntNullableFilter<"InventoryMovement"> | number | null
   createdAt?: Prisma.DateTimeFilter<"InventoryMovement"> | Date | string
 }
 
 export type InventoryMovementCreateWithoutVariantInput = {
-  id?: string
   delta: number
   reason: string
   referenceType?: string | null
-  referenceId?: string | null
+  referenceId?: number | null
   createdAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutInventoryMovementsInput
 }
 
 export type InventoryMovementUncheckedCreateWithoutVariantInput = {
-  id?: string
-  tenantId: string
+  id?: number
+  tenantId: number
   delta: number
   reason: string
   referenceType?: string | null
-  referenceId?: string | null
+  referenceId?: number | null
   createdAt?: Date | string
 }
 
@@ -620,82 +639,80 @@ export type InventoryMovementUpdateManyWithWhereWithoutVariantInput = {
 }
 
 export type InventoryMovementCreateManyTenantInput = {
-  id?: string
-  variantId: string
+  id?: number
+  variantId: number
   delta: number
   reason: string
   referenceType?: string | null
-  referenceId?: string | null
+  referenceId?: number | null
   createdAt?: Date | string
 }
 
 export type InventoryMovementUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   delta?: Prisma.IntFieldUpdateOperationsInput | number
   reason?: Prisma.StringFieldUpdateOperationsInput | string
   referenceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referenceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   variant?: Prisma.ProductVariantUpdateOneRequiredWithoutInventoryMovementsNestedInput
 }
 
 export type InventoryMovementUncheckedUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  variantId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  variantId?: Prisma.IntFieldUpdateOperationsInput | number
   delta?: Prisma.IntFieldUpdateOperationsInput | number
   reason?: Prisma.StringFieldUpdateOperationsInput | string
   referenceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referenceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type InventoryMovementUncheckedUpdateManyWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  variantId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  variantId?: Prisma.IntFieldUpdateOperationsInput | number
   delta?: Prisma.IntFieldUpdateOperationsInput | number
   reason?: Prisma.StringFieldUpdateOperationsInput | string
   referenceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referenceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type InventoryMovementCreateManyVariantInput = {
-  id?: string
-  tenantId: string
+  id?: number
+  tenantId: number
   delta: number
   reason: string
   referenceType?: string | null
-  referenceId?: string | null
+  referenceId?: number | null
   createdAt?: Date | string
 }
 
 export type InventoryMovementUpdateWithoutVariantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   delta?: Prisma.IntFieldUpdateOperationsInput | number
   reason?: Prisma.StringFieldUpdateOperationsInput | string
   referenceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referenceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutInventoryMovementsNestedInput
 }
 
 export type InventoryMovementUncheckedUpdateWithoutVariantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
   delta?: Prisma.IntFieldUpdateOperationsInput | number
   reason?: Prisma.StringFieldUpdateOperationsInput | string
   referenceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referenceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type InventoryMovementUncheckedUpdateManyWithoutVariantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
   delta?: Prisma.IntFieldUpdateOperationsInput | number
   reason?: Prisma.StringFieldUpdateOperationsInput | string
   referenceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  referenceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referenceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -772,13 +789,13 @@ export type $InventoryMovementPayload<ExtArgs extends runtime.Types.Extensions.I
     variant: Prisma.$ProductVariantPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
-    tenantId: string
-    variantId: string
+    id: number
+    tenantId: number
+    variantId: number
     delta: number
     reason: string
     referenceType: string | null
-    referenceId: string | null
+    referenceId: number | null
     createdAt: Date
   }, ExtArgs["result"]["inventoryMovement"]>
   composites: {}
@@ -1205,13 +1222,13 @@ export interface Prisma__InventoryMovementClient<T, Null = never, ExtArgs extend
  * Fields of the InventoryMovement model
  */
 export interface InventoryMovementFieldRefs {
-  readonly id: Prisma.FieldRef<"InventoryMovement", 'String'>
-  readonly tenantId: Prisma.FieldRef<"InventoryMovement", 'String'>
-  readonly variantId: Prisma.FieldRef<"InventoryMovement", 'String'>
+  readonly id: Prisma.FieldRef<"InventoryMovement", 'Int'>
+  readonly tenantId: Prisma.FieldRef<"InventoryMovement", 'Int'>
+  readonly variantId: Prisma.FieldRef<"InventoryMovement", 'Int'>
   readonly delta: Prisma.FieldRef<"InventoryMovement", 'Int'>
   readonly reason: Prisma.FieldRef<"InventoryMovement", 'String'>
   readonly referenceType: Prisma.FieldRef<"InventoryMovement", 'String'>
-  readonly referenceId: Prisma.FieldRef<"InventoryMovement", 'String'>
+  readonly referenceId: Prisma.FieldRef<"InventoryMovement", 'Int'>
   readonly createdAt: Prisma.FieldRef<"InventoryMovement", 'DateTime'>
 }
     

@@ -27,21 +27,23 @@ export type AggregateTenantOrderSequence = {
 }
 
 export type TenantOrderSequenceAvgAggregateOutputType = {
+  tenantId: number | null
   nextValue: number | null
 }
 
 export type TenantOrderSequenceSumAggregateOutputType = {
+  tenantId: number | null
   nextValue: bigint | null
 }
 
 export type TenantOrderSequenceMinAggregateOutputType = {
-  tenantId: string | null
+  tenantId: number | null
   nextValue: bigint | null
   updatedAt: Date | null
 }
 
 export type TenantOrderSequenceMaxAggregateOutputType = {
-  tenantId: string | null
+  tenantId: number | null
   nextValue: bigint | null
   updatedAt: Date | null
 }
@@ -55,10 +57,12 @@ export type TenantOrderSequenceCountAggregateOutputType = {
 
 
 export type TenantOrderSequenceAvgAggregateInputType = {
+  tenantId?: true
   nextValue?: true
 }
 
 export type TenantOrderSequenceSumAggregateInputType = {
+  tenantId?: true
   nextValue?: true
 }
 
@@ -168,7 +172,7 @@ export type TenantOrderSequenceGroupByArgs<ExtArgs extends runtime.Types.Extensi
 }
 
 export type TenantOrderSequenceGroupByOutputType = {
-  tenantId: string
+  tenantId: number
   nextValue: bigint
   updatedAt: Date
   _count: TenantOrderSequenceCountAggregateOutputType | null
@@ -197,7 +201,7 @@ export type TenantOrderSequenceWhereInput = {
   AND?: Prisma.TenantOrderSequenceWhereInput | Prisma.TenantOrderSequenceWhereInput[]
   OR?: Prisma.TenantOrderSequenceWhereInput[]
   NOT?: Prisma.TenantOrderSequenceWhereInput | Prisma.TenantOrderSequenceWhereInput[]
-  tenantId?: Prisma.UuidFilter<"TenantOrderSequence"> | string
+  tenantId?: Prisma.IntFilter<"TenantOrderSequence"> | number
   nextValue?: Prisma.BigIntFilter<"TenantOrderSequence"> | bigint | number
   updatedAt?: Prisma.DateTimeFilter<"TenantOrderSequence"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -211,7 +215,7 @@ export type TenantOrderSequenceOrderByWithRelationInput = {
 }
 
 export type TenantOrderSequenceWhereUniqueInput = Prisma.AtLeast<{
-  tenantId?: string
+  tenantId?: number
   AND?: Prisma.TenantOrderSequenceWhereInput | Prisma.TenantOrderSequenceWhereInput[]
   OR?: Prisma.TenantOrderSequenceWhereInput[]
   NOT?: Prisma.TenantOrderSequenceWhereInput | Prisma.TenantOrderSequenceWhereInput[]
@@ -235,7 +239,7 @@ export type TenantOrderSequenceScalarWhereWithAggregatesInput = {
   AND?: Prisma.TenantOrderSequenceScalarWhereWithAggregatesInput | Prisma.TenantOrderSequenceScalarWhereWithAggregatesInput[]
   OR?: Prisma.TenantOrderSequenceScalarWhereWithAggregatesInput[]
   NOT?: Prisma.TenantOrderSequenceScalarWhereWithAggregatesInput | Prisma.TenantOrderSequenceScalarWhereWithAggregatesInput[]
-  tenantId?: Prisma.UuidWithAggregatesFilter<"TenantOrderSequence"> | string
+  tenantId?: Prisma.IntWithAggregatesFilter<"TenantOrderSequence"> | number
   nextValue?: Prisma.BigIntWithAggregatesFilter<"TenantOrderSequence"> | bigint | number
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"TenantOrderSequence"> | Date | string
 }
@@ -247,7 +251,7 @@ export type TenantOrderSequenceCreateInput = {
 }
 
 export type TenantOrderSequenceUncheckedCreateInput = {
-  tenantId: string
+  tenantId: number
   nextValue: bigint | number
   updatedAt?: Date | string
 }
@@ -259,13 +263,13 @@ export type TenantOrderSequenceUpdateInput = {
 }
 
 export type TenantOrderSequenceUncheckedUpdateInput = {
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
   nextValue?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type TenantOrderSequenceCreateManyInput = {
-  tenantId: string
+  tenantId: number
   nextValue: bigint | number
   updatedAt?: Date | string
 }
@@ -276,7 +280,7 @@ export type TenantOrderSequenceUpdateManyMutationInput = {
 }
 
 export type TenantOrderSequenceUncheckedUpdateManyInput = {
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
   nextValue?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -293,6 +297,7 @@ export type TenantOrderSequenceCountOrderByAggregateInput = {
 }
 
 export type TenantOrderSequenceAvgOrderByAggregateInput = {
+  tenantId?: Prisma.SortOrder
   nextValue?: Prisma.SortOrder
 }
 
@@ -309,6 +314,7 @@ export type TenantOrderSequenceMinOrderByAggregateInput = {
 }
 
 export type TenantOrderSequenceSumOrderByAggregateInput = {
+  tenantId?: Prisma.SortOrder
   nextValue?: Prisma.SortOrder
 }
 
@@ -434,7 +440,7 @@ export type $TenantOrderSequencePayload<ExtArgs extends runtime.Types.Extensions
     tenant: Prisma.$TenantPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    tenantId: string
+    tenantId: number
     nextValue: bigint
     updatedAt: Date
   }, ExtArgs["result"]["tenantOrderSequence"]>
@@ -861,7 +867,7 @@ export interface Prisma__TenantOrderSequenceClient<T, Null = never, ExtArgs exte
  * Fields of the TenantOrderSequence model
  */
 export interface TenantOrderSequenceFieldRefs {
-  readonly tenantId: Prisma.FieldRef<"TenantOrderSequence", 'String'>
+  readonly tenantId: Prisma.FieldRef<"TenantOrderSequence", 'Int'>
   readonly nextValue: Prisma.FieldRef<"TenantOrderSequence", 'BigInt'>
   readonly updatedAt: Prisma.FieldRef<"TenantOrderSequence", 'DateTime'>
 }

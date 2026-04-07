@@ -20,13 +20,25 @@ export type TenantDomainModel = runtime.Types.Result.DefaultSelection<Prisma.$Te
 
 export type AggregateTenantDomain = {
   _count: TenantDomainCountAggregateOutputType | null
+  _avg: TenantDomainAvgAggregateOutputType | null
+  _sum: TenantDomainSumAggregateOutputType | null
   _min: TenantDomainMinAggregateOutputType | null
   _max: TenantDomainMaxAggregateOutputType | null
 }
 
+export type TenantDomainAvgAggregateOutputType = {
+  id: number | null
+  tenantId: number | null
+}
+
+export type TenantDomainSumAggregateOutputType = {
+  id: number | null
+  tenantId: number | null
+}
+
 export type TenantDomainMinAggregateOutputType = {
-  id: string | null
-  tenantId: string | null
+  id: number | null
+  tenantId: number | null
   hostname: string | null
   isPrimary: boolean | null
   verifiedAt: Date | null
@@ -34,8 +46,8 @@ export type TenantDomainMinAggregateOutputType = {
 }
 
 export type TenantDomainMaxAggregateOutputType = {
-  id: string | null
-  tenantId: string | null
+  id: number | null
+  tenantId: number | null
   hostname: string | null
   isPrimary: boolean | null
   verifiedAt: Date | null
@@ -52,6 +64,16 @@ export type TenantDomainCountAggregateOutputType = {
   _all: number
 }
 
+
+export type TenantDomainAvgAggregateInputType = {
+  id?: true
+  tenantId?: true
+}
+
+export type TenantDomainSumAggregateInputType = {
+  id?: true
+  tenantId?: true
+}
 
 export type TenantDomainMinAggregateInputType = {
   id?: true
@@ -119,6 +141,18 @@ export type TenantDomainAggregateArgs<ExtArgs extends runtime.Types.Extensions.I
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: TenantDomainAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: TenantDomainSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: TenantDomainMinAggregateInputType
@@ -149,18 +183,22 @@ export type TenantDomainGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   _count?: TenantDomainCountAggregateInputType | true
+  _avg?: TenantDomainAvgAggregateInputType
+  _sum?: TenantDomainSumAggregateInputType
   _min?: TenantDomainMinAggregateInputType
   _max?: TenantDomainMaxAggregateInputType
 }
 
 export type TenantDomainGroupByOutputType = {
-  id: string
-  tenantId: string
+  id: number
+  tenantId: number
   hostname: string
   isPrimary: boolean
   verifiedAt: Date | null
   createdAt: Date
   _count: TenantDomainCountAggregateOutputType | null
+  _avg: TenantDomainAvgAggregateOutputType | null
+  _sum: TenantDomainSumAggregateOutputType | null
   _min: TenantDomainMinAggregateOutputType | null
   _max: TenantDomainMaxAggregateOutputType | null
 }
@@ -184,8 +222,8 @@ export type TenantDomainWhereInput = {
   AND?: Prisma.TenantDomainWhereInput | Prisma.TenantDomainWhereInput[]
   OR?: Prisma.TenantDomainWhereInput[]
   NOT?: Prisma.TenantDomainWhereInput | Prisma.TenantDomainWhereInput[]
-  id?: Prisma.UuidFilter<"TenantDomain"> | string
-  tenantId?: Prisma.UuidFilter<"TenantDomain"> | string
+  id?: Prisma.IntFilter<"TenantDomain"> | number
+  tenantId?: Prisma.IntFilter<"TenantDomain"> | number
   hostname?: Prisma.StringFilter<"TenantDomain"> | string
   isPrimary?: Prisma.BoolFilter<"TenantDomain"> | boolean
   verifiedAt?: Prisma.DateTimeNullableFilter<"TenantDomain"> | Date | string | null
@@ -204,12 +242,12 @@ export type TenantDomainOrderByWithRelationInput = {
 }
 
 export type TenantDomainWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
+  id?: number
   hostname?: string
   AND?: Prisma.TenantDomainWhereInput | Prisma.TenantDomainWhereInput[]
   OR?: Prisma.TenantDomainWhereInput[]
   NOT?: Prisma.TenantDomainWhereInput | Prisma.TenantDomainWhereInput[]
-  tenantId?: Prisma.UuidFilter<"TenantDomain"> | string
+  tenantId?: Prisma.IntFilter<"TenantDomain"> | number
   isPrimary?: Prisma.BoolFilter<"TenantDomain"> | boolean
   verifiedAt?: Prisma.DateTimeNullableFilter<"TenantDomain"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"TenantDomain"> | Date | string
@@ -224,16 +262,18 @@ export type TenantDomainOrderByWithAggregationInput = {
   verifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.TenantDomainCountOrderByAggregateInput
+  _avg?: Prisma.TenantDomainAvgOrderByAggregateInput
   _max?: Prisma.TenantDomainMaxOrderByAggregateInput
   _min?: Prisma.TenantDomainMinOrderByAggregateInput
+  _sum?: Prisma.TenantDomainSumOrderByAggregateInput
 }
 
 export type TenantDomainScalarWhereWithAggregatesInput = {
   AND?: Prisma.TenantDomainScalarWhereWithAggregatesInput | Prisma.TenantDomainScalarWhereWithAggregatesInput[]
   OR?: Prisma.TenantDomainScalarWhereWithAggregatesInput[]
   NOT?: Prisma.TenantDomainScalarWhereWithAggregatesInput | Prisma.TenantDomainScalarWhereWithAggregatesInput[]
-  id?: Prisma.UuidWithAggregatesFilter<"TenantDomain"> | string
-  tenantId?: Prisma.UuidWithAggregatesFilter<"TenantDomain"> | string
+  id?: Prisma.IntWithAggregatesFilter<"TenantDomain"> | number
+  tenantId?: Prisma.IntWithAggregatesFilter<"TenantDomain"> | number
   hostname?: Prisma.StringWithAggregatesFilter<"TenantDomain"> | string
   isPrimary?: Prisma.BoolWithAggregatesFilter<"TenantDomain"> | boolean
   verifiedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"TenantDomain"> | Date | string | null
@@ -241,7 +281,6 @@ export type TenantDomainScalarWhereWithAggregatesInput = {
 }
 
 export type TenantDomainCreateInput = {
-  id?: string
   hostname: string
   isPrimary: boolean
   verifiedAt?: Date | string | null
@@ -250,8 +289,8 @@ export type TenantDomainCreateInput = {
 }
 
 export type TenantDomainUncheckedCreateInput = {
-  id?: string
-  tenantId: string
+  id?: number
+  tenantId: number
   hostname: string
   isPrimary: boolean
   verifiedAt?: Date | string | null
@@ -259,7 +298,6 @@ export type TenantDomainUncheckedCreateInput = {
 }
 
 export type TenantDomainUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   hostname?: Prisma.StringFieldUpdateOperationsInput | string
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
   verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -268,8 +306,8 @@ export type TenantDomainUpdateInput = {
 }
 
 export type TenantDomainUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
   hostname?: Prisma.StringFieldUpdateOperationsInput | string
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
   verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -277,8 +315,8 @@ export type TenantDomainUncheckedUpdateInput = {
 }
 
 export type TenantDomainCreateManyInput = {
-  id?: string
-  tenantId: string
+  id?: number
+  tenantId: number
   hostname: string
   isPrimary: boolean
   verifiedAt?: Date | string | null
@@ -286,7 +324,6 @@ export type TenantDomainCreateManyInput = {
 }
 
 export type TenantDomainUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   hostname?: Prisma.StringFieldUpdateOperationsInput | string
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
   verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -294,8 +331,8 @@ export type TenantDomainUpdateManyMutationInput = {
 }
 
 export type TenantDomainUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tenantId?: Prisma.IntFieldUpdateOperationsInput | number
   hostname?: Prisma.StringFieldUpdateOperationsInput | string
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
   verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -321,6 +358,11 @@ export type TenantDomainCountOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
 }
 
+export type TenantDomainAvgOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
+}
+
 export type TenantDomainMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
@@ -337,6 +379,11 @@ export type TenantDomainMinOrderByAggregateInput = {
   isPrimary?: Prisma.SortOrder
   verifiedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+}
+
+export type TenantDomainSumOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  tenantId?: Prisma.SortOrder
 }
 
 export type TenantDomainCreateNestedManyWithoutTenantInput = {
@@ -390,7 +437,6 @@ export type NullableDateTimeFieldUpdateOperationsInput = {
 }
 
 export type TenantDomainCreateWithoutTenantInput = {
-  id?: string
   hostname: string
   isPrimary: boolean
   verifiedAt?: Date | string | null
@@ -398,7 +444,7 @@ export type TenantDomainCreateWithoutTenantInput = {
 }
 
 export type TenantDomainUncheckedCreateWithoutTenantInput = {
-  id?: string
+  id?: number
   hostname: string
   isPrimary: boolean
   verifiedAt?: Date | string | null
@@ -435,8 +481,8 @@ export type TenantDomainScalarWhereInput = {
   AND?: Prisma.TenantDomainScalarWhereInput | Prisma.TenantDomainScalarWhereInput[]
   OR?: Prisma.TenantDomainScalarWhereInput[]
   NOT?: Prisma.TenantDomainScalarWhereInput | Prisma.TenantDomainScalarWhereInput[]
-  id?: Prisma.UuidFilter<"TenantDomain"> | string
-  tenantId?: Prisma.UuidFilter<"TenantDomain"> | string
+  id?: Prisma.IntFilter<"TenantDomain"> | number
+  tenantId?: Prisma.IntFilter<"TenantDomain"> | number
   hostname?: Prisma.StringFilter<"TenantDomain"> | string
   isPrimary?: Prisma.BoolFilter<"TenantDomain"> | boolean
   verifiedAt?: Prisma.DateTimeNullableFilter<"TenantDomain"> | Date | string | null
@@ -444,7 +490,7 @@ export type TenantDomainScalarWhereInput = {
 }
 
 export type TenantDomainCreateManyTenantInput = {
-  id?: string
+  id?: number
   hostname: string
   isPrimary: boolean
   verifiedAt?: Date | string | null
@@ -452,7 +498,6 @@ export type TenantDomainCreateManyTenantInput = {
 }
 
 export type TenantDomainUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   hostname?: Prisma.StringFieldUpdateOperationsInput | string
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
   verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -460,7 +505,7 @@ export type TenantDomainUpdateWithoutTenantInput = {
 }
 
 export type TenantDomainUncheckedUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   hostname?: Prisma.StringFieldUpdateOperationsInput | string
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
   verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -468,7 +513,7 @@ export type TenantDomainUncheckedUpdateWithoutTenantInput = {
 }
 
 export type TenantDomainUncheckedUpdateManyWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   hostname?: Prisma.StringFieldUpdateOperationsInput | string
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
   verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -533,8 +578,8 @@ export type $TenantDomainPayload<ExtArgs extends runtime.Types.Extensions.Intern
     tenant: Prisma.$TenantPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
-    tenantId: string
+    id: number
+    tenantId: number
     hostname: string
     isPrimary: boolean
     verifiedAt: Date | null
@@ -963,8 +1008,8 @@ export interface Prisma__TenantDomainClient<T, Null = never, ExtArgs extends run
  * Fields of the TenantDomain model
  */
 export interface TenantDomainFieldRefs {
-  readonly id: Prisma.FieldRef<"TenantDomain", 'String'>
-  readonly tenantId: Prisma.FieldRef<"TenantDomain", 'String'>
+  readonly id: Prisma.FieldRef<"TenantDomain", 'Int'>
+  readonly tenantId: Prisma.FieldRef<"TenantDomain", 'Int'>
   readonly hostname: Prisma.FieldRef<"TenantDomain", 'String'>
   readonly isPrimary: Prisma.FieldRef<"TenantDomain", 'Boolean'>
   readonly verifiedAt: Prisma.FieldRef<"TenantDomain", 'DateTime'>

@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(process.env.PORT ?? 3001);
+  // Escuchamos en 0.0.0.0 para que Docker pueda rutear el trafico fuera del contenedor
+  await app.listen(process.env.PORT ?? 3000, '0.0.0.0');
 }
 bootstrap();

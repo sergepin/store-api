@@ -41,6 +41,7 @@ model Tenant {
   orderItems          OrderItem[]
   payments            Payment[]
   paymentEvents       PaymentEvent[]
+  users               User[]
 
   @@map("tenants")
 }
@@ -71,15 +72,18 @@ model TenantDomain {
 
 model User {
   id              Int       @id @default(autoincrement())
-  email           String    @unique @db.VarChar 
+  tenantId        Int       @map("tenant_id")
+  email           String    @db.VarChar 
   passwordHash    String?   @map("password_hash") @db.VarChar
   emailVerifiedAt DateTime? @map("email_verified_at") @db.Timestamptz
   createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz
   updatedAt       DateTime  @updatedAt @map("updated_at") @db.Timestamptz
 
+  tenant          Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   memberships     TenantMembership[]
   customers       Customer[]
 
+  @@unique([tenantId, email])
   @@map("users")
 }
 

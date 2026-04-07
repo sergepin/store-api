@@ -2131,6 +2131,7 @@ export type TenantDomainScalarFieldEnum = (typeof TenantDomainScalarFieldEnum)[k
 
 export const UserScalarFieldEnum = {
   id: 'id',
+  tenantId: 'tenantId',
   email: 'email',
   passwordHash: 'passwordHash',
   emailVerifiedAt: 'emailVerifiedAt',

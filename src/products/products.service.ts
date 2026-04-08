@@ -69,31 +69,6 @@ export class ProductsService {
     };
   }
 
-  // ── CATEGORIES ──────────────────────────────────────────────────────────
-  findAllCategories(tenantId: number) {
-    return this.prisma.category.findMany({
-      where: { tenantId, deletedAt: null },
-      orderBy: { sortOrder: 'asc' },
-    });
-  }
-
-  // ── 2. GET BY CATEGORY ───────────────────────────────────────────────────
-  async findByCategory(
-    tenantId: number,
-    categorySlug: string,
-    query: GetProductsQueryDto,
-  ) {
-    const category = await this.prisma.category.findUnique({
-      where: { tenantId_slug: { tenantId, slug: categorySlug } },
-    });
-
-    if (!category) {
-      throw new NotFoundException(`Category '${categorySlug}' not found`);
-    }
-
-    return this.findAll(tenantId, { ...query, categoryId: category.id });
-  }
-
   // ── 3. SEARCH PRODUCTS ───────────────────────────────────────────────────
   async search(tenantId: number, q: string, query: GetProductsQueryDto) {
     if (!q?.trim()) return this.findAll(tenantId, query);
@@ -191,20 +166,6 @@ export class ProductsService {
     };
 
     return [...items].sort((a, b) => score(b) - score(a));
-  }
-
-  // ── PRIVATE: Resolve Tenant ───────────────────────────────────────────
-  async getTenantIdBySlug(slug: string): Promise<number> {
-    const tenant = await this.prisma.tenant.findUnique({
-      where: { slug },
-      select: { id: true },
-    });
-
-    if (!tenant) {
-      throw new NotFoundException(`Tenant '${slug}' not found`);
-    }
-
-    return tenant.id;
   }
 
   // ── PRIVATE: Format response ──────────────────────────────────────────

@@ -1,13 +1,17 @@
 import { Controller, Get, Param, Query, ParseIntPipe } from '@nestjs/common';
 import { ProductsService } from './products.service.js';
 import { GetProductsQueryDto } from './dto/get-products-query.dto.js';
+import { TenantsService } from '../tenants/tenants.service.js';
 
 // TODO: Replace with real tenant resolution middleware (from host / JWT / header)
 const DEV_TENANT_SLUG = 'gamer-store';
 
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(
+    private readonly productsService: ProductsService,
+    private readonly tenantsService: TenantsService,
+  ) {}
 
   /**
    * GET /products
@@ -17,7 +21,7 @@ export class ProductsController {
   @Get()
   async findAll(@Query() query: GetProductsQueryDto) {
     const tenantId =
-      await this.productsService.getTenantIdBySlug(DEV_TENANT_SLUG);
+      await this.tenantsService.getTenantIdBySlug(DEV_TENANT_SLUG);
     return this.productsService.findAll(tenantId, query);
   }
 
@@ -28,7 +32,7 @@ export class ProductsController {
   @Get('search')
   async search(@Query('q') q: string, @Query() query: GetProductsQueryDto) {
     const tenantId =
-      await this.productsService.getTenantIdBySlug(DEV_TENANT_SLUG);
+      await this.tenantsService.getTenantIdBySlug(DEV_TENANT_SLUG);
     return this.productsService.search(tenantId, q, query);
   }
 
@@ -39,7 +43,7 @@ export class ProductsController {
   @Get(':id')
   async findById(@Param('id', ParseIntPipe) id: number) {
     const tenantId =
-      await this.productsService.getTenantIdBySlug(DEV_TENANT_SLUG);
+      await this.tenantsService.getTenantIdBySlug(DEV_TENANT_SLUG);
     return this.productsService.findById(tenantId, id);
   }
 }

@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  ConflictException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users/users.service.js';
@@ -23,7 +27,7 @@ export class AuthService {
     const passwordHash = await bcrypt.hash(dto.password, 10);
 
     // Create User + Customer in a transaction
-    return this.prisma.client.$transaction(async (tx) => {
+    return this.prisma.$transaction(async (tx) => {
       const user = await tx.user.create({
         data: {
           tenantId,
@@ -48,28 +52,34 @@ export class AuthService {
 
   async validateUser(tenantId: number, dto: LoginDto) {
     const user = await this.usersService.findByEmail(tenantId, dto.email);
-    if (user && user.passwordHash) {
-      const isMatch = await bcrypt.compare(dto.password, user.passwordHash);
+
+    if (user?.passwordHash) {
+      const isMatch = await bcrypt.compare(
+        dto.password,
+        user.passwordHash as string,
+      );
+
       if (isMatch) {
-        const { passwordHash, ...result } = user;
+        const { passwordHash: _passwordHash, ...result } = user;
         return result;
       }
     }
+
     throw new UnauthorizedException('Invalid credentials');
   }
 
-  async login(user: any) {
-    const payload = { 
-      sub: user.id, 
-      email: user.email, 
-      tenantId: user.tenantId 
+  login(user: any) {
+    const payload = {
+      sub: user.id,
+      email: user.email,
+      tenantId: user.tenantId,
     };
     return {
       access_token: this.jwtService.sign(payload),
       user: {
         id: user.id,
         email: user.email,
-      }
+      },
     };
   }
 }

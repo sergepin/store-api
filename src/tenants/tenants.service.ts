@@ -6,7 +6,7 @@ export class TenantsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async getTenantIdBySlug(slug: string): Promise<number> {
-    const tenant = await this.prisma.client.tenant.findUnique({
+    const tenant = await this.prisma.tenant.findUnique({
       where: { slug },
       select: { id: true },
     });

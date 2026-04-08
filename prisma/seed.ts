@@ -1,10 +1,9 @@
 import 'dotenv/config';
-import { PrismaClient } from './generated/prisma/client.js';
+import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
-
 
 async function main() {
   console.log('🌱 Seeding gamer store...');
@@ -45,7 +44,12 @@ async function main() {
     const c = await prisma.category.upsert({
       where: { tenantId_slug: { tenantId: tenant.id, slug: cat.slug } },
       update: {},
-      create: { tenantId: tenant.id, name: cat.name, slug: cat.slug, sortOrder: 0 },
+      create: {
+        tenantId: tenant.id,
+        name: cat.name,
+        slug: cat.slug,
+        sortOrder: 0,
+      },
     });
     categories[cat.slug] = c.id;
   }
@@ -131,7 +135,11 @@ async function main() {
         {
           sku: 'SS-AX9W-BLK',
           name: 'Negro',
-          attributes: { color: 'Negro', botones: '18', conectividad: 'Inalámbrico / BT' },
+          attributes: {
+            color: 'Negro',
+            botones: '18',
+            conectividad: 'Inalámbrico / BT',
+          },
           basePrice: BigInt(38900_00),
           compareAt: BigInt(44000_00),
           stock: 12,
@@ -151,7 +159,11 @@ async function main() {
         {
           sku: 'CS-K100-OPX',
           name: 'OPX - Layout US',
-          attributes: { switch: 'OPX Óptico', layout: 'US', retroiluminación: 'RGB' },
+          attributes: {
+            switch: 'OPX Óptico',
+            layout: 'US',
+            retroiluminación: 'RGB',
+          },
           basePrice: BigInt(79900_00),
           compareAt: BigInt(92000_00),
           stock: 7,
@@ -193,14 +205,22 @@ async function main() {
         {
           sku: 'HX-AO65-AQUA',
           name: 'HyperX Aqua',
-          attributes: { switch: 'HyperX Aqua', formato: '65%', material: 'Aluminio' },
+          attributes: {
+            switch: 'HyperX Aqua',
+            formato: '65%',
+            material: 'Aluminio',
+          },
           basePrice: BigInt(34900_00),
           stock: 20,
         },
         {
           sku: 'HX-AO65-RED',
           name: 'HyperX Red',
-          attributes: { switch: 'HyperX Red', formato: '65%', material: 'Aluminio' },
+          attributes: {
+            switch: 'HyperX Red',
+            formato: '65%',
+            material: 'Aluminio',
+          },
           basePrice: BigInt(34900_00),
           stock: 18,
         },
@@ -219,7 +239,11 @@ async function main() {
         {
           sku: 'SS-ANPW-BLK',
           name: 'Negro',
-          attributes: { color: 'Negro', conectividad: 'Inalámbrico 2.4G + BT', ANC: 'Sí' },
+          attributes: {
+            color: 'Negro',
+            conectividad: 'Inalámbrico 2.4G + BT',
+            ANC: 'Sí',
+          },
           basePrice: BigInt(129900_00),
           compareAt: BigInt(149900_00),
           stock: 5,
@@ -227,7 +251,11 @@ async function main() {
         {
           sku: 'SS-ANPW-WHT',
           name: 'Blanco',
-          attributes: { color: 'Blanco', conectividad: 'Inalámbrico 2.4G + BT', ANC: 'Sí' },
+          attributes: {
+            color: 'Blanco',
+            conectividad: 'Inalámbrico 2.4G + BT',
+            ANC: 'Sí',
+          },
           basePrice: BigInt(129900_00),
           stock: 4,
         },
@@ -244,7 +272,11 @@ async function main() {
         {
           sku: 'RZ-BSV2P-BLK',
           name: 'Negro',
-          attributes: { color: 'Negro', driver: 'TriForce Titanium 50mm', batería: '70h' },
+          attributes: {
+            color: 'Negro',
+            driver: 'TriForce Titanium 50mm',
+            batería: '70h',
+          },
           basePrice: BigInt(89900_00),
           stock: 8,
         },
@@ -263,7 +295,12 @@ async function main() {
         {
           sku: 'LG-27GN950-B',
           name: '27" 4K 144Hz',
-          attributes: { tamaño: '27"', resolución: '4K UHD', Hz: '144 Hz', panel: 'Nano IPS' },
+          attributes: {
+            tamaño: '27"',
+            resolución: '4K UHD',
+            Hz: '144 Hz',
+            panel: 'Nano IPS',
+          },
           basePrice: BigInt(289900_00),
           compareAt: BigInt(329900_00),
           stock: 6,
@@ -281,7 +318,12 @@ async function main() {
         {
           sku: 'MSI-274QRF-QD',
           name: '27" QHD 165Hz Quantum Dot',
-          attributes: { tamaño: '27"', resolución: 'QHD 1440p', Hz: '165 Hz', panel: 'IPS QD' },
+          attributes: {
+            tamaño: '27"',
+            resolución: 'QHD 1440p',
+            Hz: '165 Hz',
+            panel: 'IPS QD',
+          },
           basePrice: BigInt(169900_00),
           stock: 9,
         },
@@ -300,7 +342,12 @@ async function main() {
         {
           sku: 'INT-I9-14900K',
           name: 'i9-14900K Boxed',
-          attributes: { núcleos: '24', socket: 'LGA1700', frecuencia: '6.0 GHz Turbo', DDR: 'DDR5/DDR4' },
+          attributes: {
+            núcleos: '24',
+            socket: 'LGA1700',
+            frecuencia: '6.0 GHz Turbo',
+            DDR: 'DDR5/DDR4',
+          },
           basePrice: BigInt(269900_00),
           compareAt: BigInt(299900_00),
           stock: 10,
@@ -318,7 +365,12 @@ async function main() {
         {
           sku: 'AMD-R9-7950X',
           name: 'Ryzen 9 7950X Boxed',
-          attributes: { núcleos: '16', socket: 'AM5', frecuencia: '5.7 GHz Turbo', proceso: '5nm' },
+          attributes: {
+            núcleos: '16',
+            socket: 'AM5',
+            frecuencia: '5.7 GHz Turbo',
+            proceso: '5nm',
+          },
           basePrice: BigInt(289900_00),
           stock: 8,
         },
@@ -337,7 +389,12 @@ async function main() {
         {
           sku: 'CS-DOM-DDR5-5600-32',
           name: '32GB (2×16GB) 5600MHz',
-          attributes: { capacidad: '32GB', velocidad: '5600 MHz', tipo: 'DDR5', latencia: 'CL36' },
+          attributes: {
+            capacidad: '32GB',
+            velocidad: '5600 MHz',
+            tipo: 'DDR5',
+            latencia: 'CL36',
+          },
           basePrice: BigInt(89900_00),
           compareAt: BigInt(104000_00),
           stock: 14,
@@ -345,7 +402,12 @@ async function main() {
         {
           sku: 'CS-DOM-DDR5-6000-32',
           name: '32GB (2×16GB) 6000MHz',
-          attributes: { capacidad: '32GB', velocidad: '6000 MHz', tipo: 'DDR5', latencia: 'CL30' },
+          attributes: {
+            capacidad: '32GB',
+            velocidad: '6000 MHz',
+            tipo: 'DDR5',
+            latencia: 'CL30',
+          },
           basePrice: BigInt(109900_00),
           stock: 7,
         },
@@ -362,7 +424,12 @@ async function main() {
         {
           sku: 'GS-TZ5-DDR5-6000-64',
           name: '64GB (2×32GB) 6000MHz',
-          attributes: { capacidad: '64GB', velocidad: '6000 MHz', tipo: 'DDR5', latencia: 'CL30' },
+          attributes: {
+            capacidad: '64GB',
+            velocidad: '6000 MHz',
+            tipo: 'DDR5',
+            latencia: 'CL30',
+          },
           basePrice: BigInt(199900_00),
           stock: 5,
         },
@@ -381,7 +448,12 @@ async function main() {
         {
           sku: 'NV-RTX4080S-FE',
           name: 'Founders Edition',
-          attributes: { VRAM: '16GB GDDR6X', CUDA: '10,240', conectores: '1x 16-pin', puertos: '3x DP 1.4a + 1x HDMI 2.1' },
+          attributes: {
+            VRAM: '16GB GDDR6X',
+            CUDA: '10,240',
+            conectores: '1x 16-pin',
+            puertos: '3x DP 1.4a + 1x HDMI 2.1',
+          },
           basePrice: BigInt(729900_00),
           stock: 4,
         },
@@ -398,7 +470,11 @@ async function main() {
         {
           sku: 'AMD-RX7900XTX-REF',
           name: 'Reference Edition',
-          attributes: { VRAM: '24GB GDDR6', 'Stream Processors': '6144', puertos: '2x DP 2.1 + 1x HDMI 2.1' },
+          attributes: {
+            VRAM: '24GB GDDR6',
+            'Stream Processors': '6144',
+            puertos: '2x DP 2.1 + 1x HDMI 2.1',
+          },
           basePrice: BigInt(629900_00),
           compareAt: BigInt(699900_00),
           stock: 3,
@@ -418,14 +494,24 @@ async function main() {
         {
           sku: 'SS-990PRO-1TB',
           name: '1TB',
-          attributes: { capacidad: '1TB', interfaz: 'PCIe 4.0 x4', lectura: '7,450 MB/s', escritura: '6,900 MB/s' },
+          attributes: {
+            capacidad: '1TB',
+            interfaz: 'PCIe 4.0 x4',
+            lectura: '7,450 MB/s',
+            escritura: '6,900 MB/s',
+          },
           basePrice: BigInt(34900_00),
           stock: 20,
         },
         {
           sku: 'SS-990PRO-2TB',
           name: '2TB',
-          attributes: { capacidad: '2TB', interfaz: 'PCIe 4.0 x4', lectura: '7,450 MB/s', escritura: '6,900 MB/s' },
+          attributes: {
+            capacidad: '2TB',
+            interfaz: 'PCIe 4.0 x4',
+            lectura: '7,450 MB/s',
+            escritura: '6,900 MB/s',
+          },
           basePrice: BigInt(62900_00),
           compareAt: BigInt(74000_00),
           stock: 15,
@@ -445,21 +531,36 @@ async function main() {
         {
           sku: 'SL-TITAN-EVO-S-BLK',
           name: 'Small – Negro/Rojo',
-          attributes: { talla: 'S', material: 'NEO Hybrid Leather', color: 'Negro/Rojo', capacidad: '90 kg' },
+          attributes: {
+            talla: 'S',
+            material: 'NEO Hybrid Leather',
+            color: 'Negro/Rojo',
+            capacidad: '90 kg',
+          },
           basePrice: BigInt(279900_00),
           stock: 6,
         },
         {
           sku: 'SL-TITAN-EVO-R-BLK',
           name: 'Regular – Negro/Rojo',
-          attributes: { talla: 'R', material: 'NEO Hybrid Leather', color: 'Negro/Rojo', capacidad: '110 kg' },
+          attributes: {
+            talla: 'R',
+            material: 'NEO Hybrid Leather',
+            color: 'Negro/Rojo',
+            capacidad: '110 kg',
+          },
           basePrice: BigInt(299900_00),
           stock: 8,
         },
         {
           sku: 'SL-TITAN-EVO-XL-BLK',
           name: 'XL – Negro/Rojo',
-          attributes: { talla: 'XL', material: 'NEO Hybrid Leather', color: 'Negro/Rojo', capacidad: '130 kg' },
+          attributes: {
+            talla: 'XL',
+            material: 'NEO Hybrid Leather',
+            color: 'Negro/Rojo',
+            capacidad: '130 kg',
+          },
           basePrice: BigInt(319900_00),
           stock: 4,
         },

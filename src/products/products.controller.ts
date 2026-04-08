@@ -16,7 +16,8 @@ export class ProductsController {
    */
   @Get()
   async findAll(@Query() query: GetProductsQueryDto) {
-    const tenantId = await this.productsService.getTenantIdBySlug(DEV_TENANT_SLUG);
+    const tenantId =
+      await this.productsService.getTenantIdBySlug(DEV_TENANT_SLUG);
     return this.productsService.findAll(tenantId, query);
   }
 
@@ -26,10 +27,10 @@ export class ProductsController {
    */
   @Get('search')
   async search(@Query('q') q: string, @Query() query: GetProductsQueryDto) {
-    const tenantId = await this.productsService.getTenantIdBySlug(DEV_TENANT_SLUG);
+    const tenantId =
+      await this.productsService.getTenantIdBySlug(DEV_TENANT_SLUG);
     return this.productsService.search(tenantId, q, query);
   }
-
 
   /**
    * GET /products/:id
@@ -37,7 +38,8 @@ export class ProductsController {
    */
   @Get(':id')
   async findById(@Param('id', ParseIntPipe) id: number) {
-    const tenantId = await this.productsService.getTenantIdBySlug(DEV_TENANT_SLUG);
+    const tenantId =
+      await this.productsService.getTenantIdBySlug(DEV_TENANT_SLUG);
     return this.productsService.findById(tenantId, id);
   }
 }

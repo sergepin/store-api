@@ -38,9 +38,9 @@ export class ProductsService {
       where.OR = this.buildSearchConditions(search);
     }
 
-    const [total, items] = await this.prisma.client.$transaction([
-      this.prisma.client.product.count({ where }),
-      this.prisma.client.product.findMany({
+    const [total, items] = await this.prisma.$transaction([
+      this.prisma.product.count({ where }),
+      this.prisma.product.findMany({
         where,
         include: PRODUCT_INCLUDE,
         orderBy: search
@@ -55,7 +55,7 @@ export class ProductsService {
     const data = search ? this.rankByRelevance(items, search) : items;
 
     return {
-      data: data.map(this.formatProduct),
+      data: data.map((p) => this.formatProduct(p)),
       meta: {
         total,
         page,
@@ -67,19 +67,24 @@ export class ProductsService {
 
   // ── CATEGORIES ──────────────────────────────────────────────────────────
   async findAllCategories(tenantId: number) {
-    return this.prisma.client.category.findMany({
+    return this.prisma.category.findMany({
       where: { tenantId, deletedAt: null },
       orderBy: { sortOrder: 'asc' },
     });
   }
 
   // ── 2. GET BY CATEGORY ───────────────────────────────────────────────────
-  async findByCategory(tenantId: number, categorySlug: string, query: GetProductsQueryDto) {
-    const category = await this.prisma.client.category.findUnique({
+  async findByCategory(
+    tenantId: number,
+    categorySlug: string,
+    query: GetProductsQueryDto,
+  ) {
+    const category = await this.prisma.category.findUnique({
       where: { tenantId_slug: { tenantId, slug: categorySlug } },
     });
 
-    if (!category) throw new NotFoundException(`Category '${categorySlug}' not found`);
+    if (!category)
+      throw new NotFoundException(`Category '${categorySlug}' not found`);
 
     return this.findAll(tenantId, { ...query, categoryId: category.id });
   }
@@ -95,7 +100,7 @@ export class ProductsService {
 
   // ── 4. GET BY ID ─────────────────────────────────────────────────────────
   async findById(tenantId: number, productId: number) {
-    const product = await this.prisma.client.product.findFirst({
+    const product = await this.prisma.product.findFirst({
       where: { id: productId, tenantId, deletedAt: null },
       include: {
         ...PRODUCT_INCLUDE,
@@ -103,14 +108,15 @@ export class ProductsService {
       },
     });
 
-    if (!product) throw new NotFoundException(`Product '${productId}' not found`);
+    if (!product)
+      throw new NotFoundException(`Product '${productId}' not found`);
 
     return this.formatProduct(product);
   }
 
   // ── GET BY SLUG (for storefront canonical URLs) ───────────────────────
   async findBySlug(tenantId: number, slug: string) {
-    const product = await this.prisma.client.product.findUnique({
+    const product = await this.prisma.product.findUnique({
       where: { tenantId_slug: { tenantId, slug } },
       include: PRODUCT_INCLUDE,
     });
@@ -124,11 +130,7 @@ export class ProductsService {
 
   // ── PRIVATE: Build OR conditions for search ───────────────────────────
   private buildSearchConditions(search: string) {
-    const terms = search
-      .toLowerCase()
-      .split(/\s+/)
-      .filter(Boolean)
-      .slice(0, 6); // safety: max 6 terms
+    const terms = search.toLowerCase().split(/\s+/).filter(Boolean).slice(0, 6); // safety: max 6 terms
 
     // Full query match + individual term matches across name, description and sku
     const conditions: unknown[] = [];
@@ -137,7 +139,12 @@ export class ProductsService {
     conditions.push({ name: { contains: search, mode: 'insensitive' } });
     conditions.push({ description: { contains: search, mode: 'insensitive' } });
     conditions.push({
-      variants: { some: { sku: { contains: search, mode: 'insensitive' }, deletedAt: null } },
+      variants: {
+        some: {
+          sku: { contains: search, mode: 'insensitive' },
+          deletedAt: null,
+        },
+      },
     });
 
     // Individual term matches for multi-word queries (e.g. "teclado rojo lineal")
@@ -145,7 +152,12 @@ export class ProductsService {
       conditions.push({ name: { contains: term, mode: 'insensitive' } });
       conditions.push({ description: { contains: term, mode: 'insensitive' } });
       conditions.push({
-        variants: { some: { sku: { contains: term, mode: 'insensitive' }, deletedAt: null } },
+        variants: {
+          some: {
+            sku: { contains: term, mode: 'insensitive' },
+            deletedAt: null,
+          },
+        },
       });
     }
 
@@ -153,10 +165,9 @@ export class ProductsService {
   }
 
   // ── PRIVATE: Score and sort results by relevance ──────────────────────
-  private rankByRelevance<T extends { name: string; description?: string | null }>(
-    items: T[],
-    search: string,
-  ): T[] {
+  private rankByRelevance<
+    T extends { name: string; description?: string | null },
+  >(items: T[], search: string): T[] {
     const query = search.toLowerCase();
     const terms = query.split(/\s+/).filter(Boolean);
 
@@ -188,7 +199,7 @@ export class ProductsService {
 
   // ── PRIVATE: Resolve Tenant ───────────────────────────────────────────
   async getTenantIdBySlug(slug: string): Promise<number> {
-    const tenant = await this.prisma.client.tenant.findUnique({
+    const tenant = await this.prisma.tenant.findUnique({
       where: { slug },
       select: { id: true },
     });
@@ -197,7 +208,6 @@ export class ProductsService {
   }
 
   // ── PRIVATE: Format response ──────────────────────────────────────────
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private formatProduct(product: any) {
     return {
       id: product.id,
@@ -210,34 +220,42 @@ export class ProductsService {
       categories: product.productCategories?.map(
         (pc: { category: unknown }) => pc.category,
       ),
-      variants: product.variants?.map((v: {
-        id: string;
-        sku: string;
-        name: string;
-        attributes: unknown;
-        basePriceMinor: bigint;
-        currency: string;
-        compareAtPriceMinor: bigint | null;
-        inventoryBalance: { quantityOnHand: number; quantityReserved: number } | null;
-      }) => ({
-        id: v.id,
-        sku: v.sku,
-        name: v.name,
-        attributes: v.attributes,
-        price: {
-          amount: Number(v.basePriceMinor),
-          compareAt: v.compareAtPriceMinor ? Number(v.compareAtPriceMinor) : null,
-          currency: v.currency,
-        },
-        stock: v.inventoryBalance
-          ? {
-              onHand: v.inventoryBalance.quantityOnHand,
-              reserved: v.inventoryBalance.quantityReserved,
-              available:
-                v.inventoryBalance.quantityOnHand - v.inventoryBalance.quantityReserved,
-            }
-          : null,
-      })),
+      variants: product.variants?.map(
+        (v: {
+          id: string;
+          sku: string;
+          name: string;
+          attributes: unknown;
+          basePriceMinor: bigint;
+          currency: string;
+          compareAtPriceMinor: bigint | null;
+          inventoryBalance: {
+            quantityOnHand: number;
+            quantityReserved: number;
+          } | null;
+        }) => ({
+          id: v.id,
+          sku: v.sku,
+          name: v.name,
+          attributes: v.attributes,
+          price: {
+            amount: Number(v.basePriceMinor),
+            compareAt: v.compareAtPriceMinor
+              ? Number(v.compareAtPriceMinor)
+              : null,
+            currency: v.currency,
+          },
+          stock: v.inventoryBalance
+            ? {
+                onHand: v.inventoryBalance.quantityOnHand,
+                reserved: v.inventoryBalance.quantityReserved,
+                available:
+                  v.inventoryBalance.quantityOnHand -
+                  v.inventoryBalance.quantityReserved,
+              }
+            : null,
+        }),
+      ),
       createdAt: product.createdAt,
     };
   }

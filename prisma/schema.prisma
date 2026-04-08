@@ -2,8 +2,7 @@
 // Translates the DATA_MODEL.md documentation to Prisma ORM.
 
 generator client {
-  provider = "prisma-client"
-  output   = "./generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -11,37 +10,37 @@ datasource db {
 }
 
 model Tenant {
-  id                  Int      @id @default(autoincrement())
-  name                String   @db.VarChar
-  slug                String   @unique @db.VarChar
-  status              String   @db.VarChar
-  defaultCurrency     String   @map("default_currency") @db.Char(3)
-  settings            Json     @default("{}")
-  orderNumberPrefix   String?  @map("order_number_prefix") @db.VarChar
-  orderNumberPadding  Int      @default(6) @map("order_number_padding")
-  createdAt           DateTime @default(now()) @map("created_at") @db.Timestamptz
-  updatedAt           DateTime @updatedAt @map("updated_at") @db.Timestamptz
+  id                 Int      @id @default(autoincrement())
+  name               String   @db.VarChar
+  slug               String   @unique @db.VarChar
+  status             String   @db.VarChar
+  defaultCurrency    String   @map("default_currency") @db.Char(3)
+  settings           Json     @default("{}")
+  orderNumberPrefix  String?  @map("order_number_prefix") @db.VarChar
+  orderNumberPadding Int      @default(6) @map("order_number_padding")
+  createdAt          DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt          DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
-  sequence            TenantOrderSequence?
-  domains             TenantDomain[]
-  memberships         TenantMembership[]
-  companies           Company[]
-  customers           Customer[]
-  categories          Category[]
-  products            Product[]
-  productCategories   ProductCategory[]
-  productVariants     ProductVariant[]
-  inventoryBalances   InventoryBalance[]
-  inventoryMovements  InventoryMovement[]
-  priceLists          PriceList[]
-  priceListItems      PriceListItem[]
-  carts               Cart[]
-  cartItems           CartItem[]
-  orders              Order[]
-  orderItems          OrderItem[]
-  payments            Payment[]
-  paymentEvents       PaymentEvent[]
-  users               User[]
+  sequence           TenantOrderSequence?
+  domains            TenantDomain[]
+  memberships        TenantMembership[]
+  companies          Company[]
+  customers          Customer[]
+  categories         Category[]
+  products           Product[]
+  productCategories  ProductCategory[]
+  productVariants    ProductVariant[]
+  inventoryBalances  InventoryBalance[]
+  inventoryMovements InventoryMovement[]
+  priceLists         PriceList[]
+  priceListItems     PriceListItem[]
+  carts              Cart[]
+  cartItems          CartItem[]
+  orders             Order[]
+  orderItems         OrderItem[]
+  payments           Payment[]
+  paymentEvents      PaymentEvent[]
+  users              User[]
 
   @@map("tenants")
 }
@@ -51,20 +50,20 @@ model TenantOrderSequence {
   nextValue BigInt   @map("next_value")
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
-  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
   @@map("tenant_order_sequences")
 }
 
 model TenantDomain {
-  id          Int       @id @default(autoincrement())
-  tenantId    Int       @map("tenant_id")
-  hostname    String    @unique @db.VarChar
-  isPrimary   Boolean   @map("is_primary")
-  verifiedAt  DateTime? @map("verified_at") @db.Timestamptz
-  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  id         Int       @id @default(autoincrement())
+  tenantId   Int       @map("tenant_id")
+  hostname   String    @unique @db.VarChar
+  isPrimary  Boolean   @map("is_primary")
+  verifiedAt DateTime? @map("verified_at") @db.Timestamptz
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz
 
-  tenant      Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
   @@index([tenantId])
   @@map("tenant_domains")
@@ -73,15 +72,15 @@ model TenantDomain {
 model User {
   id              Int       @id @default(autoincrement())
   tenantId        Int       @map("tenant_id")
-  email           String    @db.VarChar 
+  email           String    @db.VarChar
   passwordHash    String?   @map("password_hash") @db.VarChar
   emailVerifiedAt DateTime? @map("email_verified_at") @db.Timestamptz
   createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz
   updatedAt       DateTime  @updatedAt @map("updated_at") @db.Timestamptz
 
-  tenant          Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  memberships     TenantMembership[]
-  customers       Customer[]
+  tenant      Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  memberships TenantMembership[]
+  customers   Customer[]
 
   @@unique([tenantId, email])
   @@map("users")
@@ -96,8 +95,8 @@ model TenantMembership {
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
-  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([tenantId, userId])
   @@index([userId])
@@ -114,9 +113,9 @@ model Company {
   createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz
   updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
-  tenant         Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  customers      Customer[]
-  priceLists     CompanyPriceList[]
+  tenant     Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  customers  Customer[]
+  priceLists CompanyPriceList[]
 
   @@unique([tenantId, taxId])
   @@map("companies")
@@ -134,11 +133,11 @@ model Customer {
   createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
   updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
-  tenant       Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  user         User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
-  company      Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
-  carts        Cart[]
-  orders       Order[]
+  tenant  Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user    User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  company Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  carts   Cart[]
+  orders  Order[]
 
   @@unique([tenantId, email])
   @@index([userId])
@@ -156,9 +155,9 @@ model Category {
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
   updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz
 
-  tenant    Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  parent    Category? @relation("CategoryToCategory", fields: [parentId], references: [id])
-  children  Category[] @relation("CategoryToCategory")
+  tenant            Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  parent            Category?         @relation("CategoryToCategory", fields: [parentId], references: [id])
+  children          Category[]        @relation("CategoryToCategory")
   productCategories ProductCategory[]
   productsAsPrimary Product[]
 
@@ -179,8 +178,8 @@ model Product {
   createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz
   updatedAt         DateTime  @updatedAt @map("updated_at") @db.Timestamptz
 
-  tenant            Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  primaryCategory   Category? @relation(fields: [primaryCategoryId], references: [id])
+  tenant            Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  primaryCategory   Category?         @relation(fields: [primaryCategoryId], references: [id])
   productCategories ProductCategory[]
   variants          ProductVariant[]
 
@@ -189,15 +188,15 @@ model Product {
 }
 
 model ProductCategory {
-  id         Int    @id @default(autoincrement())
-  tenantId   Int    @map("tenant_id")
-  productId  Int    @map("product_id")
-  categoryId Int    @map("category_id")
-  sortOrder  Int    @default(0) @map("sort_order")
+  id         Int @id @default(autoincrement())
+  tenantId   Int @map("tenant_id")
+  productId  Int @map("product_id")
+  categoryId Int @map("category_id")
+  sortOrder  Int @default(0) @map("sort_order")
 
-  tenant     Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  tenant   Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  product  Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
   @@unique([tenantId, productId, categoryId])
   @@index([tenantId, categoryId])
@@ -219,13 +218,13 @@ model ProductVariant {
   createdAt           DateTime  @default(now()) @map("created_at") @db.Timestamptz
   updatedAt           DateTime  @updatedAt @map("updated_at") @db.Timestamptz
 
-  tenant              Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  product             Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
-  inventoryBalance    InventoryBalance?
-  inventoryMovements  InventoryMovement[]
-  cartItems           CartItem[]
-  orderItems          OrderItem[]
-  priceListItems      PriceListItem[]
+  tenant             Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  product            Product             @relation(fields: [productId], references: [id], onDelete: Cascade)
+  inventoryBalance   InventoryBalance?
+  inventoryMovements InventoryMovement[]
+  cartItems          CartItem[]
+  orderItems         OrderItem[]
+  priceListItems     PriceListItem[]
 
   @@unique([tenantId, sku])
   @@index([tenantId, productId])
@@ -240,8 +239,8 @@ model InventoryBalance {
   quantityReserved Int      @default(0) @map("quantity_reserved")
   updatedAt        DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
-  tenant           Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  variant          ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  tenant  Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  variant ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
 
   @@map("inventory_balances")
 }
@@ -256,8 +255,8 @@ model InventoryMovement {
   referenceId   Int?     @map("reference_id")
   createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz
 
-  tenant        Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  variant       ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  tenant  Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  variant ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
 
   @@map("inventory_movements")
 }
@@ -270,7 +269,7 @@ model PriceList {
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
-  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenant    Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   items     PriceListItem[]
   companies CompanyPriceList[]
 
@@ -287,9 +286,9 @@ model PriceListItem {
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
   updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
-  tenant      Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  priceList   PriceList      @relation(fields: [priceListId], references: [id], onDelete: Cascade)
-  variant     ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  tenant    Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  priceList PriceList      @relation(fields: [priceListId], references: [id], onDelete: Cascade)
+  variant   ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
 
   @@unique([priceListId, variantId])
   @@map("price_list_items")
@@ -299,8 +298,8 @@ model CompanyPriceList {
   companyId   Int @map("company_id")
   priceListId Int @map("price_list_id")
 
-  company     Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  priceList   PriceList @relation(fields: [priceListId], references: [id], onDelete: Cascade)
+  company   Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  priceList PriceList @relation(fields: [priceListId], references: [id], onDelete: Cascade)
 
   @@id([companyId, priceListId])
   @@map("company_price_lists")
@@ -316,9 +315,9 @@ model Cart {
   createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz
   updatedAt  DateTime  @updatedAt @map("updated_at") @db.Timestamptz
 
-  tenant     Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  customer   Customer? @relation(fields: [customerId], references: [id], onDelete: Cascade)
-  items      CartItem[]
+  tenant   Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  customer Customer?  @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  items    CartItem[]
 
   @@map("carts")
 }
@@ -333,37 +332,37 @@ model CartItem {
   createdAt              DateTime @default(now()) @map("created_at") @db.Timestamptz
   updatedAt              DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
-  tenant     Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  cart       Cart           @relation(fields: [cartId], references: [id], onDelete: Cascade)
-  variant    ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  tenant  Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  cart    Cart           @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  variant ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
 
   @@unique([cartId, variantId])
   @@map("cart_items")
 }
 
 model Order {
-  id             Int      @id @default(autoincrement())
-  tenantId       Int      @map("tenant_id")
-  orderNumber    String   @map("order_number") @db.VarChar
-  customerId     Int      @map("customer_id")
-  status         String   @db.VarChar
-  currency       String   @db.Char(3)
-  subtotalMinor  BigInt   @map("subtotal_minor")
-  taxMinor       BigInt   @default(0) @map("tax_minor")
-  shippingMinor  BigInt   @default(0) @map("shipping_minor")
-  discountMinor  BigInt   @default(0) @map("discount_minor")
-  totalMinor     BigInt   @map("total_minor")
-  shippingAddress Json    @map("shipping_address")
-  billingAddress Json?    @map("billing_address")
-  idempotencyKey String?  @map("idempotency_key") @db.VarChar
-  notes          String?  @db.Text
-  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz
-  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz
+  id              Int      @id @default(autoincrement())
+  tenantId        Int      @map("tenant_id")
+  orderNumber     String   @map("order_number") @db.VarChar
+  customerId      Int      @map("customer_id")
+  status          String   @db.VarChar
+  currency        String   @db.Char(3)
+  subtotalMinor   BigInt   @map("subtotal_minor")
+  taxMinor        BigInt   @default(0) @map("tax_minor")
+  shippingMinor   BigInt   @default(0) @map("shipping_minor")
+  discountMinor   BigInt   @default(0) @map("discount_minor")
+  totalMinor      BigInt   @map("total_minor")
+  shippingAddress Json     @map("shipping_address")
+  billingAddress  Json?    @map("billing_address")
+  idempotencyKey  String?  @map("idempotency_key") @db.VarChar
+  notes           String?  @db.Text
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
-  tenant         Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  customer       Customer  @relation(fields: [customerId], references: [id], onDelete: Restrict)
-  items          OrderItem[]
-  payments       Payment[]
+  tenant   Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  customer Customer    @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  items    OrderItem[]
+  payments Payment[]
 
   @@unique([tenantId, orderNumber])
   @@unique([tenantId, idempotencyKey])
@@ -384,9 +383,9 @@ model OrderItem {
   lineTotalMinor      BigInt   @map("line_total_minor")
   createdAt           DateTime @default(now()) @map("created_at") @db.Timestamptz
 
-  tenant              Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  order               Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  variant             ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+  tenant  Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  order   Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  variant ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
 
   @@map("order_items")
 }
@@ -406,9 +405,9 @@ model Payment {
   createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz
   updatedAt         DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
-  tenant            Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  order             Order          @relation(fields: [orderId], references: [id], onDelete: Restrict)
-  events            PaymentEvent[]
+  tenant Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  order  Order          @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  events PaymentEvent[]
 
   @@unique([tenantId, providerPaymentId])
   @@index([orderId])
@@ -426,8 +425,8 @@ model PaymentEvent {
   processedAt     DateTime @map("processed_at") @db.Timestamptz
   rawPayload      Json?
 
-  tenant          Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  payment         Payment  @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  tenant  Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  payment Payment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
 
   @@unique([tenantId, providerEventId])
   @@map("payment_events")

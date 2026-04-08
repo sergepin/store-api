@@ -1,13 +1,9 @@
 {
-  "watchOptions": {
-    "watchFile": "fixedPollingInterval",
-    "watchDirectory": "fixedPollingInterval",
-    "fallbackPolling": "dynamicPriority"
-  },
   "compilerOptions": {
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
-    "resolvePackageJsonExports": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "ES2021",
+    "types": ["node", "jest"],
     "esModuleInterop": true,
     "isolatedModules": true,
     "declaration": true,
@@ -15,16 +11,10 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "ES2023",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
-    "strictNullChecks": true,
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false
+    "strictNullChecks": true
   }
 }

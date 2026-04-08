@@ -6,7 +6,7 @@ export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
   async findByEmail(tenantId: number, email: string) {
-    return this.prisma.client.user.findFirst({
+    return this.prisma.user.findFirst({
       where: {
         tenantId,
         email,
@@ -19,13 +19,13 @@ export class UsersService {
     email: string;
     passwordHash: string;
   }) {
-    return this.prisma.client.user.create({
+    return this.prisma.user.create({
       data,
     });
   }
 
   async findById(id: number) {
-    return this.prisma.client.user.findUnique({
+    return this.prisma.user.findUnique({
       where: { id },
     });
   }

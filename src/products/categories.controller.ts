@@ -14,7 +14,8 @@ export class CategoriesController {
    */
   @Get()
   async findAll() {
-    const tenantId = await this.productsService.getTenantIdBySlug(DEV_TENANT_SLUG);
+    const tenantId =
+      await this.productsService.getTenantIdBySlug(DEV_TENANT_SLUG);
     return this.productsService.findAllCategories(tenantId);
   }
 
@@ -24,8 +25,12 @@ export class CategoriesController {
    * Example: GET /category/mouse
    */
   @Get(':slug')
-  async findByCategory(@Param('slug') slug: string, @Query() query: GetProductsQueryDto) {
-    const tenantId = await this.productsService.getTenantIdBySlug(DEV_TENANT_SLUG);
+  async findByCategory(
+    @Param('slug') slug: string,
+    @Query() query: GetProductsQueryDto,
+  ) {
+    const tenantId =
+      await this.productsService.getTenantIdBySlug(DEV_TENANT_SLUG);
     return this.productsService.findByCategory(tenantId, slug, query);
   }
 }

@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service.js';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findByEmail(tenantId: number, email: string) {
+  findByEmail(tenantId: number, email: string) {
     return this.prisma.user.findFirst({
       where: {
         tenantId,
@@ -14,17 +14,13 @@ export class UsersService {
     });
   }
 
-  async create(data: {
-    tenantId: number;
-    email: string;
-    passwordHash: string;
-  }) {
+  create(data: { tenantId: number; email: string; passwordHash: string }) {
     return this.prisma.user.create({
       data,
     });
   }
 
-  async findById(id: number) {
+  findById(id: number) {
     return this.prisma.user.findUnique({
       where: { id },
     });

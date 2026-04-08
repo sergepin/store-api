@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service.js';
-import { GetProductsQueryDto } from './dto/get-products-query.dto.js';
+import { Prisma } from '@prisma/client';
+import { PrismaService } from '../prisma/prisma.service';
+import { GetProductsQueryDto } from './dto/get-products-query.dto';
 
 // Shared product include for consistent responses
 const PRODUCT_INCLUDE = {
@@ -14,6 +15,11 @@ const PRODUCT_INCLUDE = {
   },
 } as const;
 
+// 🔥 Tipo real basado en Prisma
+type ProductWithRelations = Prisma.ProductGetPayload<{
+  include: typeof PRODUCT_INCLUDE;
+}>;
+
 @Injectable()
 export class ProductsService {
   constructor(private readonly prisma: PrismaService) {}
@@ -23,8 +29,7 @@ export class ProductsService {
     const { categoryId, search, page = 1, limit = 20 } = query;
     const skip = (page - 1) * limit;
 
-    // Build where clause step by step
-    const where: Record<string, unknown> = {
+    const where: Prisma.ProductWhereInput = {
       tenantId,
       deletedAt: null,
       status: 'published',
@@ -34,7 +39,7 @@ export class ProductsService {
       where.productCategories = { some: { categoryId } };
     }
 
-    if (search) {
+    if (search?.length) {
       where.OR = this.buildSearchConditions(search);
     }
 
@@ -44,14 +49,13 @@ export class ProductsService {
         where,
         include: PRODUCT_INCLUDE,
         orderBy: search
-          ? undefined // let search relevance handle ordering
+          ? undefined
           : [{ isFeatured: 'desc' }, { createdAt: 'desc' }],
         skip,
         take: limit,
       }),
     ]);
 
-    // If searching, apply in-memory relevance scoring for better ranking
     const data = search ? this.rankByRelevance(items, search) : items;
 
     return {
@@ -66,7 +70,7 @@ export class ProductsService {
   }
 
   // ── CATEGORIES ──────────────────────────────────────────────────────────
-  async findAllCategories(tenantId: number) {
+  findAllCategories(tenantId: number) {
     return this.prisma.category.findMany({
       where: { tenantId, deletedAt: null },
       orderBy: { sortOrder: 'asc' },
@@ -83,16 +87,14 @@ export class ProductsService {
       where: { tenantId_slug: { tenantId, slug: categorySlug } },
     });
 
-    if (!category)
+    if (!category) {
       throw new NotFoundException(`Category '${categorySlug}' not found`);
+    }
 
     return this.findAll(tenantId, { ...query, categoryId: category.id });
   }
 
   // ── 3. SEARCH PRODUCTS ───────────────────────────────────────────────────
-  // Algorithm combines:
-  //   A) Postgres full-text OR like search (filters in DB for performance)
-  //   B) In-memory relevance scoring (rank the results by match quality)
   async search(tenantId: number, q: string, query: GetProductsQueryDto) {
     if (!q?.trim()) return this.findAll(tenantId, query);
     return this.findAll(tenantId, { ...query, search: q.trim() });
@@ -108,13 +110,14 @@ export class ProductsService {
       },
     });
 
-    if (!product)
+    if (!product) {
       throw new NotFoundException(`Product '${productId}' not found`);
+    }
 
     return this.formatProduct(product);
   }
 
-  // ── GET BY SLUG (for storefront canonical URLs) ───────────────────────
+  // ── GET BY SLUG ─────────────────────────────────────────────────────────
   async findBySlug(tenantId: number, slug: string) {
     const product = await this.prisma.product.findUnique({
       where: { tenantId_slug: { tenantId, slug } },
@@ -128,14 +131,12 @@ export class ProductsService {
     return this.formatProduct(product);
   }
 
-  // ── PRIVATE: Build OR conditions for search ───────────────────────────
-  private buildSearchConditions(search: string) {
-    const terms = search.toLowerCase().split(/\s+/).filter(Boolean).slice(0, 6); // safety: max 6 terms
+  // ── PRIVATE: Build OR conditions ────────────────────────────────────────
+  private buildSearchConditions(search: string): Prisma.ProductWhereInput[] {
+    const terms = search.toLowerCase().split(/\s+/).filter(Boolean).slice(0, 6);
 
-    // Full query match + individual term matches across name, description and sku
-    const conditions: unknown[] = [];
+    const conditions: Prisma.ProductWhereInput[] = [];
 
-    // Exact / prefix match on the whole query gets highest recall
     conditions.push({ name: { contains: search, mode: 'insensitive' } });
     conditions.push({ description: { contains: search, mode: 'insensitive' } });
     conditions.push({
@@ -147,7 +148,6 @@ export class ProductsService {
       },
     });
 
-    // Individual term matches for multi-word queries (e.g. "teclado rojo lineal")
     for (const term of terms) {
       conditions.push({ name: { contains: term, mode: 'insensitive' } });
       conditions.push({ description: { contains: term, mode: 'insensitive' } });
@@ -164,28 +164,24 @@ export class ProductsService {
     return conditions;
   }
 
-  // ── PRIVATE: Score and sort results by relevance ──────────────────────
-  private rankByRelevance<
-    T extends { name: string; description?: string | null },
-  >(items: T[], search: string): T[] {
+  // ── PRIVATE: Relevance ranking ──────────────────────────────────────────
+  private rankByRelevance(
+    items: ProductWithRelations[],
+    search: string,
+  ): ProductWithRelations[] {
     const query = search.toLowerCase();
     const terms = query.split(/\s+/).filter(Boolean);
 
-    const score = (item: T): number => {
+    const score = (item: ProductWithRelations): number => {
       const name = item.name.toLowerCase();
       const desc = (item.description ?? '').toLowerCase();
       let s = 0;
 
-      // Exact full match in name → highest bonus
       if (name === query) s += 100;
-      // Name starts with query
       if (name.startsWith(query)) s += 50;
-      // Name contains query
       if (name.includes(query)) s += 30;
-      // Description contains query
       if (desc.includes(query)) s += 10;
 
-      // Per-term bonuses (for multi-word queries)
       for (const term of terms) {
         if (name.includes(term)) s += 5;
         if (desc.includes(term)) s += 2;
@@ -203,12 +199,16 @@ export class ProductsService {
       where: { slug },
       select: { id: true },
     });
-    if (!tenant) throw new NotFoundException(`Tenant '${slug}' not found`);
+
+    if (!tenant) {
+      throw new NotFoundException(`Tenant '${slug}' not found`);
+    }
+
     return tenant.id;
   }
 
   // ── PRIVATE: Format response ──────────────────────────────────────────
-  private formatProduct(product: any) {
+  private formatProduct(product: ProductWithRelations) {
     return {
       id: product.id,
       name: product.name,
@@ -217,45 +217,29 @@ export class ProductsService {
       status: product.status,
       isFeatured: product.isFeatured,
       primaryCategory: product.primaryCategory,
-      categories: product.productCategories?.map(
-        (pc: { category: unknown }) => pc.category,
-      ),
-      variants: product.variants?.map(
-        (v: {
-          id: string;
-          sku: string;
-          name: string;
-          attributes: unknown;
-          basePriceMinor: bigint;
-          currency: string;
-          compareAtPriceMinor: bigint | null;
-          inventoryBalance: {
-            quantityOnHand: number;
-            quantityReserved: number;
-          } | null;
-        }) => ({
-          id: v.id,
-          sku: v.sku,
-          name: v.name,
-          attributes: v.attributes,
-          price: {
-            amount: Number(v.basePriceMinor),
-            compareAt: v.compareAtPriceMinor
-              ? Number(v.compareAtPriceMinor)
-              : null,
-            currency: v.currency,
-          },
-          stock: v.inventoryBalance
-            ? {
-                onHand: v.inventoryBalance.quantityOnHand,
-                reserved: v.inventoryBalance.quantityReserved,
-                available:
-                  v.inventoryBalance.quantityOnHand -
-                  v.inventoryBalance.quantityReserved,
-              }
+      categories: product.productCategories?.map((pc) => pc.category),
+      variants: product.variants?.map((v) => ({
+        id: v.id,
+        sku: v.sku,
+        name: v.name,
+        attributes: v.attributes,
+        price: {
+          amount: Number(v.basePriceMinor),
+          compareAt: v.compareAtPriceMinor
+            ? Number(v.compareAtPriceMinor)
             : null,
-        }),
-      ),
+          currency: v.currency,
+        },
+        stock: v.inventoryBalance
+          ? {
+              onHand: v.inventoryBalance.quantityOnHand,
+              reserved: v.inventoryBalance.quantityReserved,
+              available:
+                v.inventoryBalance.quantityOnHand -
+                v.inventoryBalance.quantityReserved,
+            }
+          : null,
+      })),
       createdAt: product.createdAt,
     };
   }

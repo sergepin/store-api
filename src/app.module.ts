@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AppController } from './app.controller.js';
-import { AppService } from './app.service.js';
-import { PrismaModule } from './prisma/prisma.module.js';
-import { ProductsModule } from './products/products.module.js';
-import { AuthModule } from './auth/auth.module.js';
-import { TenantsModule } from './tenants/tenants.module.js';
-import { UsersModule } from './users/users.module.js';
-import { CartsModule } from './carts/carts.module.js';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { PrismaModule } from './prisma/prisma.module';
+import { ProductsModule } from './products/products.module';
+import { AuthModule } from './auth/auth.module';
+import { TenantsModule } from './tenants/tenants.module';
+import { UsersModule } from './users/users.module';
+import { CartsModule } from './carts/carts.module';
 
 @Module({
   imports: [

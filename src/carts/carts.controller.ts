@@ -110,4 +110,24 @@ export class CartsController {
       Number(itemId),
     );
   }
+
+  /**
+   * DELETE /carts
+   * Clears all items in the current cart.
+   */
+  @Delete()
+  async clearCart(
+    @Query('sessionKey') sessionKey?: string,
+    @Req() req?: RequestWithUser,
+  ) {
+    const tenantId = await this.getTenantId();
+    const customerId = req?.user?.userId;
+
+    const cart = await this.cartsService.getOrCreateCart(tenantId, {
+      customerId,
+      sessionKey,
+    });
+
+    return this.cartsService.clearCart(tenantId, cart.id as number);
+  }
 }

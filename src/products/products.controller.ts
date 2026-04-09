@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Query, ParseIntPipe } from '@nestjs/common';
-import { ProductsService } from './products.service.js';
-import { GetProductsQueryDto } from './dto/get-products-query.dto.js';
-import { TenantsService } from '../tenants/tenants.service.js';
+import { ProductsService } from './products.service';
+import { GetProductsQueryDto } from './dto/get-products-query.dto';
+import { TenantsService } from '../tenants/tenants.service';
 
 // TODO: Replace with real tenant resolution middleware (from host / JWT / header)
 const DEV_TENANT_SLUG = 'gamer-store';

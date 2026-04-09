@@ -12,6 +12,10 @@ export class GetProductsQueryDto {
   search?: string;
 
   @IsOptional()
+  @IsString()
+  q?: string;
+
+  @IsOptional()
   @Type(() => Number)
   @IsInt()
   page: number = 1;

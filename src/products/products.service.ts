@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { GetProductsQueryDto } from './dto/get-products-query.dto';
+import { ProductStatus } from '../common/enums/commerce.enums';
 
 // Shared product include for consistent responses
 const PRODUCT_INCLUDE = {
@@ -32,7 +33,7 @@ export class ProductsService {
     const where: Prisma.ProductWhereInput = {
       tenantId,
       deletedAt: null,
-      status: 'published',
+      status: ProductStatus.PUBLISHED,
     };
 
     if (categoryId) {

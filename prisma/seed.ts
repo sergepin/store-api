@@ -5,6 +5,11 @@ import { PrismaPg } from '@prisma/adapter-pg';
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
 
+import {
+  TenantStatus,
+  ProductStatus,
+} from '../src/common/enums/commerce.enums';
+
 async function main() {
   console.log('🌱 Seeding gamer store...');
 
@@ -15,7 +20,7 @@ async function main() {
     create: {
       name: 'GamerStore',
       slug: 'gamer-store',
-      status: 'active',
+      status: TenantStatus.ACTIVE,
       defaultCurrency: 'COP',
       settings: {},
       orderNumberPrefix: 'GS-',
@@ -580,7 +585,7 @@ async function main() {
         name: p.name,
         slug: p.slug,
         description: p.description,
-        status: 'published',
+        status: ProductStatus.PUBLISHED,
         isFeatured: false,
         primaryCategoryId: categories[p.primarySlug],
       },

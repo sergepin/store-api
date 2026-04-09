@@ -8,6 +8,12 @@ import { InventoryService } from '../inventory/inventory.service';
 import { TenantsService } from '../tenants/tenants.service';
 import { CartsService } from '../carts/carts.service';
 import { CheckoutOrderDto } from './dto/checkout-order.dto';
+import {
+  OrderStatus,
+  CustomerType,
+  PaymentProvider,
+  PaymentStatus,
+} from '../common/enums/commerce.enums';
 
 @Injectable()
 export class OrdersService {
@@ -79,7 +85,7 @@ export class OrdersService {
             tenantId,
             email: dto.email,
             fullName: dto.fullName || 'Guest Customer',
-            customerType: 'GUEST',
+            customerType: CustomerType.GUEST,
           },
         });
         finalCustomerId = customer.id;
@@ -91,7 +97,7 @@ export class OrdersService {
           tenantId,
           orderNumber,
           customerId: finalCustomerId,
-          status: 'PENDING_PAYMENT',
+          status: OrderStatus.PENDING_PAYMENT,
           currency: cart.currency,
           subtotalMinor: subtotalMinor,
           totalMinor: totalMinor,
@@ -133,13 +139,13 @@ export class OrdersService {
       });
 
       if (!order) throw new NotFoundException('Order not found');
-      if (order.status === 'PAID')
+      if (order.status === OrderStatus.PAID)
         throw new BadRequestException('Order already paid');
 
       // 1. Update Order Status
       const updatedOrder = await tx.order.update({
         where: { id: orderId },
-        data: { status: 'PAID' },
+        data: { status: OrderStatus.PAID },
       });
 
       // 2. Commit Inventory (reduce physical stock)
@@ -160,8 +166,8 @@ export class OrdersService {
         data: {
           tenantId,
           orderId: order.id,
-          provider: 'MOCK',
-          status: 'APPROVED',
+          provider: PaymentProvider.MOCK,
+          status: PaymentStatus.APPROVED,
           amountMinor: order.totalMinor,
           currency: order.currency,
           idempotencyKey: `mock-payment-${order.id}-${Date.now()}`,

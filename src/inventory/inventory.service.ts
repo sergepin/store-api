@@ -1,6 +1,7 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { InventoryMovementReason, Prisma } from '@prisma/client';
+import { InventoryReferenceType } from '../common/enums/commerce.enums';
 
 @Injectable()
 export class InventoryService {
@@ -143,7 +144,7 @@ export class InventoryService {
           variantId,
           delta: -quantity,
           reason: InventoryMovementReason.SALE,
-          referenceType: 'ORDER',
+          referenceType: InventoryReferenceType.ORDER,
           referenceId: orderId,
         },
       });

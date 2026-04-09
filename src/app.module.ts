@@ -9,6 +9,7 @@ import { TenantsModule } from './tenants/tenants.module';
 import { UsersModule } from './users/users.module';
 import { CartsModule } from './carts/carts.module';
 import { CategoriesModule } from './categories/categories.module';
+import { InventoryModule } from './inventory/inventory.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { CategoriesModule } from './categories/categories.module';
     UsersModule,
     CartsModule,
     CategoriesModule,
+    InventoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

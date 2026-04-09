@@ -245,15 +245,24 @@ model InventoryBalance {
   @@map("inventory_balances")
 }
 
+enum InventoryMovementReason {
+  RESTOCK
+  ADJUSTMENT
+  SALE
+  RETURN
+  DAMAGED
+  EXPIRED
+}
+
 model InventoryMovement {
-  id            Int      @id @default(autoincrement())
-  tenantId      Int      @map("tenant_id")
-  variantId     Int      @map("variant_id")
+  id            Int                     @id @default(autoincrement())
+  tenantId      Int                     @map("tenant_id")
+  variantId     Int                     @map("variant_id")
   delta         Int
-  reason        String   @db.VarChar
-  referenceType String?  @map("reference_type") @db.VarChar
-  referenceId   Int?     @map("reference_id")
-  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz
+  reason        InventoryMovementReason
+  referenceType String?                 @map("reference_type") @db.VarChar
+  referenceId   Int?                    @map("reference_id")
+  createdAt     DateTime                @default(now()) @map("created_at") @db.Timestamptz
 
   tenant  Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   variant ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)

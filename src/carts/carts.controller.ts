@@ -64,7 +64,7 @@ export class CartsController {
       sessionKey,
     });
 
-    return this.cartsService.addItem(tenantId, cart.id as number, dto);
+    return this.cartsService.addItem(tenantId, cart.id, dto);
   }
 
   @Patch('items/:itemId')
@@ -82,12 +82,7 @@ export class CartsController {
       sessionKey,
     });
 
-    return this.cartsService.updateItem(
-      tenantId,
-      cart.id as number,
-      Number(itemId),
-      dto,
-    );
+    return this.cartsService.updateItem(tenantId, cart.id, Number(itemId), dto);
   }
 
   @Delete('items/:itemId')
@@ -104,11 +99,7 @@ export class CartsController {
       sessionKey,
     });
 
-    return this.cartsService.removeItem(
-      tenantId,
-      cart.id as number,
-      Number(itemId),
-    );
+    return this.cartsService.removeItem(tenantId, cart.id, Number(itemId));
   }
 
   /**
@@ -128,6 +119,6 @@ export class CartsController {
       sessionKey,
     });
 
-    return this.cartsService.clearCart(tenantId, cart.id as number);
+    return this.cartsService.clearCart(tenantId, cart.id);
   }
 }

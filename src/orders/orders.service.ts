@@ -45,7 +45,8 @@ export class OrdersService {
       }
 
       // b. Generate Order Number
-      const orderNumber = await this.tenantsService.getNextOrderNumber(tenantId);
+      const orderNumber =
+        await this.tenantsService.getNextOrderNumber(tenantId);
 
       // c. Calculate totals
       let subtotalMinor = BigInt(0);
@@ -94,8 +95,8 @@ export class OrdersService {
           currency: cart.currency,
           subtotalMinor: subtotalMinor,
           totalMinor: totalMinor,
-          shippingAddress: shippingAddress as any,
-          billingAddress: billingAddress as any,
+          shippingAddress: shippingAddress,
+          billingAddress: billingAddress,
           notes,
           items: {
             create: cart.items.map((item) => ({

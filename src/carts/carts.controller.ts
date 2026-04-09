@@ -10,10 +10,10 @@ import {
   Req,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { CartsService } from './carts.service.js';
-import { AddToCartDto } from './dto/add-to-cart.dto.js';
-import { UpdateCartItemDto } from './dto/update-cart-item.dto.js';
-import { TenantsService } from '../tenants/tenants.service.js';
+import { CartsService } from './carts.service';
+import { AddToCartDto } from './dto/add-to-cart.dto';
+import { UpdateCartItemDto } from './dto/update-cart-item.dto';
+import { TenantsService } from '../tenants/tenants.service';
 
 const DEV_TENANT_SLUG = 'gamer-store';
 

@@ -1,11 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { InventoryService } from '../inventory/inventory.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { AddToCartDto } from './dto/add-to-cart.dto';
 import { UpdateCartItemDto } from './dto/update-cart-item.dto';
 
 @Injectable()
 export class CartsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly inventoryService: InventoryService,
+  ) {}
 
   async getOrCreateCart(
     tenantId: number,
@@ -78,6 +82,27 @@ export class CartsService {
       throw new NotFoundException('Product variant not found');
     }
 
+    // 1. Check current availability
+    const availability = await this.inventoryService.getAvailability(
+      tenantId,
+      variantId,
+    );
+
+    // 2. Check existing quantity in cart
+    const existingItem = await this.prisma.cartItem.findUnique({
+      where: {
+        cartId_variantId: { cartId, variantId },
+      },
+    });
+
+    const newTotalQuantity = (existingItem?.quantity || 0) + quantity;
+
+    if (availability.available < newTotalQuantity) {
+      throw new BadRequestException(
+        `Insufficient stock. Available: ${availability.available}, In cart: ${existingItem?.quantity || 0}, Requested: ${quantity}`,
+      );
+    }
+
     const unitPriceSnapshotMinor = variant.basePriceMinor;
 
     return this.prisma.cartItem.upsert({
@@ -113,6 +138,18 @@ export class CartsService {
 
     if (!item) {
       throw new NotFoundException('Cart item not found');
+    }
+
+    // Check availability for the new quantity
+    const availability = await this.inventoryService.getAvailability(
+      tenantId,
+      item.variantId,
+    );
+
+    if (availability.available < dto.quantity) {
+      throw new BadRequestException(
+        `Insufficient stock. Available: ${availability.available}, Requested: ${dto.quantity}`,
+      );
     }
 
     return this.prisma.cartItem.update({

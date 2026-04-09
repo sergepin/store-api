@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { InventoryService } from './inventory.service.js';
-import { InventoryController } from './inventory.controller.js';
-import { TenantsModule } from '../tenants/tenants.module.js';
+import { InventoryService } from './inventory.service';
+import { InventoryController } from './inventory.controller';
+import { TenantsModule } from '../tenants/tenants.module';
 
 @Module({
   imports: [TenantsModule],

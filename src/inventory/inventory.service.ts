@@ -1,6 +1,6 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service.js';
-import { InventoryMovementReason } from '@prisma/client';
+import { PrismaService } from '../prisma/prisma.service';
+import { InventoryMovementReason, Prisma } from '@prisma/client';
 
 @Injectable()
 export class InventoryService {
@@ -16,10 +16,11 @@ export class InventoryService {
     delta: number,
     reason: InventoryMovementReason,
     reference?: { type: string; id: number },
+    tx?: Prisma.TransactionClient,
   ) {
-    return this.prisma.$transaction(async (tx) => {
+    const action = async (client: Prisma.TransactionClient) => {
       // 1. Update or create the balance
-      const balance = await tx.inventoryBalance.upsert({
+      const balance = await client.inventoryBalance.upsert({
         where: { variantId },
         update: {
           quantityOnHand: { increment: delta },
@@ -40,7 +41,7 @@ export class InventoryService {
       }
 
       // 3. Create movement log
-      await tx.inventoryMovement.create({
+      await client.inventoryMovement.create({
         data: {
           tenantId,
           variantId,
@@ -52,16 +53,23 @@ export class InventoryService {
       });
 
       return balance;
-    });
+    };
+
+    return tx ? action(tx) : this.prisma.$transaction(action);
   }
 
   /**
    * Reserves stock for an ongoing checkout/order.
    * Increments quantityReserved if enough available stock.
    */
-  async reserve(tenantId: number, variantId: number, quantity: number) {
-    return this.prisma.$transaction(async (tx) => {
-      const balance = await tx.inventoryBalance.findUnique({
+  async reserve(
+    tenantId: number,
+    variantId: number,
+    quantity: number,
+    tx?: Prisma.TransactionClient,
+  ) {
+    const action = async (client: Prisma.TransactionClient) => {
+      const balance = await client.inventoryBalance.findUnique({
         where: { variantId },
       });
 
@@ -78,20 +86,28 @@ export class InventoryService {
         );
       }
 
-      return tx.inventoryBalance.update({
+      return client.inventoryBalance.update({
         where: { variantId },
         data: {
           quantityReserved: { increment: quantity },
         },
       });
-    });
+    };
+
+    return tx ? action(tx) : this.prisma.$transaction(action);
   }
 
   /**
    * Releases reserved stock (e.g., cancelled order/expired cart).
    */
-  async release(tenantId: number, variantId: number, quantity: number) {
-    return this.prisma.inventoryBalance.update({
+  async release(
+    tenantId: number,
+    variantId: number,
+    quantity: number,
+    tx?: Prisma.TransactionClient,
+  ) {
+    const client = tx || this.prisma;
+    return client.inventoryBalance.update({
       where: { variantId },
       data: {
         quantityReserved: { decrement: quantity },
@@ -108,10 +124,11 @@ export class InventoryService {
     variantId: number,
     quantity: number,
     orderId: number,
+    tx?: Prisma.TransactionClient,
   ) {
-    return this.prisma.$transaction(async (tx) => {
+    const action = async (client: Prisma.TransactionClient) => {
       // 1. Decrease both quantities
-      const balance = await tx.inventoryBalance.update({
+      const balance = await client.inventoryBalance.update({
         where: { variantId },
         data: {
           quantityOnHand: { decrement: quantity },
@@ -120,7 +137,7 @@ export class InventoryService {
       });
 
       // 2. Log the SALE movement
-      await tx.inventoryMovement.create({
+      await client.inventoryMovement.create({
         data: {
           tenantId,
           variantId,
@@ -132,14 +149,21 @@ export class InventoryService {
       });
 
       return balance;
-    });
+    };
+
+    return tx ? action(tx) : this.prisma.$transaction(action);
   }
 
   /**
    * Simple helper to get current availability.
    */
-  async getAvailability(tenantId: number, variantId: number) {
-    const balance = await this.prisma.inventoryBalance.findUnique({
+  async getAvailability(
+    tenantId: number,
+    variantId: number,
+    tx?: Prisma.TransactionClient,
+  ) {
+    const client = tx || this.prisma;
+    const balance = await client.inventoryBalance.findUnique({
       where: { variantId },
     });
 

@@ -1,7 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { GetProductsQueryDto } from './dto/get-products-query.dto';
+import { CreateProductDto, UpdateProductDto } from './dto/create-product.dto';
 import { ProductStatus } from '../common/enums/commerce.enums';
 
 // Shared product include for consistent responses
@@ -26,15 +27,19 @@ export class ProductsService {
   constructor(private readonly prisma: PrismaService) {}
 
   // ── 1. GET ALL PRODUCTS ──────────────────────────────────────────────────
-  async findAll(tenantId: number, query: GetProductsQueryDto) {
+  async findAll(tenantId: number, query: GetProductsQueryDto, isAdmin = false) {
     const { categoryId, search, page = 1, limit = 20 } = query;
     const skip = (page - 1) * limit;
 
     const where: Prisma.ProductWhereInput = {
       tenantId,
       deletedAt: null,
-      status: ProductStatus.PUBLISHED,
     };
+
+    // If not admin, only show published products
+    if (!isAdmin) {
+      where.status = ProductStatus.PUBLISHED;
+    }
 
     if (categoryId) {
       where.productCategories = { some: { categoryId } };
@@ -68,6 +73,145 @@ export class ProductsService {
         totalPages: Math.ceil(total / limit),
       },
     };
+  }
+
+  // ── 2. CREATE PRODUCT (ADMIN) ───────────────────────────────────────────
+  async create(tenantId: number, dto: CreateProductDto) {
+    // Check if slug already exists for this tenant
+    const existing = await this.prisma.product.findUnique({
+      where: { tenantId_slug: { tenantId, slug: dto.slug } },
+    });
+
+    if (existing) {
+      throw new ConflictException(`Product with slug '${dto.slug}' already exists`);
+    }
+
+    return this.prisma.$transaction(async (tx) => {
+      // 1. Create Product
+      const product = await tx.product.create({
+        data: {
+          tenantId,
+          name: dto.name,
+          slug: dto.slug,
+          description: dto.description,
+          status: dto.status || ProductStatus.DRAFT,
+          isFeatured: dto.isFeatured,
+          primaryCategoryId: dto.primaryCategoryId,
+          // 2. Connect Categories
+          productCategories: {
+            create: dto.categoryIds?.map((categoryId) => ({
+              tenantId,
+              categoryId,
+            })),
+          },
+          // 3. Create Variants and Inventory Balances
+          variants: {
+            create: dto.variants.map((v) => ({
+              tenantId,
+              sku: v.sku,
+              name: v.name,
+              basePriceMinor: BigInt(v.basePriceMinor),
+              currency: v.currency,
+              compareAtPriceMinor: v.compareAtPriceMinor ? BigInt(v.compareAtPriceMinor) : null,
+              attributes: v.attributes || {},
+              inventoryBalance: {
+                create: {
+                  tenantId,
+                  quantityOnHand: v.initialStock,
+                  quantityReserved: 0,
+                },
+              },
+            })),
+          },
+        },
+      });
+
+      // Refetch with relations for formatting
+      const result = await tx.product.findUnique({
+        where: { id: product.id },
+        include: PRODUCT_INCLUDE,
+      });
+
+      return this.formatProduct(result!);
+    });
+  }
+
+  // ── 3. UPDATE PRODUCT (ADMIN) ───────────────────────────────────────────
+  async update(tenantId: number, productId: number, dto: UpdateProductDto) {
+    const product = await this.prisma.product.findFirst({
+      where: { id: productId, tenantId, deletedAt: null },
+    });
+
+    if (!product) {
+      throw new NotFoundException(`Product '${productId}' not found`);
+    }
+
+    // If slug is changing, check for uniqueness
+    if (dto.slug && dto.slug !== product.slug) {
+      const existing = await this.prisma.product.findUnique({
+        where: { tenantId_slug: { tenantId, slug: dto.slug } },
+      });
+      if (existing) {
+        throw new ConflictException(`Product with slug '${dto.slug}' already exists`);
+      }
+    }
+
+    return this.prisma.$transaction(async (tx) => {
+      // 1. Update basic info
+      const updatedProduct = await tx.product.update({
+        where: { id: productId },
+        data: {
+          name: dto.name,
+          slug: dto.slug,
+          description: dto.description,
+          status: dto.status,
+          isFeatured: dto.isFeatured,
+          primaryCategoryId: dto.primaryCategoryId,
+        },
+      });
+
+      // 2. Update Categories if provided
+      if (dto.categoryIds) {
+        // Delete old relations
+        await tx.productCategory.deleteMany({
+          where: { productId, tenantId },
+        });
+
+        // Create new ones
+        await tx.productCategory.createMany({
+          data: dto.categoryIds.map((categoryId) => ({
+            tenantId,
+            productId,
+            categoryId,
+          })),
+        });
+      }
+
+      const result = await tx.product.findUnique({
+        where: { id: productId },
+        include: PRODUCT_INCLUDE,
+      });
+
+      return this.formatProduct(result!);
+    });
+  }
+
+  // ── 4. DELETE PRODUCT (ADMIN) ───────────────────────────────────────────
+  async remove(tenantId: number, productId: number) {
+    const product = await this.prisma.product.findFirst({
+      where: { id: productId, tenantId, deletedAt: null },
+    });
+
+    if (!product) {
+      throw new NotFoundException(`Product '${productId}' not found`);
+    }
+
+    await this.prisma.product.update({
+      where: { id: productId },
+      data: { deletedAt: new Date() },
+    });
+
+    return { success: true, message: `Product '${productId}' deleted (soft-delete)` };
   }
 
   // ── 3. SEARCH PRODUCTS ───────────────────────────────────────────────────

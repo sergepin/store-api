@@ -89,4 +89,15 @@ export class ProductsController {
   ) {
     return this.productsService.findById(tenantId, id);
   }
+
+  /**
+   * GET /products/slug/:slug
+   */
+  @Get('slug/:slug')
+  async findBySlug(
+    @TenantId() tenantId: number,
+    @Param('slug') slug: string,
+  ) {
+    return this.productsService.findBySlug(tenantId, slug);
+  }
 }

@@ -31,24 +31,26 @@ export class ProductsService {
   constructor(private readonly prisma: PrismaService) {}
 
   private normalizeBrand(input: string) {
-    const key = input.trim().toLowerCase();
-    const map: Record<string, string> = {
-      logitech: 'Logitech',
-      razer: 'Razer',
-      steelseries: 'SteelSeries',
-      corsair: 'Corsair',
-      hyperx: 'HyperX',
-      lg: 'LG',
-      msi: 'MSI',
-      intel: 'Intel',
-      amd: 'AMD',
-      nvidia: 'NVIDIA',
-      samsung: 'Samsung',
-      secretlab: 'Secretlab',
-      'g.skill': 'G.Skill',
-      gskill: 'G.Skill',
-    };
-    return map[key] ?? input.trim();
+    const trimmed = input.trim().replace(/\s+/g, ' ');
+    const lowered = trimmed.toLowerCase();
+    return lowered
+      .split(' ')
+      .filter(Boolean)
+      .map((token) => {
+        const alnumLen = token.replace(/[^a-z0-9]/g, '').length;
+        if (alnumLen > 0 && alnumLen <= 3) return token.toUpperCase();
+        return token.replace(
+          /(^|[.\-_/])([a-z])/g,
+          (_, sep: string, c: string) => `${sep}${c.toUpperCase()}`,
+        );
+      })
+      .join(' ');
+  }
+
+  private normalizeBrandOrNull(input: string) {
+    const trimmed = input.trim().replace(/\s+/g, ' ');
+    if (!trimmed) return null;
+    return this.normalizeBrand(trimmed);
   }
 
   // ── 1. GET ALL PRODUCTS ──────────────────────────────────────────────────
@@ -81,8 +83,22 @@ export class ProductsService {
       where.productCategories = { some: { categoryId } };
     }
 
-    if (brand) {
-      where.brand = { equals: this.normalizeBrand(brand), mode: 'insensitive' };
+    const brandFilter = brand?.trim();
+    if (brandFilter) {
+      const brandKey = brandFilter.toLowerCase();
+      if (
+        brandKey === 'generico' ||
+        brandKey === 'genérico' ||
+        brandKey === 'generic'
+      ) {
+        const and = (where.AND as Prisma.ProductWhereInput[] | undefined) ?? [];
+        where.AND = [...and, { OR: [{ brand: null }, { brand: '' }] }];
+      } else {
+        where.brand = {
+          equals: this.normalizeBrand(brandFilter),
+          mode: 'insensitive',
+        };
+      }
     }
 
     if (search?.length) {
@@ -198,7 +214,10 @@ export class ProductsService {
           tenantId,
           name: dto.name,
           slug: dto.slug,
-          brand: dto.brand ? this.normalizeBrand(dto.brand) : undefined,
+          brand:
+            dto.brand !== undefined
+              ? this.normalizeBrandOrNull(dto.brand)
+              : undefined,
           description: dto.description,
           status: dto.status || ProductStatus.DRAFT,
           isFeatured: dto.isFeatured,
@@ -273,7 +292,10 @@ export class ProductsService {
         data: {
           name: dto.name,
           slug: dto.slug,
-          brand: dto.brand ? this.normalizeBrand(dto.brand) : undefined,
+          brand:
+            dto.brand !== undefined
+              ? this.normalizeBrandOrNull(dto.brand)
+              : undefined,
           description: dto.description,
           status: dto.status,
           isFeatured: dto.isFeatured,
@@ -433,7 +455,7 @@ export class ProductsService {
       id: product.id,
       name: product.name,
       slug: product.slug,
-      brand: product.brand,
+      brand: product.brand?.trim() ? this.normalizeBrand(product.brand) : null,
       description: product.description,
       status: product.status,
       isFeatured: product.isFeatured,

@@ -1,11 +1,19 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+
+import { Injectable } from '@nestjs/common';
 import { InventoryMovementReason, Prisma } from '@prisma/client';
-import { InventoryReferenceType } from '../common/enums/commerce.enums';
+import { AdjustOnHandUseCase } from './application/use-cases/adjust-on-hand.use-case';
+import { ReserveStockUseCase } from './application/use-cases/reserve-stock.use-case';
+import { CommitStockUseCase } from './application/use-cases/commit-stock.use-case';
+import { GetAvailabilityUseCase } from './application/use-cases/get-availability.use-case';
 
 @Injectable()
 export class InventoryService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly adjustOnHandUseCase: AdjustOnHandUseCase,
+    private readonly reserveStockUseCase: ReserveStockUseCase,
+    private readonly commitStockUseCase: CommitStockUseCase,
+    private readonly getAvailabilityUseCase: GetAvailabilityUseCase,
+  ) {}
 
   /**
    * Adjusts the physical stock (Quantity On Hand).
@@ -19,44 +27,14 @@ export class InventoryService {
     reference?: { type: string; id: number },
     tx?: Prisma.TransactionClient,
   ) {
-    const action = async (client: Prisma.TransactionClient) => {
-      // 1. Update or create the balance
-      const balance = await client.inventoryBalance.upsert({
-        where: { variantId },
-        update: {
-          quantityOnHand: { increment: delta },
-        },
-        create: {
-          tenantId,
-          variantId,
-          quantityOnHand: delta,
-          quantityReserved: 0,
-        },
-      });
-
-      // 2. Prevent negative stock if logic requires it (usually yes for physical stock)
-      if (balance.quantityOnHand < 0) {
-        throw new BadRequestException(
-          `Adjustment would result in negative stock (${balance.quantityOnHand})`,
-        );
-      }
-
-      // 3. Create movement log
-      await client.inventoryMovement.create({
-        data: {
-          tenantId,
-          variantId,
-          delta,
-          reason,
-          referenceType: reference?.type,
-          referenceId: reference?.id,
-        },
-      });
-
-      return balance;
-    };
-
-    return tx ? action(tx) : this.prisma.$transaction(action);
+    return this.adjustOnHandUseCase.execute(
+      tenantId,
+      variantId,
+      delta,
+      reason,
+      reference,
+      tx,
+    );
   }
 
   /**
@@ -69,56 +47,12 @@ export class InventoryService {
     quantity: number,
     tx?: Prisma.TransactionClient,
   ) {
-    const action = async (client: Prisma.TransactionClient) => {
-      const balance = await client.inventoryBalance.findUnique({
-        where: { variantId },
-      });
-
-      if (!balance) {
-        throw new BadRequestException(
-          'No inventory balance found for this item',
-        );
-      }
-
-      const available = balance.quantityOnHand - balance.quantityReserved;
-      if (available < quantity) {
-        throw new BadRequestException(
-          `Not enough stock available. Requested: ${quantity}, Available: ${available}`,
-        );
-      }
-
-      return client.inventoryBalance.update({
-        where: { variantId },
-        data: {
-          quantityReserved: { increment: quantity },
-        },
-      });
-    };
-
-    return tx ? action(tx) : this.prisma.$transaction(action);
+    return this.reserveStockUseCase.execute(tenantId, variantId, quantity, tx);
   }
 
   /**
-   * Releases reserved stock (e.g., cancelled order/expired cart).
-   */
-  async release(
-    tenantId: number,
-    variantId: number,
-    quantity: number,
-    tx?: Prisma.TransactionClient,
-  ) {
-    const client = tx || this.prisma;
-    return client.inventoryBalance.update({
-      where: { variantId },
-      data: {
-        quantityReserved: { decrement: quantity },
-      },
-    });
-  }
-
-  /**
-   * Finalizes the stock movement when an order is completed.
-   * Decreases bothOnHand and Reserved, and logs a SALE movement.
+   * Commits the stock for a paid order.
+   * Decrements quantityReserved and quantityOnHand.
    */
   async commit(
     tenantId: number,
@@ -127,55 +61,23 @@ export class InventoryService {
     orderId: number,
     tx?: Prisma.TransactionClient,
   ) {
-    const action = async (client: Prisma.TransactionClient) => {
-      // 1. Decrease both quantities
-      const balance = await client.inventoryBalance.update({
-        where: { variantId },
-        data: {
-          quantityOnHand: { decrement: quantity },
-          quantityReserved: { decrement: quantity },
-        },
-      });
-
-      // 2. Log the SALE movement
-      await client.inventoryMovement.create({
-        data: {
-          tenantId,
-          variantId,
-          delta: -quantity,
-          reason: InventoryMovementReason.SALE,
-          referenceType: InventoryReferenceType.ORDER,
-          referenceId: orderId,
-        },
-      });
-
-      return balance;
-    };
-
-    return tx ? action(tx) : this.prisma.$transaction(action);
+    return this.commitStockUseCase.execute(
+      tenantId,
+      variantId,
+      quantity,
+      orderId,
+      tx,
+    );
   }
 
   /**
-   * Simple helper to get current availability.
+   * Returns current stock availability.
    */
   async getAvailability(
     tenantId: number,
     variantId: number,
     tx?: Prisma.TransactionClient,
   ) {
-    const client = tx || this.prisma;
-    const balance = await client.inventoryBalance.findUnique({
-      where: { variantId },
-    });
-
-    if (!balance) {
-      return { onHand: 0, reserved: 0, available: 0 };
-    }
-
-    return {
-      onHand: balance.quantityOnHand,
-      reserved: balance.quantityReserved,
-      available: balance.quantityOnHand - balance.quantityReserved,
-    };
+    return this.getAvailabilityUseCase.execute(tenantId, variantId, tx);
   }
 }

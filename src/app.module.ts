@@ -14,6 +14,7 @@ import { CategoriesModule } from './categories/categories.module';
 import { InventoryModule } from './inventory/inventory.module';
 import { OrdersModule } from './orders/orders.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { PaymentsModule } from './payments/payments.module';
 import { TenantMiddleware } from './tenants/tenant.middleware';
 import { envSchema } from './common/config/env.schema';
 import { HealthModule } from './health/health.module';
@@ -40,6 +41,7 @@ import { HealthModule } from './health/health.module';
     InventoryModule,
     OrdersModule,
     DashboardModule,
+    PaymentsModule,
     HealthModule,
   ],
   controllers: [AppController],

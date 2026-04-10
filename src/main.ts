@@ -38,6 +38,16 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
+  // Write Swagger JSON to a file in development for frontend type generation
+  if (process.env.NODE_ENV !== 'production') {
+    const fs = require('fs');
+    const path = require('path');
+    fs.writeFileSync(
+      path.join(process.cwd(), 'swagger-spec.json'),
+      JSON.stringify(document, null, 2),
+    );
+  }
+
   app.useGlobalFilters(new AllExceptionsFilter());
 
   app.useGlobalPipes(

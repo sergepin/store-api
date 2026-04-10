@@ -7,7 +7,10 @@ import { Roles } from '../common/decorators/roles.decorator';
 import { UserRole } from '../common/enums/iam.enums';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ProductResponseDto } from './dto/product-response.dto';
 
+@ApiTags('Products')
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
@@ -17,6 +20,8 @@ export class ProductsController {
    * Returns all published products (paginated).
    */
   @Get()
+  @ApiOperation({ summary: 'List all products' })
+  @ApiResponse({ status: 200, description: 'Paginated list of products', type: ProductResponseDto })
   async findAll(
     @TenantId() tenantId: number,
     @Query() query: GetProductsQueryDto,

@@ -13,9 +13,7 @@ import { Request } from 'express';
 import { CartsService } from './carts.service';
 import { AddToCartDto } from './dto/add-to-cart.dto';
 import { UpdateCartItemDto } from './dto/update-cart-item.dto';
-import { TenantsService } from '../tenants/tenants.service';
-
-const DEV_TENANT_SLUG = 'gamer-store';
+import { TenantId } from '../common/decorators/tenant-id.decorator';
 
 interface RequestWithUser extends Request {
   user?: {
@@ -27,21 +25,14 @@ interface RequestWithUser extends Request {
 
 @Controller('carts')
 export class CartsController {
-  constructor(
-    private readonly cartsService: CartsService,
-    private readonly tenantsService: TenantsService,
-  ) {}
-
-  private async getTenantId(): Promise<number> {
-    return this.tenantsService.getTenantIdBySlug(DEV_TENANT_SLUG);
-  }
+  constructor(private readonly cartsService: CartsService) {}
 
   @Get()
   async getCart(
+    @TenantId() tenantId: number,
     @Query('sessionKey') sessionKey?: string,
     @Req() req?: RequestWithUser,
   ) {
-    const tenantId = await this.getTenantId();
     const customerId = req?.user?.userId;
 
     return this.cartsService.getOrCreateCart(tenantId, {
@@ -52,11 +43,11 @@ export class CartsController {
 
   @Post('items')
   async addItem(
+    @TenantId() tenantId: number,
     @Body() dto: AddToCartDto,
     @Query('sessionKey') sessionKey?: string,
     @Req() req?: RequestWithUser,
   ) {
-    const tenantId = await this.getTenantId();
     const customerId = req?.user?.userId;
 
     const cart = await this.cartsService.getOrCreateCart(tenantId, {
@@ -69,12 +60,12 @@ export class CartsController {
 
   @Patch('items/:itemId')
   async updateItem(
+    @TenantId() tenantId: number,
     @Param('itemId') itemId: string,
     @Body() dto: UpdateCartItemDto,
     @Query('sessionKey') sessionKey?: string,
     @Req() req?: RequestWithUser,
   ) {
-    const tenantId = await this.getTenantId();
     const customerId = req?.user?.userId;
 
     const cart = await this.cartsService.getOrCreateCart(tenantId, {
@@ -87,11 +78,11 @@ export class CartsController {
 
   @Delete('items/:itemId')
   async removeItem(
+    @TenantId() tenantId: number,
     @Param('itemId') itemId: string,
     @Query('sessionKey') sessionKey?: string,
     @Req() req?: RequestWithUser,
   ) {
-    const tenantId = await this.getTenantId();
     const customerId = req?.user?.userId;
 
     const cart = await this.cartsService.getOrCreateCart(tenantId, {
@@ -108,10 +99,10 @@ export class CartsController {
    */
   @Delete()
   async clearCart(
+    @TenantId() tenantId: number,
     @Query('sessionKey') sessionKey?: string,
     @Req() req?: RequestWithUser,
   ) {
-    const tenantId = await this.getTenantId();
     const customerId = req?.user?.userId;
 
     const cart = await this.cartsService.getOrCreateCart(tenantId, {

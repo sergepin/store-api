@@ -8,24 +8,14 @@ import {
 } from '@nestjs/common';
 import { InventoryService } from './inventory.service';
 import { AdjustStockDto } from './dto/adjust-stock.dto';
-import { TenantsService } from '../tenants/tenants.service';
-import { InventoryMovementReason } from '@prisma/client';
-
-// TODO: Use real tenant resolution
-const DEV_TENANT_SLUG = 'gamer-store';
+import { TenantId } from '../common/decorators/tenant-id.decorator';
 
 @Controller('inventory')
 export class InventoryController {
-  constructor(
-    private readonly inventoryService: InventoryService,
-    private readonly tenantsService: TenantsService,
-  ) {}
+  constructor(private readonly inventoryService: InventoryService) {}
 
   @Post('adjust')
-  async adjustStock(@Body() dto: AdjustStockDto) {
-    const tenantId =
-      await this.tenantsService.getTenantIdBySlug(DEV_TENANT_SLUG);
-
+  async adjustStock(@TenantId() tenantId: number, @Body() dto: AdjustStockDto) {
     const reference =
       dto.referenceType && dto.referenceId !== undefined
         ? { type: dto.referenceType, id: dto.referenceId }
@@ -41,9 +31,10 @@ export class InventoryController {
   }
 
   @Get('availability/:variantId')
-  async getAvailability(@Param('variantId', ParseIntPipe) variantId: number) {
-    const tenantId =
-      await this.tenantsService.getTenantIdBySlug(DEV_TENANT_SLUG);
+  async getAvailability(
+    @TenantId() tenantId: number,
+    @Param('variantId', ParseIntPipe) variantId: number,
+  ) {
     return this.inventoryService.getAvailability(tenantId, variantId);
   }
 }

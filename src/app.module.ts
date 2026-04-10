@@ -11,6 +11,7 @@ import { CartsModule } from './carts/carts.module';
 import { CategoriesModule } from './categories/categories.module';
 import { InventoryModule } from './inventory/inventory.module';
 import { OrdersModule } from './orders/orders.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 import { TenantMiddleware } from './tenants/tenant.middleware';
 
 @Module({
@@ -25,6 +26,7 @@ import { TenantMiddleware } from './tenants/tenant.middleware';
     CategoriesModule,
     InventoryModule,
     OrdersModule,
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [AppService],

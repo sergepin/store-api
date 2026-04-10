@@ -354,7 +354,7 @@ model Order {
   tenantId        Int      @map("tenant_id")
   orderNumber     String   @map("order_number") @db.VarChar
   customerId      Int      @map("customer_id")
-  status          String   @db.VarChar
+  status          OrderStatus @map("status")
   currency        String   @db.Char(3)
   subtotalMinor   BigInt   @map("subtotal_minor")
   taxMinor        BigInt   @default(0) @map("tax_minor")
@@ -439,4 +439,13 @@ model PaymentEvent {
 
   @@unique([tenantId, providerEventId])
   @@map("payment_events")
+}
+
+enum OrderStatus {
+  PENDING_PAYMENT
+  PAID
+  PREPARING
+  SHIPPED
+  DELIVERED
+  CANCELLED
 }

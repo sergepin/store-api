@@ -5,16 +5,23 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { InventoryService } from './inventory.service';
 import { AdjustStockDto } from './dto/adjust-stock.dto';
 import { TenantId } from '../common/decorators/tenant-id.decorator';
+import { Roles } from '../common/decorators/roles.decorator';
+import { UserRole } from '../common/enums/iam.enums';
+import { RolesGuard } from '../common/guards/roles.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('inventory')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class InventoryController {
   constructor(private readonly inventoryService: InventoryService) {}
 
   @Post('adjust')
+  @Roles(UserRole.ADMIN)
   async adjustStock(@TenantId() tenantId: number, @Body() dto: AdjustStockDto) {
     const reference =
       dto.referenceType && dto.referenceId !== undefined

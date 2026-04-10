@@ -51,7 +51,10 @@ export class AuthService {
   }
 
   async validateUser(tenantId: number, dto: LoginDto) {
-    const user = await this.usersService.findByEmail(tenantId, dto.email);
+    const user = await this.prisma.user.findFirst({
+      where: { tenantId, email: dto.email },
+      include: { memberships: { where: { tenantId } } },
+    });
 
     if (user?.passwordHash) {
       const isMatch = await bcrypt.compare(
@@ -60,8 +63,12 @@ export class AuthService {
       );
 
       if (isMatch) {
-        const { passwordHash: _passwordHash, ...result } = user;
-        return result;
+        // Find membership role for this tenant
+        const membership = user.memberships[0];
+        const role = membership?.role || 'CUSTOMER';
+
+        const { passwordHash: _passwordHash, memberships: _m, ...result } = user;
+        return { ...result, role };
       }
     }
 
@@ -73,12 +80,14 @@ export class AuthService {
       sub: user.id,
       email: user.email,
       tenantId: user.tenantId,
+      role: user.role,
     };
     return {
       access_token: this.jwtService.sign(payload),
       user: {
         id: user.id,
         email: user.email,
+        role: user.role,
       },
     };
   }

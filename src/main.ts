@@ -4,6 +4,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import fs from 'node:fs';
+import path from 'node:path';
 
 (BigInt.prototype as any).toJSON = function () {
   return Number(this);
@@ -40,8 +42,6 @@ async function bootstrap() {
 
   // Write Swagger JSON to a file in development for frontend type generation
   if (process.env.NODE_ENV !== 'production') {
-    const fs = require('fs');
-    const path = require('path');
     fs.writeFileSync(
       path.join(process.cwd(), 'swagger-spec.json'),
       JSON.stringify(document, null, 2),
@@ -61,4 +61,4 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT ?? 3000, '0.0.0.0');
 }
-bootstrap();
+void bootstrap();

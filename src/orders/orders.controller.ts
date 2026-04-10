@@ -52,7 +52,10 @@ export class OrdersController {
   @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
-  async findAll(@TenantId() tenantId: number, @Query() query: GetOrdersQueryDto) {
+  async findAll(
+    @TenantId() tenantId: number,
+    @Query() query: GetOrdersQueryDto,
+  ) {
     return this.ordersService.findAll(tenantId, query);
   }
 
@@ -63,7 +66,10 @@ export class OrdersController {
   @Get(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
-  async findOne(@TenantId() tenantId: number, @Param('id', ParseIntPipe) id: number) {
+  async findOne(
+    @TenantId() tenantId: number,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
     return this.ordersService.findOne(tenantId, id);
   }
 

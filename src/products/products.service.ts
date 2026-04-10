@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { GetProductsQueryDto } from './dto/get-products-query.dto';
@@ -26,9 +30,41 @@ type ProductWithRelations = Prisma.ProductGetPayload<{
 export class ProductsService {
   constructor(private readonly prisma: PrismaService) {}
 
+  private normalizeBrand(input: string) {
+    const key = input.trim().toLowerCase();
+    const map: Record<string, string> = {
+      logitech: 'Logitech',
+      razer: 'Razer',
+      steelseries: 'SteelSeries',
+      corsair: 'Corsair',
+      hyperx: 'HyperX',
+      lg: 'LG',
+      msi: 'MSI',
+      intel: 'Intel',
+      amd: 'AMD',
+      nvidia: 'NVIDIA',
+      samsung: 'Samsung',
+      secretlab: 'Secretlab',
+      'g.skill': 'G.Skill',
+      gskill: 'G.Skill',
+    };
+    return map[key] ?? input.trim();
+  }
+
   // ── 1. GET ALL PRODUCTS ──────────────────────────────────────────────────
   async findAll(tenantId: number, query: GetProductsQueryDto, isAdmin = false) {
-    const { categoryId, search, page = 1, limit = 20 } = query;
+    const {
+      categoryId,
+      search,
+      page = 1,
+      limit = 20,
+      minPrice,
+      maxPrice,
+      brand,
+      attributes,
+      sortBy,
+      sortOrder,
+    } = query;
     const skip = (page - 1) * limit;
 
     const where: Prisma.ProductWhereInput = {
@@ -45,8 +81,64 @@ export class ProductsService {
       where.productCategories = { some: { categoryId } };
     }
 
+    if (brand) {
+      where.brand = { equals: this.normalizeBrand(brand), mode: 'insensitive' };
+    }
+
     if (search?.length) {
       where.OR = this.buildSearchConditions(search);
+    }
+
+    // Filtros de precio y atributos (en las variantes)
+    if (minPrice !== undefined || maxPrice !== undefined || attributes) {
+      const variantConditions: Prisma.ProductVariantWhereInput = {
+        deletedAt: null,
+      };
+
+      if (minPrice !== undefined) {
+        variantConditions.basePriceMinor = { gte: BigInt(minPrice * 100) };
+      }
+
+      if (maxPrice !== undefined) {
+        variantConditions.basePriceMinor = {
+          ...(variantConditions.basePriceMinor as object),
+          lte: BigInt(maxPrice * 100),
+        };
+      }
+
+      if (attributes) {
+        try {
+          const attrMap = JSON.parse(attributes);
+          // En PostgreSQL con Prisma, para filtrar por campos dentro de un JSON
+          // usamos 'path' y 'equals' para una búsqueda precisa.
+          if (attrMap.marca) {
+            variantConditions.attributes = {
+              path: ['marca'],
+              equals: attrMap.marca,
+            };
+          }
+        } catch {
+          // Si no es JSON válido, lo ignoramos
+        }
+      }
+
+      where.variants = { some: variantConditions };
+    }
+
+    // Definir ordenamiento
+    let orderBy:
+      | Prisma.ProductOrderByWithRelationInput
+      | Prisma.ProductOrderByWithRelationInput[]
+      | undefined;
+
+    if (sortBy === 'price') {
+      orderBy = { variants: { _count: 'desc' } }; // Prisma no soporta ordenar directamente por campos de relación 1:N fácilmente aquí
+      // Una alternativa común es ordenar en memoria después o usar una consulta raw,
+      // pero por ahora usemos el default si no es un campo directo del Producto.
+    } else if (sortBy === 'name') {
+      orderBy = { name: sortOrder || 'asc' };
+    } else if (sortBy === 'createdAt') {
+      orderBy = { createdAt: sortOrder || 'desc' };
     }
 
     const [total, items] = await this.prisma.$transaction([
@@ -54,15 +146,26 @@ export class ProductsService {
       this.prisma.product.findMany({
         where,
         include: PRODUCT_INCLUDE,
-        orderBy: search
-          ? undefined
-          : [{ isFeatured: 'desc' }, { createdAt: 'desc' }],
+        orderBy:
+          orderBy ||
+          (search
+            ? undefined
+            : [{ isFeatured: 'desc' }, { createdAt: 'desc' }]),
         skip,
         take: limit,
       }),
     ]);
 
-    const data = search ? this.rankByRelevance(items, search) : items;
+    let data = search ? this.rankByRelevance(items, search) : items;
+
+    // Si ordenamos por precio, lo hacemos en memoria ya que Prisma tiene limitaciones con 1:N
+    if (sortBy === 'price') {
+      data = [...data].sort((a, b) => {
+        const priceA = Number(a.variants[0]?.basePriceMinor || 0);
+        const priceB = Number(b.variants[0]?.basePriceMinor || 0);
+        return sortOrder === 'desc' ? priceB - priceA : priceA - priceB;
+      });
+    }
 
     return {
       data: data.map((p) => this.formatProduct(p)),
@@ -83,7 +186,9 @@ export class ProductsService {
     });
 
     if (existing) {
-      throw new ConflictException(`Product with slug '${dto.slug}' already exists`);
+      throw new ConflictException(
+        `Product with slug '${dto.slug}' already exists`,
+      );
     }
 
     return this.prisma.$transaction(async (tx) => {
@@ -93,6 +198,7 @@ export class ProductsService {
           tenantId,
           name: dto.name,
           slug: dto.slug,
+          brand: dto.brand ? this.normalizeBrand(dto.brand) : undefined,
           description: dto.description,
           status: dto.status || ProductStatus.DRAFT,
           isFeatured: dto.isFeatured,
@@ -112,7 +218,9 @@ export class ProductsService {
               name: v.name,
               basePriceMinor: BigInt(v.basePriceMinor),
               currency: v.currency,
-              compareAtPriceMinor: v.compareAtPriceMinor ? BigInt(v.compareAtPriceMinor) : null,
+              compareAtPriceMinor: v.compareAtPriceMinor
+                ? BigInt(v.compareAtPriceMinor)
+                : null,
               attributes: v.attributes || {},
               inventoryBalance: {
                 create: {
@@ -152,17 +260,20 @@ export class ProductsService {
         where: { tenantId_slug: { tenantId, slug: dto.slug } },
       });
       if (existing) {
-        throw new ConflictException(`Product with slug '${dto.slug}' already exists`);
+        throw new ConflictException(
+          `Product with slug '${dto.slug}' already exists`,
+        );
       }
     }
 
     return this.prisma.$transaction(async (tx) => {
       // 1. Update basic info
-      const updatedProduct = await tx.product.update({
+      await tx.product.update({
         where: { id: productId },
         data: {
           name: dto.name,
           slug: dto.slug,
+          brand: dto.brand ? this.normalizeBrand(dto.brand) : undefined,
           description: dto.description,
           status: dto.status,
           isFeatured: dto.isFeatured,
@@ -211,7 +322,10 @@ export class ProductsService {
       data: { deletedAt: new Date() },
     });
 
-    return { success: true, message: `Product '${productId}' deleted (soft-delete)` };
+    return {
+      success: true,
+      message: `Product '${productId}' deleted (soft-delete)`,
+    };
   }
 
   // ── 3. SEARCH PRODUCTS ───────────────────────────────────────────────────
@@ -319,6 +433,7 @@ export class ProductsService {
       id: product.id,
       name: product.name,
       slug: product.slug,
+      brand: product.brand,
       description: product.description,
       status: product.status,
       isFeatured: product.isFeatured,

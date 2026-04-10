@@ -1,7 +1,9 @@
-
 import { Injectable, Logger, Inject } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
-import { PAYMENT_APPROVED_EVENT, PaymentApprovedEvent } from '../../../payments/domain/events/payment-approved.event';
+import {
+  PAYMENT_APPROVED_EVENT,
+  PaymentApprovedEvent,
+} from '../../../payments/domain/events/payment-approved.event';
 import { IOrderRepository } from '../../domain/repositories/order-repository.interface';
 import { InventoryService } from '../../../inventory/inventory.service';
 import { PrismaService } from '../../../prisma/prisma.service';
@@ -26,7 +28,9 @@ export class OrderPaymentListener {
         // 1. Get the order
         const order = await this.orderRepository.findById(event.orderId, tx);
         if (!order) {
-          this.logger.error(`Order ${event.orderId} not found during payment processing`);
+          this.logger.error(
+            `Order ${event.orderId} not found during payment processing`,
+          );
           return;
         }
 
@@ -47,10 +51,12 @@ export class OrderPaymentListener {
           );
         }
       });
-      
+
       this.logger.log(`Order ${event.orderId} successfully marked as PAID`);
     } catch (error) {
-      this.logger.error(`Failed to process payment for order ${event.orderId}: ${error.message}`);
+      this.logger.error(
+        `Failed to process payment for order ${event.orderId}: ${error.message}`,
+      );
     }
   }
 }

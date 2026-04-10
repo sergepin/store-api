@@ -57,17 +57,18 @@ export class AuthService {
     });
 
     if (user?.passwordHash) {
-      const isMatch = await bcrypt.compare(
-        dto.password,
-        user.passwordHash as string,
-      );
+      const isMatch = await bcrypt.compare(dto.password, user.passwordHash);
 
       if (isMatch) {
         // Find membership role for this tenant
         const membership = user.memberships[0];
         const role = membership?.role || 'CUSTOMER';
 
-        const { passwordHash: _passwordHash, memberships: _m, ...result } = user;
+        const {
+          passwordHash: _passwordHash,
+          memberships: _m,
+          ...result
+        } = user;
         return { ...result, role };
       }
     }

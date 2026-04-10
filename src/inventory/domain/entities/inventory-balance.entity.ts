@@ -1,4 +1,3 @@
-
 export class InventoryBalance {
   constructor(
     public readonly tenantId: number,
@@ -14,7 +13,9 @@ export class InventoryBalance {
   adjustOnHand(delta: number): void {
     const newOnHand = this.quantityOnHand + delta;
     if (newOnHand < 0) {
-      throw new Error(`Adjustment would result in negative stock (${newOnHand})`);
+      throw new Error(
+        `Adjustment would result in negative stock (${newOnHand})`,
+      );
     }
     this.quantityOnHand = newOnHand;
   }

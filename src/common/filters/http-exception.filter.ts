@@ -31,7 +31,9 @@ export class AllExceptionsFilter implements ExceptionFilter {
     if (status >= 500) {
       this.logger.error(
         `${request.method} ${request.url} ${status} - Error: ${
-          exception instanceof Error ? exception.stack : JSON.stringify(exception)
+          exception instanceof Error
+            ? exception.stack
+            : JSON.stringify(exception)
         }`,
       );
     } else {

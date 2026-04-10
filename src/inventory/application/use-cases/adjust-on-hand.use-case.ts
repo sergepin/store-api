@@ -1,4 +1,3 @@
-
 import { Injectable, Inject, BadRequestException } from '@nestjs/common';
 import { IInventoryRepository } from '../../domain/repositories/inventory-repository.interface';
 import { InventoryMovementReason } from '@prisma/client';

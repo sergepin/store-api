@@ -1,4 +1,3 @@
-
 import { Module } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { OrdersController } from './orders.controller';
@@ -15,7 +14,13 @@ import { IInventoryPort } from './domain/ports/inventory-port.interface';
 import { InventoryAdapter } from './infrastructure/adapters/inventory.adapter';
 
 @Module({
-  imports: [PrismaModule, InventoryModule, CartsModule, TenantsModule, PaymentsModule],
+  imports: [
+    PrismaModule,
+    InventoryModule,
+    CartsModule,
+    TenantsModule,
+    PaymentsModule,
+  ],
   providers: [
     OrdersService,
     CheckoutOrderUseCase,

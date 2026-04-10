@@ -1,4 +1,3 @@
-
 export class PaymentApprovedEvent {
   constructor(
     public readonly tenantId: number,

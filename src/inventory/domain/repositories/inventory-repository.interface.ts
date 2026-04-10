@@ -1,9 +1,11 @@
-
 import { InventoryBalance } from '../entities/inventory-balance.entity';
 import { InventoryMovementReason } from '@prisma/client';
 
 export interface IInventoryRepository {
-  findByVariantId(variantId: number, tx?: any): Promise<InventoryBalance | null>;
+  findByVariantId(
+    variantId: number,
+    tx?: any,
+  ): Promise<InventoryBalance | null>;
   save(balance: InventoryBalance, tx?: any): Promise<void>;
   recordMovement(
     movement: {

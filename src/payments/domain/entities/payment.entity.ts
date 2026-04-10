@@ -1,5 +1,7 @@
-
-import { PaymentProvider, PaymentStatus } from '../../../common/enums/commerce.enums';
+import {
+  PaymentProvider,
+  PaymentStatus,
+} from '../../../common/enums/commerce.enums';
 
 export class Payment {
   constructor(
@@ -39,7 +41,8 @@ export class Payment {
   approve(externalReference?: string): void {
     if (this.status === PaymentStatus.APPROVED) return;
     this.status = PaymentStatus.APPROVED;
-    (this as any).externalReference = externalReference || this.externalReference;
+    (this as any).externalReference =
+      externalReference || this.externalReference;
   }
 
   fail(): void {

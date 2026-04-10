@@ -1,6 +1,13 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateCategoryDto, UpdateCategoryDto } from './dto/create-category.dto';
+import {
+  CreateCategoryDto,
+  UpdateCategoryDto,
+} from './dto/create-category.dto';
 
 @Injectable()
 export class CategoriesService {
@@ -45,7 +52,9 @@ export class CategoriesService {
     });
 
     if (existing) {
-      throw new ConflictException(`Category with slug '${dto.slug}' already exists`);
+      throw new ConflictException(
+        `Category with slug '${dto.slug}' already exists`,
+      );
     }
 
     return this.prisma.category.create({
@@ -76,7 +85,9 @@ export class CategoriesService {
         where: { tenantId_slug: { tenantId, slug: dto.slug } },
       });
       if (existing) {
-        throw new ConflictException(`Category with slug '${dto.slug}' already exists`);
+        throw new ConflictException(
+          `Category with slug '${dto.slug}' already exists`,
+        );
       }
     }
 

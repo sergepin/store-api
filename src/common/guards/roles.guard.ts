@@ -28,11 +28,14 @@ export class RolesGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
 
     // ── 🛡️ DEVELOPMENT BYPASS ────────────────────────────────────────────────
-    const isDev = process.env.NODE_ENV === 'development' || !process.env.NODE_ENV;
+    const isDev =
+      process.env.NODE_ENV === 'development' || !process.env.NODE_ENV;
     const hasBypassHeader = request.headers['x-dev-bypass'] === 'true';
 
     if (isDev && hasBypassHeader) {
-      this.logger.warn('🛡️ RolesGuard: Development bypass active via x-dev-bypass header');
+      this.logger.warn(
+        '🛡️ RolesGuard: Development bypass active via x-dev-bypass header',
+      );
       return true;
     }
 

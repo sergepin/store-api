@@ -30,4 +30,42 @@ export class GetProductsQueryDto {
   @Type(() => Number)
   @IsInt()
   limit: number = 20;
+
+  @ApiPropertyOptional({ description: 'Filter by minimum price' })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  minPrice?: number;
+
+  @ApiPropertyOptional({ description: 'Filter by maximum price' })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  maxPrice?: number;
+
+  @ApiPropertyOptional({ description: 'Filter by brand' })
+  @IsOptional()
+  @IsString()
+  brand?: string;
+
+  @ApiPropertyOptional({
+    description: 'Filter by attributes (JSON string)',
+    example: '{"color": "Negro"}',
+  })
+  @IsOptional()
+  @IsString()
+  attributes?: string;
+
+  @ApiPropertyOptional({
+    description: 'Sort by field',
+    enum: ['createdAt', 'price', 'name'],
+  })
+  @IsOptional()
+  @IsString()
+  sortBy?: string;
+
+  @ApiPropertyOptional({ description: 'Sort order', enum: ['asc', 'desc'] })
+  @IsOptional()
+  @IsString()
+  sortOrder?: 'asc' | 'desc';
 }

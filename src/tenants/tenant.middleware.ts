@@ -24,7 +24,7 @@ export class TenantMiddleware implements NestMiddleware {
     if (host && !this.isGenericHost(host)) {
       // Logic: store-a.com -> store-a, store-b.platform.com -> store-b
       tenantSlug = host.split('.')[0];
-    } 
+    }
     // 2. Header Resolution (Priority for Dev/Internal testing)
     else if (tenantSlugHeader) {
       tenantSlug = tenantSlugHeader;
@@ -40,7 +40,7 @@ export class TenantMiddleware implements NestMiddleware {
 
     try {
       const tenantId = await this.tenantsService.getTenantIdBySlug(tenantSlug);
-      
+
       // Attach to request object
       (req as any).tenantId = tenantId;
       (req as any).tenantSlug = tenantSlug;

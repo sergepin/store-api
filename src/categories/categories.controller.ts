@@ -1,9 +1,23 @@
-import { Controller, Get, Param, Query, Post, Body, Patch, Delete, UseGuards, ParseIntPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Query,
+  Post,
+  Body,
+  Patch,
+  Delete,
+  UseGuards,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { ProductsService } from '../products/products.service';
 import { TenantId } from '../common/decorators/tenant-id.decorator';
 import { GetProductsQueryDto } from '../products/dto/get-products-query.dto';
-import { CreateCategoryDto, UpdateCategoryDto } from './dto/create-category.dto';
+import {
+  CreateCategoryDto,
+  UpdateCategoryDto,
+} from './dto/create-category.dto';
 import { Roles } from '../common/decorators/roles.decorator';
 import { UserRole } from '../common/enums/iam.enums';
 import { RolesGuard } from '../common/guards/roles.guard';
@@ -24,7 +38,10 @@ export class CategoriesController {
    */
   @Get()
   @ApiOperation({ summary: 'List all categories' })
-  @ApiResponse({ status: 200, description: 'List of categories returned successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of categories returned successfully',
+  })
   async findAll(@TenantId() tenantId: number) {
     return this.categoriesService.findAll(tenantId);
   }
@@ -81,7 +98,10 @@ export class CategoriesController {
    */
   @Get(':slug')
   @ApiOperation({ summary: 'Get products by category slug' })
-  @ApiResponse({ status: 200, description: 'List of products for the category' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of products for the category',
+  })
   async findByCategory(
     @TenantId() tenantId: number,
     @Param('slug') slug: string,

@@ -1,4 +1,3 @@
-
 import { Injectable, Inject, BadRequestException } from '@nestjs/common';
 import { IInventoryRepository } from '../../domain/repositories/inventory-repository.interface';
 
@@ -15,7 +14,10 @@ export class ReserveStockUseCase {
     quantity: number,
     tx?: any,
   ) {
-    const balance = await this.inventoryRepository.findByVariantId(variantId, tx);
+    const balance = await this.inventoryRepository.findByVariantId(
+      variantId,
+      tx,
+    );
 
     if (!balance) {
       throw new BadRequestException('No inventory balance found for this item');

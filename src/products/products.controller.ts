@@ -1,4 +1,16 @@
-import { Controller, Get, Param, Query, ParseIntPipe, Post, Body, Patch, Delete, UseGuards, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Query,
+  ParseIntPipe,
+  Post,
+  Body,
+  Patch,
+  Delete,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { GetProductsQueryDto } from './dto/get-products-query.dto';
 import { CreateProductDto, UpdateProductDto } from './dto/create-product.dto';
@@ -21,7 +33,11 @@ export class ProductsController {
    */
   @Get()
   @ApiOperation({ summary: 'List all products' })
-  @ApiResponse({ status: 200, description: 'Paginated list of products', type: ProductResponseDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Paginated list of products',
+    type: ProductResponseDto,
+  })
   async findAll(
     @TenantId() tenantId: number,
     @Query() query: GetProductsQueryDto,
@@ -99,10 +115,7 @@ export class ProductsController {
    * GET /products/slug/:slug
    */
   @Get('slug/:slug')
-  async findBySlug(
-    @TenantId() tenantId: number,
-    @Param('slug') slug: string,
-  ) {
+  async findBySlug(@TenantId() tenantId: number, @Param('slug') slug: string) {
     return this.productsService.findBySlug(tenantId, slug);
   }
 }

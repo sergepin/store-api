@@ -1,4 +1,14 @@
-import { IsString, IsOptional, IsEnum, IsBoolean, IsArray, IsInt, IsNumber, ValidateNested, Min, IsNotEmpty } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsEnum,
+  IsBoolean,
+  IsArray,
+  IsInt,
+  ValidateNested,
+  Min,
+  IsNotEmpty,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import { ProductStatus } from '../../common/enums/commerce.enums';
 
@@ -43,6 +53,10 @@ export class CreateProductDto {
 
   @IsString()
   @IsOptional()
+  brand?: string;
+
+  @IsString()
+  @IsOptional()
   description?: string;
 
   @IsEnum(ProductStatus)
@@ -76,6 +90,10 @@ export class UpdateProductDto {
   @IsString()
   @IsOptional()
   slug?: string;
+
+  @IsString()
+  @IsOptional()
+  brand?: string;
 
   @IsString()
   @IsOptional()

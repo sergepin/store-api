@@ -29,10 +29,12 @@ import { HealthModule } from './health/health.module';
       },
     }),
     EventEmitterModule.forRoot(),
-    ThrottlerModule.forRoot([{
-      ttl: 60000,
-      limit: 100,
-    }]),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 100,
+      },
+    ]),
     PrismaModule,
     ProductsModule,
     AuthModule,
@@ -57,8 +59,6 @@ import { HealthModule } from './health/health.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(TenantMiddleware)
-      .forRoutes('*');
+    consumer.apply(TenantMiddleware).forRoutes('*');
   }
 }

@@ -1,4 +1,3 @@
-
 import { Injectable } from '@nestjs/common';
 import { InventoryMovementReason, Prisma } from '@prisma/client';
 import { AdjustOnHandUseCase } from './application/use-cases/adjust-on-hand.use-case';

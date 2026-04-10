@@ -33,7 +33,10 @@ export class TenantsController {
   @Patch('admin/settings')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
-  async updateSettings(@TenantId() tenantId: number, @Body() dto: UpdateTenantDto) {
+  async updateSettings(
+    @TenantId() tenantId: number,
+    @Body() dto: UpdateTenantDto,
+  ) {
     return this.tenantsService.update(tenantId, dto);
   }
 }

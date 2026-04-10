@@ -1,12 +1,22 @@
-
-import { Injectable, Inject, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  Inject,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { IPaymentRepository } from '../../domain/repositories/payment-repository.interface';
 import { Payment } from '../../domain/entities/payment.entity';
 import { PrismaService } from '../../../prisma/prisma.service';
-import { PaymentProvider, PaymentStatus } from '../../../common/enums/commerce.enums';
+import {
+  PaymentProvider,
+  PaymentStatus,
+} from '../../../common/enums/commerce.enums';
 import { OrderStatus } from '@prisma/client';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { PAYMENT_APPROVED_EVENT, PaymentApprovedEvent } from '../../domain/events/payment-approved.event';
+import {
+  PAYMENT_APPROVED_EVENT,
+  PaymentApprovedEvent,
+} from '../../domain/events/payment-approved.event';
 
 @Injectable()
 export class ProcessPaymentUseCase {
@@ -25,11 +35,12 @@ export class ProcessPaymentUseCase {
       });
 
       if (!order) throw new NotFoundException('Order not found');
-      if (order.status === OrderStatus.PAID) throw new BadRequestException('Order already paid');
+      if (order.status === OrderStatus.PAID)
+        throw new BadRequestException('Order already paid');
 
       // 2. Create/Get Payment
       const idempotencyKey = `payment-${order.id}-${provider}-${Date.now()}`;
-      
+
       const payment = Payment.create({
         tenantId,
         orderId: order.id,

@@ -1,4 +1,3 @@
-
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { IPaymentRepository } from '../../domain/repositories/payment-repository.interface';
@@ -35,7 +34,10 @@ export class PrismaPaymentRepository implements IPaymentRepository {
     );
   }
 
-  async save(payment: Payment, tx?: Prisma.TransactionClient): Promise<Payment> {
+  async save(
+    payment: Payment,
+    tx?: Prisma.TransactionClient,
+  ): Promise<Payment> {
     const client = tx || this.prisma;
 
     if (payment.id) {

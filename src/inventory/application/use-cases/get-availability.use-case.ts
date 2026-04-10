@@ -1,4 +1,3 @@
-
 import { Injectable, Inject } from '@nestjs/common';
 import { IInventoryRepository } from '../../domain/repositories/inventory-repository.interface';
 
@@ -10,7 +9,10 @@ export class GetAvailabilityUseCase {
   ) {}
 
   async execute(tenantId: number, variantId: number, tx?: any) {
-    const balance = await this.inventoryRepository.findByVariantId(variantId, tx);
+    const balance = await this.inventoryRepository.findByVariantId(
+      variantId,
+      tx,
+    );
 
     if (!balance) {
       return {

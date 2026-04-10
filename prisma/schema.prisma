@@ -171,6 +171,7 @@ model Product {
   primaryCategoryId Int?      @map("primary_category_id")
   name              String    @db.VarChar
   slug              String    @db.VarChar
+  brand             String?   @db.VarChar
   description       String?   @db.Text
   status            String    @db.VarChar
   isFeatured        Boolean   @default(false) @map("is_featured")

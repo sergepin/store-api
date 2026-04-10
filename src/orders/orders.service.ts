@@ -1,8 +1,4 @@
-
-import {
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CheckoutOrderUseCase } from './application/use-cases/checkout-order.use-case';
 import { CheckoutOrderDto } from './dto/checkout-order.dto';
@@ -85,6 +81,10 @@ export class OrdersService {
   }
 
   async processMockPayment(tenantId: number, orderId: number) {
-    return this.processPaymentUseCase.execute(tenantId, orderId, PaymentProvider.MOCK);
+    return this.processPaymentUseCase.execute(
+      tenantId,
+      orderId,
+      PaymentProvider.MOCK,
+    );
   }
 }

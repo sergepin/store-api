@@ -4,7 +4,7 @@ import { IOrderRepository } from '../../domain/repositories/order-repository.int
 import { CheckoutOrderDto } from '../../dto/checkout-order.dto';
 import { Order } from '../../domain/entities/order.entity';
 import { CartsService } from '../../../carts/carts.service';
-import { InventoryService } from '../../../inventory/inventory.service';
+import { IInventoryPort } from '../../domain/ports/inventory-port.interface';
 import { TenantsService } from '../../../tenants/tenants.service';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CustomerType } from '../../../common/enums/commerce.enums';
@@ -15,7 +15,8 @@ export class CheckoutOrderUseCase {
     @Inject(IOrderRepository)
     private readonly orderRepository: IOrderRepository,
     private readonly cartsService: CartsService,
-    private readonly inventoryService: InventoryService,
+    @Inject(IInventoryPort)
+    private readonly inventoryPort: IInventoryPort,
     private readonly tenantsService: TenantsService,
     private readonly prisma: PrismaService,
   ) {}
@@ -34,9 +35,9 @@ export class CheckoutOrderUseCase {
     }
 
     return this.prisma.$transaction(async (tx) => {
-      // 1. Reserve Inventory
+      // 1. Reserve Inventory via PORT
       for (const item of cart.items) {
-        await this.inventoryService.reserve(
+        await this.inventoryPort.reserve(
           tenantId,
           item.variantId,
           item.quantity,

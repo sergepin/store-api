@@ -3,17 +3,18 @@ import { Injectable, Inject, NotFoundException, BadRequestException } from '@nes
 import { IPaymentRepository } from '../../domain/repositories/payment-repository.interface';
 import { Payment } from '../../domain/entities/payment.entity';
 import { PrismaService } from '../../../prisma/prisma.service';
-import { InventoryService } from '../../../inventory/inventory.service';
 import { PaymentProvider, PaymentStatus } from '../../../common/enums/commerce.enums';
 import { OrderStatus } from '@prisma/client';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { PAYMENT_APPROVED_EVENT, PaymentApprovedEvent } from '../../domain/events/payment-approved.event';
 
 @Injectable()
 export class ProcessPaymentUseCase {
   constructor(
     @Inject(IPaymentRepository)
     private readonly paymentRepository: IPaymentRepository,
-    private readonly inventoryService: InventoryService,
     private readonly prisma: PrismaService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async execute(tenantId: number, orderId: number, provider: PaymentProvider) {
@@ -21,14 +22,13 @@ export class ProcessPaymentUseCase {
       // 1. Get Order
       const order = await tx.order.findFirst({
         where: { id: orderId, tenantId },
-        include: { items: true },
       });
 
       if (!order) throw new NotFoundException('Order not found');
       if (order.status === OrderStatus.PAID) throw new BadRequestException('Order already paid');
 
-      // 2. Create/Get Payment (using idempotency key for mock)
-      const idempotencyKey = `payment-${order.id}-${provider}-${Date.now()}`; // Simplified
+      // 2. Create/Get Payment
+      const idempotencyKey = `payment-${order.id}-${provider}-${Date.now()}`;
       
       const payment = Payment.create({
         tenantId,
@@ -47,24 +47,17 @@ export class ProcessPaymentUseCase {
       // 4. Save Payment
       const savedPayment = await this.paymentRepository.save(payment, tx);
 
-      // 5. If approved, update order and commit inventory
+      // 5. If approved, EMIT EVENT (No direct order update here anymore)
       if (savedPayment.status === PaymentStatus.APPROVED) {
-        await tx.order.update({
-          where: { id: order.id },
-          data: { status: OrderStatus.PAID },
-        });
-
-        for (const item of order.items) {
-          if (item.variantId) {
-            await this.inventoryService.commit(
-              tenantId,
-              item.variantId,
-              item.quantity,
-              order.id,
-              tx,
-            );
-          }
-        }
+        this.eventEmitter.emit(
+          PAYMENT_APPROVED_EVENT,
+          new PaymentApprovedEvent(
+            tenantId,
+            order.id,
+            savedPayment.amountMinor,
+            savedPayment.id!,
+          ),
+        );
       }
 
       return savedPayment;

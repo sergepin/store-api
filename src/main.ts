@@ -12,6 +12,13 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // ── 🌐 CORS CONFIGURATION ─────────────────────────────────────────────
+  app.enableCors({
+    origin: true, // During development, we allow all origins.
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
+
   app.useGlobalInterceptors(new LoggingInterceptor());
 
   // ── 📝 SWAGGER CONFIGURATION ─────────────────────────────────────────────
